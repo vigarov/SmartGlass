@@ -6,7 +6,7 @@ Project proposal : Smart Glasses
 I. Description
 --------------
 
-The main idea of this project is to make smart glasses. To keep things simple, only one of the lenses will have a screen/act as a graphic interface for the user. What would’ve been the glasses’ frames can be expanded to fit in electronics and batteries. A general sketch of the desired outcome would be the following:![A very-well-drawn and professional sketch illustrating the outline of the Smart Glasses the group will try to build](images/image3.jpg "Product Sketch")
+The main idea of this project is to make smart glasses. To keep things simple, only one of the lenses will have a screen/act as a graphic interface for the user. What would’ve been the glasses’ frames can be expanded to fit in electronics and batteries. A general sketch of the desired outcome would be the following:![A very-well-drawn and professional sketch illustrating the outline of the Smart Glasses the group will try to build](proposal/images/image0.jpg "Product Sketch")
 
 Such glasses will be used for several things such as maintaining a connection between the user and his digital world, while not requiring him to be actively using his digital devices (such as his phone or PC). Furthermore, these glasses could be, coupled to vision corrective lenses, used as an additional tool for ensuring one’s safety and comfort.
 
@@ -50,13 +50,13 @@ Furthermore, long battery life is important. Being more or less size constrained
 
 Secondly, a different concern would be the user’s interaction with the device. Indeed, the simplified mode/sketch proposed in the “Description”’s segment could potentially not work. Using a transparent OLED display might harm the user’s eyesight and make it too unpleasant to look at if it were placed too close to the eye. Of course, this cannot be known in advance and will have to undergo a trial (and error) phase. To make it easier however, we have made sure to only research transparent OLED displays (indeed LCD ones would force having lit black LEDs which would further harm the user’s eyes if anything). To solve this problem, two options stand in front of us: we can “push” the display further back, to accommodate the user. This is (somewhat) represented in the following illustration:
 
-![](images/image1.png)
+![](proposal/images/image2.jpg)
 
 Here, we can see under “2:” that the screen is shifted to the right, further from the eye. To make this design more natural and sophisticated, one might try to make the screen move up and down, similarly to a motorcycle helmet visor.
 
 Another (possibly simpler) alternative would be to use a technique similar to what is done in the videos of section II, by simply reflecting a beam of light. The final device would therefore look like this:
 
-![](images/image2.png)
+![](proposal/images/image1.jpg)
 
 <Any other risks challenges?>
 
