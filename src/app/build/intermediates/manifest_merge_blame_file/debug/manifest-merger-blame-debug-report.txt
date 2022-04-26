@@ -1,0 +1,154 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.SmartGlass.application"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+8-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="32" />
+9-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml
+10
+11    <!-- Include required permissions for Google Maps API to run. -->
+12    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+12-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:23:5-79
+12-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:23:22-76
+13    <uses-permission android:name="android.permission.INTERNET" />
+13-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:24:5-67
+13-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:24:22-64
+14
+15    <uses-feature
+15-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:26:5-28:35
+16        android:glEsVersion="0x00020000"
+16-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:27:9-41
+17        android:required="true" />
+17-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:28:9-32
+18
+19    <queries>
+19-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:30:5-34:15
+20
+21        <!-- Needs to be explicitly declared on Android R+ -->
+22        <package android:name="com.google.android.apps.maps" />
+22-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:33:9-64
+22-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:33:18-61
+23    </queries>
+24
+25    <application
+25-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:5:5-39:19
+26        android:allowBackup="true"
+26-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:6:9-35
+27        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+27-->[androidx.core:core:1.7.0] C:\Users\daver\.gradle\caches\transforms-3\ea8aab26d8146e3b0158817a40feeb42\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+28        android:debuggable="true"
+29        android:icon="@mipmap/ic_launcher"
+29-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:7:9-43
+30        android:label="@string/app_name"
+30-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:8:9-41
+31        android:roundIcon="@mipmap/ic_launcher_round"
+31-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:9:9-54
+32        android:supportsRtl="true"
+32-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:10:9-35
+33        android:testOnly="true"
+34        android:theme="@style/Theme.MyApplication" >
+34-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:11:9-51
+35
+36        <!--
+37             TODO: Before you run your application, you need a Google Maps API key.
+38
+39             To get one, follow the directions here:
+40
+41                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+42
+43             Once you have your API key (it starts with "AIza"), define a new property in your
+44             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+45             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+46        -->
+47        <meta-data
+47-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:24:9-26:44
+48            android:name="com.google.android.geo.API_KEY"
+48-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:25:13-58
+49            android:value="YOUR_API_KEY" />
+49-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:26:13-41
+50
+51        <activity
+51-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:28:9-38:20
+52            android:name="com.SmartGlass.application.MainActivity"
+52-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:29:13-41
+53            android:exported="true"
+53-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:30:13-36
+54            android:label="@string/app_name"
+54-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:31:13-45
+55            android:theme="@style/Theme.MyApplication.NoActionBar" >
+55-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:32:13-67
+56            <intent-filter>
+56-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:33:13-37:29
+57                <action android:name="android.intent.action.MAIN" />
+57-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:34:17-69
+57-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:34:25-66
+58
+59                <category android:name="android.intent.category.LAUNCHER" />
+59-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:36:17-77
+59-->C:\Users\daver\Downloads\BA4_Stuff\MIT\SmartGlass\src\app\src\main\AndroidManifest.xml:36:27-74
+60            </intent-filter>
+61        </activity>
+62
+63        <uses-library
+63-->[androidx.window:window:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\4c124145bdcbad81fe29c939a2c3e373\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+64            android:name="androidx.window.extensions"
+64-->[androidx.window:window:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\4c124145bdcbad81fe29c939a2c3e373\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+65            android:required="false" />
+65-->[androidx.window:window:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\4c124145bdcbad81fe29c939a2c3e373\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+66        <uses-library
+66-->[androidx.window:window:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\4c124145bdcbad81fe29c939a2c3e373\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+67            android:name="androidx.window.sidecar"
+67-->[androidx.window:window:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\4c124145bdcbad81fe29c939a2c3e373\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+68            android:required="false" /> <!-- Needs to be explicitly declared on P+ -->
+68-->[androidx.window:window:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\4c124145bdcbad81fe29c939a2c3e373\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+69        <uses-library
+69-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:39:9-41:40
+70            android:name="org.apache.http.legacy"
+70-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:40:13-50
+71            android:required="false" />
+71-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\daver\.gradle\caches\transforms-3\f9187f0f85c9cd3345fed2278a76a00a\transformed\play-services-maps-18.0.2\AndroidManifest.xml:41:13-37
+72
+73        <activity
+73-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\daver\.gradle\caches\transforms-3\f2a7d51fc8f395f1dbacb2df34b0fe9f\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+74            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+74-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\daver\.gradle\caches\transforms-3\f2a7d51fc8f395f1dbacb2df34b0fe9f\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+75            android:exported="false"
+75-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\daver\.gradle\caches\transforms-3\f2a7d51fc8f395f1dbacb2df34b0fe9f\transformed\play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+76            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+76-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\daver\.gradle\caches\transforms-3\f2a7d51fc8f395f1dbacb2df34b0fe9f\transformed\play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+77
+78        <meta-data
+78-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\daver\.gradle\caches\transforms-3\7a51a9e95c4d63b908e10d0314f27d52\transformed\play-services-basement-18.0.0\AndroidManifest.xml:21:9-23:69
+79            android:name="com.google.android.gms.version"
+79-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\daver\.gradle\caches\transforms-3\7a51a9e95c4d63b908e10d0314f27d52\transformed\play-services-basement-18.0.0\AndroidManifest.xml:22:13-58
+80            android:value="@integer/google_play_services_version" />
+80-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\daver\.gradle\caches\transforms-3\7a51a9e95c4d63b908e10d0314f27d52\transformed\play-services-basement-18.0.0\AndroidManifest.xml:23:13-66
+81
+82        <provider
+82-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+83            android:name="androidx.startup.InitializationProvider"
+83-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:27:13-67
+84            android:authorities="com.SmartGlass.application.androidx-startup"
+84-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:28:13-68
+85            android:exported="false" >
+85-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:29:13-37
+86            <meta-data
+86-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+87                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+87-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:32:17-75
+88                android:value="androidx.startup" />
+88-->[androidx.emoji2:emoji2:1.0.0] C:\Users\daver\.gradle\caches\transforms-3\b10fca800ffdba5b45ecb30623a742bf\transformed\emoji2-1.0.0\AndroidManifest.xml:33:17-49
+89            <meta-data
+89-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\daver\.gradle\caches\transforms-3\9268a44c22ecf2b8948b8f4fcd99337e\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+90                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+90-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\daver\.gradle\caches\transforms-3\9268a44c22ecf2b8948b8f4fcd99337e\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+91                android:value="androidx.startup" />
+91-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\daver\.gradle\caches\transforms-3\9268a44c22ecf2b8948b8f4fcd99337e\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+92        </provider>
+93    </application>
+94
+95</manifest>
