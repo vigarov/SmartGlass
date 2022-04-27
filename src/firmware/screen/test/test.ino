@@ -1,6 +1,6 @@
 /*
   Verify that your Qwiic Transparent Grahical OLED is connected correctly and working.
-
+  
   By: Owen Lyke
   SparkFun Electronics
   Date: February 26, 2019
@@ -9,7 +9,7 @@
   Feel like supporting open source hardware?
   Buy a board from SparkFun! https://www.sparkfun.com/products/15173
 
-
+  
 
   The graphics library is like a 3-layer cake. Here they are from top-down
   https://github.com/sparkfun/SparkFun_HyperDisplay
@@ -22,7 +22,7 @@
     - This display relies on a copy of graphics data in your microcontroller, a total of 1024 bytes. 
       That is half the RAM available on an Uno so it is easy to run into sinister low-memory related
       bugs. We reccomend using a micro with more memory like a SAMD21, Esp32, Teensy, etc.
-
+  
   Hardware Connections:
   Option 1 (I2C):
     Connect using a Qwiic jumper if you have a Qwiic compatible board and you plan to use I2C
@@ -44,10 +44,10 @@
 #define SPI_PORT SPI        // Used if USE_SPI == 1
 
 #define RES_PIN 2           // Optional
-#define CS_PIN 4            // Used only if USE_SPI == 1
-#define DC_PIN 5            // Used only if USE_SPI == 1
+#define CS_PIN 34            // Used only if USE_SPI == 1
+#define DC_PIN 35            // Used only if USE_SPI == 1
 
-#define USE_SPI 1           // Choose your interface. 0 = I2C, 1 = SPI
+#define USE_SPI 1             // Choose your interface. 0 = I2C, 1 = SPI
 
 // END USER SETUP
 
@@ -59,6 +59,9 @@
   UG2856KLBAG01_I2C myTOLED;  // Declare a I2C-based Transparent OLED object called myTOLED
 #endif /* USE_SPI */
 
+
+uint8_t color = 0x01;
+uint8_t noColor = 0x00;
 
 void setup() {
   Serial.begin(9600);
@@ -81,7 +84,7 @@ void setup() {
 }
 
 void loop() {
-
+  
   lineTest();
   delay(500);
 
@@ -98,25 +101,25 @@ void lineTest( void )
 
   for(hd_hw_extent_t indi = 0; indi < myTOLED.xExt; indi+=5)
   {
-    myTOLED.lineSet(0,0,indi,myTOLED.yExt-1,1);
+    myTOLED.line(0,0,indi,myTOLED.yExt-1,1,(color_t)&color);
     delay(10);
   }
-
+  
   for(hd_hw_extent_t indi = 0; indi < myTOLED.yExt; indi+=5)
   {
-    myTOLED.lineSet(0,myTOLED.yExt-1,myTOLED.xExt-1,myTOLED.yExt-indi-1,1);
+    myTOLED.line(0,myTOLED.yExt-1,myTOLED.xExt-1,myTOLED.yExt-indi-1,1,(color_t)&color);
     delay(10);
   }
 
   for(hd_hw_extent_t indi = 0; indi < myTOLED.xExt; indi+=5)
   {
-    myTOLED.lineSet(myTOLED.xExt-1,myTOLED.yExt-1,myTOLED.xExt-indi-1,0,1);
+    myTOLED.line(myTOLED.xExt-1,myTOLED.yExt-1,myTOLED.xExt-indi-1,0,1,(color_t)&color);
     delay(10);
   }
 
   for(hd_hw_extent_t indi = 0; indi < myTOLED.yExt; indi+=5)
   {
-    myTOLED.lineSet(myTOLED.xExt-1,0,0,indi,1);
+    myTOLED.line(myTOLED.xExt-1,0,0,indi,1,(color_t)&color);
   }
 }
 
@@ -126,19 +129,19 @@ void rectTest( void )
 
   for(uint8_t indi = 0; indi < myTOLED.yExt/2; indi+=1)
   {
-    myTOLED.rectangleSet(myTOLED.xExt/2-1-indi, myTOLED.yExt/2-1-indi, myTOLED.xExt/2+1+indi, myTOLED.yExt/2+1+indi, false);
+    myTOLED.rectangle(myTOLED.xExt/2-1-indi, myTOLED.yExt/2-1-indi, myTOLED.xExt/2+1+indi, myTOLED.yExt/2+1+indi, false, (color_t)&color);
     delay(50);
   }
 
   for(uint8_t indi = 0; indi < myTOLED.yExt/2; indi+=1)
   {
-    myTOLED.rectangleClear(myTOLED.xExt/2-1-indi, myTOLED.yExt/2-1-indi, myTOLED.xExt/2+1+indi, myTOLED.yExt/2+1+indi, false);
+    myTOLED.rectangle(myTOLED.xExt/2-1-indi, myTOLED.yExt/2-1-indi, myTOLED.xExt/2+1+indi, myTOLED.yExt/2+1+indi, false, (color_t)&noColor);
     delay(50);
   }
 
   for(uint8_t indi = 0; indi < myTOLED.yExt/2; indi+=1)
   {
-    myTOLED.rectangleSet(myTOLED.xExt/2-1-indi, myTOLED.yExt/2-1-indi, myTOLED.xExt/2+1+indi, myTOLED.yExt/2+1+indi, false);
+    myTOLED.rectangle(myTOLED.xExt/2-1-indi, myTOLED.yExt/2-1-indi, myTOLED.xExt/2+1+indi, myTOLED.yExt/2+1+indi, false, (color_t)&color);
     delay(50);
   }
 }
@@ -146,19 +149,19 @@ void rectTest( void )
 void circleTest( void )
 {
   myTOLED.clearDisplay();
-
+  
   for(uint8_t indi = 0; indi < (myTOLED.xExt/2 - 1); indi++)
   {
-    myTOLED.circleSet((myTOLED.xExt/2 - 1),(myTOLED.yExt/2 - 1), indi, false);
+    myTOLED.circle((myTOLED.xExt/2 - 1),(myTOLED.yExt/2 - 1), indi, false, (color_t)&color);
     delay(10);
   }
-  myTOLED.circleSet((myTOLED.xExt/2 - 1),(myTOLED.yExt/2 - 1), myTOLED.xExt/2, true);
+  myTOLED.circle((myTOLED.xExt/2 - 1),(myTOLED.yExt/2 - 1), myTOLED.xExt/2, true, (color_t)&color);
 }
 
 #if !defined(__AVR_ATmega328P__) && !defined(__AVR_ATmega168__)
 void showLogo( void ){
   myTOLED.setContrastControl(0);
-
+  
   myTOLED.pixelSet(84, 3); myTOLED.pixelSet(85, 3); myTOLED.pixelSet(86, 3); myTOLED.pixelSet(87, 3); myTOLED.pixelSet(88, 3); 
   myTOLED.pixelSet(83, 4); myTOLED.pixelSet(84, 4); myTOLED.pixelSet(85, 4); myTOLED.pixelSet(86, 4); myTOLED.pixelSet(87, 4); 
   myTOLED.pixelSet(82, 5); myTOLED.pixelSet(83, 5); myTOLED.pixelSet(84, 5); myTOLED.pixelSet(85, 5); myTOLED.pixelSet(86, 5); 
