@@ -124,18 +124,34 @@ void app_main (void)
 
 
 //----------------------Bluetooth----------------------
-typedef enum{
-    NOTIF_BUFFER,
-    
-    
-    NB_CHARS
-}CHAR_IDX;
-
-
 
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
+
+typedef enum{
+    NOTIF_BUFFER,
+    //...
+    BATTERY_LEVEL,
+    NB_CHARS
+}CHAR_IDX;
+
+typedef enum{
+	NOTIF_SERVICE,
+	//GNSS_SERVICE,
+	//IMU_SERVICE,
+	BATTERY_SERVICE,
+	NB_SERVICES
+}SERVICE_IDX;
+
+#define NOTIF_SERVICE_UUID "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
+#define NOTIF_BUFFER_ATTR_UUID "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
+
+#define BATTERY_SERVICE_UUID 0x180F
+#define BATTERY_CHAR_UUID 0x2A19
+
+static const BLEUUID servicesUUID[NB_SERVICES] = {BLEUUID(NOTIF_SERVICE_UUID),BLEUUID((uint16_t)BATTERY_SERVICE_UUID)};
+
 
 //Globals
 BLECharacteristic* characteristics[NB_CHARS];
@@ -173,7 +189,7 @@ class NotificationBufferCB : public BLECharacteristicCallbacks {
 |    |  UUID: 1e7b14e7-f5d9-4113-b249-d16b6ae7db7f                            | |
 |    |                                                                        | |
 |    |  +-------------------------------------------------------------------+ | |
-|    |  | Attribute 1: Notificcation Buffer                                 | | |
+|    |  | Attribute 1: Notification Buffer                                  | | |
 |    |  | UUID: 8d5b53b8-fe04-4509-a689-82ab4c3d2507                        | | |
 |    |  | Properites: WRITE,NOTIFY                                          | | |
 |    |  | Value Type: notification_t (size = 64 bytes)                      | | |
@@ -183,16 +199,16 @@ class NotificationBufferCB : public BLECharacteristicCallbacks {
 |                                                                               |
 |    +------------------------------------------------------------------------+ |
 |    |  Service 2: GNSS                                                       | |
+|    |  UUID: 0x1335 (as per some spec)                                       | |
 |    |                                                                        | |
 |    |                                                                        | |
-|    |                                                                        | |
-|    |                      TBD                                               | |
+|    |                   TBD depending on what values we need                 | |
 |    |                                                                        | |
 |    |                                                                        | |
 |    +------------------------------------------------------------------------+ |
 |                                                                               |
 |    +------------------------------------------------------------------------+ |
-|    |  Srvice 3: IMU-related                                                 | |
+|    |  Srvice 3: IMU-related`                                                | |
 |    |                                                                        | |
 |    |                                                                        | |
 |    |                                                                        | |
@@ -201,11 +217,22 @@ class NotificationBufferCB : public BLECharacteristicCallbacks {
 |    |                                                                        | |
 |    +------------------------------------------------------------------------+ |
 |                                                                               |
+|    +------------------------------------------------------------------------+ |
+|    |  Service 4: Battery --> Following spec                                 | |
+|    |  UUID: 0x180F                                                          | |
+|    |  +-------------------------------------------------------------------+ | |
+|    |  | Attribute 1: Battery Level                                        | | |
+|    |  | UUID: 0x2A19                                                      | | |
+|    |  | Properties: READ, NOTIFY                                          | | |
+|    |  |                                                                   | | |
+|    |  +-------------------------------------------------------------------+ | |
+|    |                                                                        | |
+|    +------------------------------------------------------------------------+ |
+|                                                                               |
+|                                                                               |
 +-------------------------------------------------------------------------------+
  */
 
-#define NOTIF_SERVICE_UUID "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
-#define NOTIF_BUFFER_ATTR_UUID "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
  
 /**
  * @brief Task in charge of handling the bluetooth.
@@ -221,16 +248,40 @@ void T_HandleBLE( void *pvParameters){
     //Creating the different services and attributes
     BLECharacteristic* tempP = NULL;
     
-    BLEService* notificationS = server->createService(NOTIF_SERVICE_UUID);
-    tempP = notificationS->createCharacteristic(NOTIF_BUFFER_ATTR_UUID,BLECharacteristic:: PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
+	//Service 1
+    BLEService* notificationS = server->createService(servicesUUID[NOTIF_SERVICE]);
+    tempP = notificationS->createCharacteristic(NOTIF_BUFFER_ATTR_UUID,BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
     tempP->setCallbacks(new NotificationBufferCB());
     //Could implement custom descriptor (e.g.: a Characteristic User Description Descriptor ; see https://www.oreilly.com/library/view/getting-started-with/9781491900550/ch04.html#gatt_epd )
     //tempP->setValue("") done on creation
     characteristics[NOTIF_BUFFER] = tempP;
+	notificationS->start();
     
-    //TODO: continue setting up characteristics
+    //TODO: continue setting up service and characteristics
 
-    //TODO: start adverising
+	//Service 4
+	BLEService* batteryService = server->createService(servicesUUID[BATTERY_SERVICE]);
+	tempP = batteryService->createCharacteristic(BLEUUID((uint16_t)BATTERY_CHAR_UUID), BLECharacteristic::PROPERTY_READ|BLECharacteristic::PROPERTY_NOTIFY);
+	#if DEBUG==1
+	{
+		int testValue = 67;
+		tempP->setValue(testValue);
+	}
+	#endif
+	characteristics[BATTERY_LEVEL] = tempP;
+	batteryService->start();
+	
+	//Finished creating services, starting to advertise
+	BLEAdvertising* advertiser = BLEDevice::getAdvertising();
+	for(auto &u : servicesUUID){
+		advertiser->addServiceUUID(u);
+	}
+	advertiser->setScanResponse(true);
+	advertiser->setMinPreferred(0x12);
+	BLEDevice::startAdvertising();
+	
+	//Finished setup, notifying all threads
 
     while(1){} //loop infinitely to keep thread alive
 }
+
