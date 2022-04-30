@@ -121,7 +121,7 @@ void app_main (void)
 {
     IFD(Serial.begin(115200));
     createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1,PRO_CPU,T_BLE);
-	createTask(T_Display,"Display",1024,2,APP_CPU,T_DISPLAY)
+	createTask(T_Display,"Display",1024,2,APP_CPU,T_DISPLAY);
 
 	xDisplayUpdateSemaphore =  xSemaphoreCreateBinary();
     #if CLION_IDE
@@ -339,14 +339,15 @@ typedef struct{
 	unsigned char overwrite;
 }__attribute__((packed)) display_t;
 
-volatile display_t toBeDisplayed = {0};
+display_t toBeDisplayed = {0}; //TODO: make volatile?
 
+void updateAwaitingDisplay(display_t* newFrames);
 
 void updateAwaitingDisplay(display_t* newFrames){
 	TAKE_S_INF(xDisplayUpdateSemaphore); 
 	if(newFrames->priority > toBeDisplayed.priority){ 
 	//Not >= since if two events with the same priority happen to occur at the same time, it is logical to keep to first and disregard the second
-	//This however should be rare (only e.g. I can think of is if you press on a "menu UP/DOWN" button before the menu has actually displayed
+	//This however should be rare (only e.g. I can think of is if you press on a "menu UP/DOWN" button before the menu has actually displayed)
 		if(toBeDisplayed.p != NULL){
 			//Freeing only if an event is waiting to be displayed but hasn't yet been displyed
 			free(toBeDisplayed.p);
@@ -356,7 +357,6 @@ void updateAwaitingDisplay(display_t* newFrames){
 	}
 	xSemaphoreGive(xDisplayUpdateSemaphore);
 	xTaskNotifyGive(allTasks[T_DISPLAY]);
-	
 }
 
 void T_Display(void* pvParameters){
@@ -377,7 +377,7 @@ void T_Display(void* pvParameters){
 			myTOLED.clearDisplay();
 		}
 		for(size_t i =0; i<toDisplay.len;i++){
-			pixel_pair_t* pixels = p+i;
+			pixel_pair_t* pixels = toDisplay.p+i;
 			myTOLED.pixelSet(pixels->x,pixels->y);
 		}
 		myTOLED.setContrastControl(128); //TODO: needed to be done @ every write?
