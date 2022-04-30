@@ -24,7 +24,7 @@
 void loop(void){}//No loop, tasks will handle everything
 #endif
 
-//----------------------Application----------------------
+//----------------------Firmware----------------------
 
 #define APP_NAME "Smart Glasses"
 
@@ -69,26 +69,23 @@ struct __attribute__((packed, aligned(64))) notification_t{
     app_t application;
     content_t<MAX_TITLE_LENGTH> title;
     content_t<MAX_ADD_INFO_LENGTH> additionalInfo;
-}; 
-
-
-
+};
 
 //Tasks
 typedef enum{
     T_BLE,
-    T_uOS,
-    
+    T_DISPLAY,
+	
     NB_TASKS
 }task_idx;
 TaskHandle_t* allTasks[NB_TASKS] = {0};
 
 void createTask(TaskFunction_t pvTaskCode, const char *const pcName, const uint32_t usStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID, size_t idx){
-    
+
     #define PREFIX "Unable to create task "
     #define MID ", error: "
     #define TASK_ERROR_FMT  PREFIX "%d" MID "%d\n"
-    
+
     int error = pdPASS;
     if((error = xTaskCreatePinnedToCore(pvTaskCode, pcName, usStackDepth, NULL,uxPriority,allTasks[idx],xCoreID)) != pdPASS
         || allTasks[T_BLE] == NULL){
@@ -101,21 +98,32 @@ void createTask(TaskFunction_t pvTaskCode, const char *const pcName, const uint3
 }
 
 void T_HandleBLE( void *pvParameters );
+void T_Display( void *pvParameters );
 
+
+//Globals and semaphores
+SemaphoreHandle_t xDisplayUpdateSemaphore;
+
+#if ARDUINO_IDE==1 || CLION_IDE == 1
+#define TAKE_S_INF(semaphore) do{}while(xSemaphoreTake(xDisplayUpdateSemaphore,portMAX_DELAY)== pdFALSE)
+#else
+#define TAKE_S_INF(semaphore) xSemaphoreTake(xDisplayUpdateSemaphore,portMAX_DELAY)
+#endif
 
 //----------------------Entry point----------------------
-#if ARDUINO_IDE 
+#if ARDUINO_IDE
 void setup (void)
 #elif CLION_IDE
 int main()
 #else //ESP_IDF
-void app_main (void) 
+void app_main (void)
 #endif
 {
     IFD(Serial.begin(115200));
     createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1,PRO_CPU,T_BLE);
-    
+	createTask(T_Display,"Display",1024,2,APP_CPU,T_DISPLAY)
 
+	xDisplayUpdateSemaphore =  xSemaphoreCreateBinary();
     #if CLION_IDE
     return 0;
     #endif
@@ -161,14 +169,14 @@ class ServerCB : public BLEServerCallbacks{
     void onConnect(BLEServer* pServer) override {
         //Notify the uOS to change the header
         //TODO: either taskNotify uOS or semaphore unlock (not preferrable)
-        //      AND wrtie to some bitset/flag (atomically) to show what is updated (in that case BT connectivity)
-        
+        //      AND write to some bitset/flag (atomically) to show what is updated (in that case BT connectivity)
+
     }
 
     void onDisconnect(BLEServer* pServer) override {
         //TODO: Opposite, but same as above
     }
-  
+
 };
 
 class NotificationBufferCB : public BLECharacteristicCallbacks {
@@ -224,7 +232,7 @@ class NotificationBufferCB : public BLECharacteristicCallbacks {
 |    |  | Attribute 1: Battery Level                                        | | |
 |    |  | UUID: 0x2A19                                                      | | |
 |    |  | Properties: READ, NOTIFY                                          | | |
-|    |  |                                                                   | | |
+|    |  | Value Type: unsigned short [0-100] (2 bytes), the battery level   | | |
 |    |  +-------------------------------------------------------------------+ | |
 |    |                                                                        | |
 |    +------------------------------------------------------------------------+ |
@@ -233,7 +241,7 @@ class NotificationBufferCB : public BLECharacteristicCallbacks {
 +-------------------------------------------------------------------------------+
  */
 
- 
+
 /**
  * @brief Task in charge of handling the bluetooth.
  * @arg pvParameters (void *) pointer to context parameters. Unused
@@ -247,7 +255,7 @@ void T_HandleBLE( void *pvParameters){
 
     //Creating the different services and attributes
     BLECharacteristic* tempP = NULL;
-    
+
 	//Service 1
     BLEService* notificationS = server->createService(servicesUUID[NOTIF_SERVICE]);
     tempP = notificationS->createCharacteristic(NOTIF_BUFFER_ATTR_UUID,BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
@@ -256,7 +264,7 @@ void T_HandleBLE( void *pvParameters){
     //tempP->setValue("") done on creation
     characteristics[NOTIF_BUFFER] = tempP;
 	notificationS->start();
-    
+
     //TODO: continue setting up service and characteristics
 
 	//Service 4
@@ -270,7 +278,7 @@ void T_HandleBLE( void *pvParameters){
 	#endif
 	characteristics[BATTERY_LEVEL] = tempP;
 	batteryService->start();
-	
+
 	//Finished creating services, starting to advertise
 	BLEAdvertising* advertiser = BLEDevice::getAdvertising();
 	for(auto &u : servicesUUID){
@@ -279,9 +287,102 @@ void T_HandleBLE( void *pvParameters){
 	advertiser->setScanResponse(true);
 	advertiser->setMinPreferred(0x12);
 	BLEDevice::startAdvertising();
-	
+
 	//Finished setup, notifying all threads
+	//TODO: notifyAllThreads();
 
     while(1){} //loop infinitely to keep thread alive
 }
+
+
+//----------------------uOS and Applications----------------------
+
+//TODO: do it...
+
+/*
+typedef enum{
+	NEW_NOTIFICATION,
+
+	NB_EVENTS
+}event_t;
+*/
+
+/*
+void T_uOS(void* pvParameters){
+
+	//Thread safely writes data off from IMU and GPS to corresponding characteristics
+
+
+}
+*/
+
+//----------------------Display----------------------
+
+#include "HyperDisplay_UG2856KLBAG01.h" 
+
+#define SERIAL_PORT Serial  
+#define SPI_PORT SPI        // Used if USE_SPI == 1
+
+#define CS_PIN 4            // Used only if USE_SPI == 1
+#define DC_PIN 5            // Used only if USE_SPI == 1
+UG2856KLBAG01_SPI myTOLED;  // Declare a SPI-based Transparent OLED object called myTOLED
+
+typedef struct{
+	unsigned char x;
+	unsigned char y;
+}__attribute__((packed))pixel_pair_t;
+
+typedef struct{
+	unsigned char priority; //TODO: can make it a bitfield to save... one byte if necessary
+	pixel_pair_t* p;
+	size_t len;
+	unsigned char overwrite;
+}__attribute__((packed)) display_t;
+
+volatile display_t toBeDisplayed = {0};
+
+
+void updateAwaitingDisplay(display_t* newFrames){
+	TAKE_S_INF(xDisplayUpdateSemaphore); 
+	if(newFrames->priority > toBeDisplayed.priority){ 
+	//Not >= since if two events with the same priority happen to occur at the same time, it is logical to keep to first and disregard the second
+	//This however should be rare (only e.g. I can think of is if you press on a "menu UP/DOWN" button before the menu has actually displayed
+		if(toBeDisplayed.p != NULL){
+			//Freeing only if an event is waiting to be displayed but hasn't yet been displyed
+			free(toBeDisplayed.p);
+			toBeDisplayed.p=NULL;
+		}
+		toBeDisplayed = *newFrames; //Deep copy
+	}
+	xSemaphoreGive(xDisplayUpdateSemaphore);
+	xTaskNotifyGive(allTasks[T_DISPLAY]);
+	
+}
+
+void T_Display(void* pvParameters){
+	SPI_PORT.begin();
+	myTOLED.begin(CS_PIN, DC_PIN, SPI_PORT);
+	
+	while(1){
+		ulTaskNotifyTake(pdTRUE,portMAX_DELAY); //TODO: RTOS suggests to not wait indefinitely, but rather TO at some point and e.g. log error. Why not, can also refactor infinite semaphore take
+		TAKE_S_INF(xDisplayUpdateSemaphore);
+		//Make a copy of the context to be displayed, and release semaphore
+		//This enable other potentially waiting threads to continue while we are displaying current context
+		display_t toDisplay = toBeDisplayed;
+		free(toBeDisplayed.p);
+		toBeDisplayed = {0};
+		xSemaphoreGive(xDisplayUpdateSemaphore);
+		//Giving the semaphore back and starting to actually display
+		if(toDisplay.overwrite){
+			myTOLED.clearDisplay();
+		}
+		for(size_t i =0; i<toDisplay.len;i++){
+			pixel_pair_t* pixels = p+i;
+			myTOLED.pixelSet(pixels->x,pixels->y);
+		}
+		myTOLED.setContrastControl(128); //TODO: needed to be done @ every write?
+	}
+}
+
+
 
