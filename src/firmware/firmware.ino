@@ -1,84 +1,31 @@
-//----------------------ESP related defines----------------------
-#ifndef PRO_CPU
-#define PRO_CPU 0
-#endif
-#ifndef APP_CPU
-#define APP_CPU 1
-#endif
-
-//----------------------IDE and Programming defines----------------------
-#define ARDUINO_IDE 1
-#define CLION_IDE 0
-
-#define DEBUG 1
-
-#ifdef DEBUG
-#define IFD(x) x
-#define CHECK_ERROR(expr,expected) if(expr!=expected) ESP_LOGE(TAG,"Expression %s failed, expected %s", #expr, #expected)
-#else
-#define IFD(x)
-#define CHECK_ERROR(expr,expected)
-#endif
-
-#ifdef ARDUINO_IDE
-void loop(void){}//No loop, tasks will handle everything
-#endif
-
-//----------------------Firmware----------------------
-
-#define APP_NAME "Smart Glasses"
-
 //Includes
 #include <memory>
+
+#include "glasses_constants.h"
+#include "glasses_types.h"
+
 #if ARDUINO_IDE
 #include <iostream>
 #endif
 
+//Globals and semaphores
+SemaphoreHandle_t xDisplayUpdateSemaphore;
+
+#if ARDUINO_IDE==1 || CLION_IDE == 1
+#define TAKE_S_INF(semaphore) do{}while(xSemaphoreTake(xDisplayUpdateSemaphore,portMAX_DELAY)== pdFALSE)
+#else
+#define TAKE_S_INF(semaphore) xSemaphoreTake(xDisplayUpdateSemaphore,portMAX_DELAY)
+#endif
+
+TaskHandle_t* allTasks[NB_TASKS] = {0};
+static const char* TAG = "Main Module";
+
+#include "glasses_display.h"
+
 //Logging
-#if ARDUINO_IDE
-#ifdef LOG_LOCAL_LEVEL
-#undef LOG_LOCAL_LEVEL
-#endif
-#endif
-#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
 #if ARDUINO_IDE == 0 && CLION_IDE == 0
 #include "esp_log.h"
 #endif
-static const char* TAG = "Main Module";
-
-//Notifications
-template<size_t SIZE>
-struct __attribute__((packed, aligned(1))) content_t{
-    unsigned char terminated;
-    char text[SIZE];
-};
-
-#define MAX_TITLE_LENGTH 12
-#define MAX_ADD_INFO_LENGTH 48
-
-enum app_t : uint16_t{
-    SYSTEM,
-    SMS,
-    WHATSAPP,
-    //...
-    OTHER
-};
-
-//Make sure to align with the correct amount of bytes
-struct __attribute__((packed, aligned(64))) notification_t{
-    app_t application;
-    content_t<MAX_TITLE_LENGTH> title;
-    content_t<MAX_ADD_INFO_LENGTH> additionalInfo;
-};
-
-//Tasks
-typedef enum{
-    T_BLE,
-    T_DISPLAY,
-	
-    NB_TASKS
-}task_idx;
-TaskHandle_t* allTasks[NB_TASKS] = {0};
 
 void createTask(TaskFunction_t pvTaskCode, const char *const pcName, const uint32_t usStackDepth, UBaseType_t uxPriority, const BaseType_t xCoreID, size_t idx){
 
@@ -89,11 +36,11 @@ void createTask(TaskFunction_t pvTaskCode, const char *const pcName, const uint3
     int error = pdPASS;
     if((error = xTaskCreatePinnedToCore(pvTaskCode, pcName, usStackDepth, NULL,uxPriority,allTasks[idx],xCoreID)) != pdPASS
         || allTasks[T_BLE] == NULL){
-        #if ARDUINO_IDE == 1
+/*        #if ARDUINO_IDE == 1
         std::cerr<< "-Error- " << TAG <<": "<<PREFIX<<idx<<MID<<error<<std::endl;
         #else
         ESP_LOGE(TAG, TASK_ERROR_FMT, idx,error)
-        #endif
+        #endif*/
     }
 }
 
@@ -101,14 +48,6 @@ void T_HandleBLE( void *pvParameters );
 void T_Display( void *pvParameters );
 
 
-//Globals and semaphores
-SemaphoreHandle_t xDisplayUpdateSemaphore;
-
-#if ARDUINO_IDE==1 || CLION_IDE == 1
-#define TAKE_S_INF(semaphore) do{}while(xSemaphoreTake(xDisplayUpdateSemaphore,portMAX_DELAY)== pdFALSE)
-#else
-#define TAKE_S_INF(semaphore) xSemaphoreTake(xDisplayUpdateSemaphore,portMAX_DELAY)
-#endif
 
 //----------------------Entry point----------------------
 #if ARDUINO_IDE
@@ -315,74 +254,3 @@ void T_uOS(void* pvParameters){
 
 }
 */
-
-//----------------------Display----------------------
-
-#include "HyperDisplay_UG2856KLBAG01.h" 
-
-#define SERIAL_PORT Serial  
-#define SPI_PORT SPI        // Used if USE_SPI == 1
-
-#define CS_PIN 4            // Used only if USE_SPI == 1
-#define DC_PIN 5            // Used only if USE_SPI == 1
-UG2856KLBAG01_SPI myTOLED;  // Declare a SPI-based Transparent OLED object called myTOLED
-
-typedef struct{
-	unsigned char x;
-	unsigned char y;
-}__attribute__((packed))pixel_pair_t;
-
-typedef struct{
-	unsigned char priority; //TODO: can make it a bitfield to save... one byte if necessary
-	pixel_pair_t* p;
-	size_t len;
-	unsigned char overwrite;
-}__attribute__((packed)) display_t;
-
-display_t toBeDisplayed = {0}; //TODO: make volatile?
-
-void updateAwaitingDisplay(display_t* newFrames);
-
-void updateAwaitingDisplay(display_t* newFrames){
-	TAKE_S_INF(xDisplayUpdateSemaphore); 
-	if(newFrames->priority > toBeDisplayed.priority){ 
-	//Not >= since if two events with the same priority happen to occur at the same time, it is logical to keep to first and disregard the second
-	//This however should be rare (only e.g. I can think of is if you press on a "menu UP/DOWN" button before the menu has actually displayed)
-		if(toBeDisplayed.p != NULL){
-			//Freeing only if an event is waiting to be displayed but hasn't yet been displyed
-			free(toBeDisplayed.p);
-			toBeDisplayed.p=NULL;
-		}
-		toBeDisplayed = *newFrames; //Deep copy
-	}
-	xSemaphoreGive(xDisplayUpdateSemaphore);
-	xTaskNotifyGive(allTasks[T_DISPLAY]);
-}
-
-void T_Display(void* pvParameters){
-	SPI_PORT.begin();
-	myTOLED.begin(CS_PIN, DC_PIN, SPI_PORT);
-	
-	while(1){
-		ulTaskNotifyTake(pdTRUE,portMAX_DELAY); //TODO: RTOS suggests to not wait indefinitely, but rather TO at some point and e.g. log error. Why not, can also refactor infinite semaphore take
-		TAKE_S_INF(xDisplayUpdateSemaphore);
-		//Make a copy of the context to be displayed, and release semaphore
-		//This enable other potentially waiting threads to continue while we are displaying current context
-		display_t toDisplay = toBeDisplayed;
-		free(toBeDisplayed.p);
-		toBeDisplayed = {0};
-		xSemaphoreGive(xDisplayUpdateSemaphore);
-		//Giving the semaphore back and starting to actually display
-		if(toDisplay.overwrite){
-			myTOLED.clearDisplay();
-		}
-		for(size_t i =0; i<toDisplay.len;i++){
-			pixel_pair_t* pixels = toDisplay.p+i;
-			myTOLED.pixelSet(pixels->x,pixels->y);
-		}
-		myTOLED.setContrastControl(128); //TODO: needed to be done @ every write?
-	}
-}
-
-
-
