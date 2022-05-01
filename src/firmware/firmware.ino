@@ -88,7 +88,7 @@ void createTask(TaskFunction_t pvTaskCode, const char *const pcName, const uint3
 
     int error = pdPASS;
     if((error = xTaskCreatePinnedToCore(pvTaskCode, pcName, usStackDepth, NULL,uxPriority,allTasks[idx],xCoreID)) != pdPASS
-        || allTasks[T_BLE] == NULL){
+        || allTasks[idx] == NULL){
         #if ARDUINO_IDE == 1
         std::cerr<< "-Error- " << TAG <<": "<<PREFIX<<idx<<MID<<error<<std::endl;
         #else
@@ -383,6 +383,3 @@ void T_Display(void* pvParameters){
 		myTOLED.setContrastControl(128); //TODO: needed to be done @ every write?
 	}
 }
-
-
-
