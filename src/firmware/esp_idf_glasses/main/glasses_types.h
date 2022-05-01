@@ -28,3 +28,19 @@ typedef enum{
   
     NB_TASKS
 }task_idx;
+
+
+typedef enum{
+    NOTIF_BUFFER,
+    //...
+    BATTERY_LEVEL,
+    NB_CHARS
+}CHAR_IDX;
+
+typedef enum{
+	NOTIF_SERVICE,
+	//GNSS_SERVICE,
+	//IMU_SERVICE,
+	BATTERY_SERVICE,
+	NB_SERVICES
+} svc_idx_e;

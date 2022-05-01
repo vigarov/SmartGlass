@@ -8,7 +8,7 @@
 #endif
 
 //----------------------IDE and Programming defines----------------------
-// #define ARDUINO_IDE 1
+#define ARDUINO_IDE 0
 #define CLION_IDE 0
 
 #define DEBUG 1
@@ -38,4 +38,10 @@ void loop(void){}//No loop, tasks will handle everything
 
 #define MAX_TITLE_LENGTH 12
 #define MAX_ADD_INFO_LENGTH 48
+
+#define NOTIF_SERVICE_UUID "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
+#define NOTIF_BUFFER_ATTR_UUID "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
+
+#define BATTERY_SERVICE_UUID 0x180F
+#define BATTERY_CHAR_UUID 0x2A19
 
