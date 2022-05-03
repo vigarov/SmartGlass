@@ -21,12 +21,6 @@
 #define CHECK_ERROR(expr,expected)
 #endif
 
-#ifdef ARDUINO_IDE
-void loop(void){}//No loop, tasks will handle everything
-#endif
-
-//----------------------Firmware----------------------
-
 #define APP_NAME "Smart Glasses"
 
 #if ARDUINO_IDE
@@ -45,3 +39,6 @@ void loop(void){}//No loop, tasks will handle everything
 #define BATTERY_SERVICE_UUID 0x180F
 #define BATTERY_CHAR_UUID 0x2A19
 
+#define GNSS_SERVICE_UUID 0x1819 // these come from the UUIDs with allocation type=gatt service here: https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
+#define GNSS_CHAR_UUID 0x2a67 // these come from UUIDs with allocation type=GATT Characteristic and Object Type here: https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
+#define GNSS_FEATURES_CHAR_UUID 0x2a6a
