@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
@@ -55,11 +58,11 @@ class FirstFragment : Fragment() {
         }
     }
 
-    val isLocationPermissionGranted
+    private val isLocationPermissionGranted
         get() = hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
 
     private fun hasPermission(permissionType: String): Boolean {
-        return ContextCompat.checkSelfPermission(, permissionType) ==
+        return ContextCompat.checkSelfPermission(this.requireContext(), permissionType) ==
                 PackageManager.PERMISSION_GRANTED
     }
 
@@ -67,7 +70,9 @@ class FirstFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !isLocationPermissionGranted) {
             requestLocationPermission()
         }
-        else { /* TODO: Actually perform scan */ }
+        else { /* TODO: Actually perform scan */
+
+        }
     }
 
     private fun requestLocationPermission() {
@@ -78,6 +83,27 @@ class FirstFragment : Fragment() {
 
     private fun Activity.requestPermission(permission: String, requestCode: Int) {
         ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult(),
+            ActivityResultCallback {
+                when (requestCode) {
+                    LOCATION_PERMISSION_REQUEST_CODE -> {
+                        if (grantResults.firstOrNull() == PackageManager.PERMISSION_DENIED) {
+                            requestLocationPermission()
+                        } else {
+                            startBleScan()
+                        }
+                    }
+                }
+            }
+        )
     }
 
     override fun onDestroyView() {
