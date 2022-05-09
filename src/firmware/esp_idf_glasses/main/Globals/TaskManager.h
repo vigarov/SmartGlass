@@ -49,7 +49,7 @@ namespace SmartGlasses{
          * 
          * @param notification_idx the index of the notification
          */
-        void notifyAllTasks(UBaseType_t notification_idx);
+        void notifyAllTasks(UBaseType_t notificationIdx);
 
     private:
         TaskManager() = default;
