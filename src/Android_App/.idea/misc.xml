@@ -3,10 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/drawable/ic_bluetooth.xml" value="0.16" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/drawable/ic_launcher_background.xml" value="0.16" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/drawable/ic_map.xml" value="0.16" />
         <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/content_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_blank.xml" value="0.5" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_bluetooth.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_chat.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_first.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_map.xml" value="0.31145833333333334" />
         <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_maps.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_message.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/layout/nav_header.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/daver/Downloads/BA4_Stuff/MIT/SmartGlass/src/Android_App/app/src/main/res/menu/draw_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/shrey/Le_Poly/IN_BA3+4/Making_Intelligent_Things/SmartGlass/src/Android_App/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/shrey/Le_Poly/IN_BA3+4/Making_Intelligent_Things/SmartGlass/src/Android_App/app/src/main/res/layout/fragment_first.xml" value="0.22826086956521738" />
       </map>
