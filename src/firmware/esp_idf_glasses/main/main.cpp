@@ -20,6 +20,14 @@ std::shared_ptr<notification_t> notifBuffer;
 
 #include "glasses_display.h"
 
+void set_glasses_logging_levels() {
+    esp_log_level_set("*", ESP_LOG_INFO); // setting default log level here too just in case although already specified in menuconfig.
+    esp_log_level_set(GlobalsManager::main_module_debug_name, ESP_LOG_VERBOSE);
+    esp_log_level_set(toplevel_tasks_BLE_tag, ESP_LOG_VERBOSE);
+    esp_log_level_set(toplevel_tasks_GNSS_tag, ESP_LOG_VERBOSE);
+    esp_log_level_set(toplevel_tasks_Display_tag, ESP_LOG_VERBOSE);
+}
+
 //----------------------Entry point----------------------
 /*#if ARDUINO_IDE
 void setup (void)
@@ -29,6 +37,7 @@ int main()
 extern "C" void app_main()
 //#endif
 {
+    set_glasses_logging_levels();
     IFD(Serial.begin(115200));
     GlobalsManager glob_mgr;
     vTaskDelay(0); // need to let 0 run too
@@ -36,7 +45,7 @@ extern "C" void app_main()
     glob_mgr.init_tasks();
 
 	
-    while (true) {Serial.println("hi 123"); delay(2000);}
+    while (true) {/*Serial.println("hi 123"); */delay(2000);}
     #if CLION_IDE
     return 0;
     #endif

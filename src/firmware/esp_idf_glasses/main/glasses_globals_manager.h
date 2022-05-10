@@ -25,18 +25,18 @@ class GlobalsManager {
     BLEService* services[NB_SERVICES];
     BLEServer* server;
     bool ble_svcs_initialised = false;
-    const char* main_module_debug_name = "Main module";
 
     public:
     DisplayManager display_manager;
     BLECharacteristic* characteristics[NB_CHARS];
-    TaskHandle_t* allTasks[NB_TASKS];
+    TaskHandle_t allTasks[NB_TASKS];
+    static constexpr char* main_module_debug_name = "Main module";
 
     GlobalsManager();
 
     void init_tasks();
 
-    void notify_all_tasks(UBaseType_t notification_idx, uint32_t new_val);
+    void notify_all_tasks(UBaseType_t uxIndexToNotify, uint32_t ulValue, eNotifyAction eAction, uint32_t* pulPreviousNotificationValue);
 
     void init_server();
 

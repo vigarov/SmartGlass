@@ -53,8 +53,8 @@ typedef enum{
 
 typedef enum {
     BLE_INIT_READY,
-    NB_TASK_NOTIFICATIONS,
-    DISPLAY_UPDATE
+    DISPLAY_UPDATE,
+    NB_TASK_NOTIFICATIONS
 } task_notification_idx;
 
 typedef struct __attribute__((packed)){

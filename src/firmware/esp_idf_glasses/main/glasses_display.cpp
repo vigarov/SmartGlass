@@ -26,7 +26,7 @@ void DisplayManager::update_awaiting_display(GlobalsManager* glob_mgr, display_t
       this->to_display = *newFrames; //Deep copy
     }
     xSemaphoreGive(this->xDisplayUpdateSemaphore);
-    xTaskGenericNotify(*glob_mgr->allTasks[T_DISPLAY],DISPLAY_UPDATE,0,eSetValueWithoutOverwrite,NULL);
+    xTaskGenericNotify(glob_mgr->allTasks[T_DISPLAY],DISPLAY_UPDATE,0,eSetValueWithoutOverwrite,NULL);
     //xTaskNotifyGive(allTasks[T_DISPLAY]); // FreeRTOS will already handle task switching and doing this sounds like a bad idea
 }
 
