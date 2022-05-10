@@ -16,6 +16,8 @@ namespace SmartGlasses{
         NB_TASKS
     };
 
+    #define TASK_M "Task Module"
+
     /**
      * @brief Manager object for of our tasks.
      * Note: Is guaranteed to be created by the GlobalsManager

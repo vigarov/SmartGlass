@@ -11,7 +11,7 @@ namespace SmartGlasses{
     class uOS: public std::enable_shared_from_this<uOS>{
     public:
         uOS() = default;
-        void startUp();
+        void setup();
     private:
         unsigned short nbUnreadNotifications = 0;
         

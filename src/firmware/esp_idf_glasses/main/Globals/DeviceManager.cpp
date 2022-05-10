@@ -2,6 +2,6 @@
 
 using namespace SmartGlasses;
 
-DisplayManager& DeviceManager::getDisplayManager(){
+std::shared_ptr<DisplayManager> DeviceManager::getDisplayManager(){
     return displayManager;
 }

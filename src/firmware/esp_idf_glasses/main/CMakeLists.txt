@@ -20,21 +20,25 @@ set(UOS_SRCS
 
 set(APP_DIR ${UOS_DIR}/Applications)
 set(APP_SRCS 
+    ${APP_DIR}/Application.cpp
     ${APP_DIR}/ApplicationContainer.cpp
     ${APP_DIR}/IdleApp.cpp)
 
 set(DISPLAY_DIR Display)
 set(FONTS_DIR 
     ${DISPLAY_DIR}/fonts)
+set(OBJECTS_DIR ${DISPLAY_DIR}/Objects)
 set(DISPLAY_DIRS
     ${DISPLAY_DIR}
-    ${FONTS_DIR})
-set(FONTS_SRC
-    ${FONTS_DIR}/font.cpp)
+    ${FONTS_DIR}
+    ${OBJECTS_DIR})
 set(DISPLAY_SRCS 
     ${DISPLAY_DIR}/Display.cpp
+    ${DISPLAY_DIR}/DisplayManager.cpp
     ${FONTS_SRC}
     )
+set(FONTS_SRC
+    ${FONTS_DIR}/font.cpp)
 
 set(SENSORS_DIR Sensors)
 set(GNSS_DIR ${SENSORS_DIR}/GNSS)

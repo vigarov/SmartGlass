@@ -16,11 +16,12 @@ TaskHandle_t* TaskManager::getTaskHandle(task_t taskType){
 }
 
 void TaskManager::initAllTasks(){
-
+    ESP_LOGI(TASK_M,"Initialising all tasks");
     int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
     error = createTask(T_HandleDisplay,"DisplayHandler",1024,configMAX_PRIORITIES-1,allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",20480,2,allTasks[T_UOS],APP_CPU);
+    ESP_LOGI(TASK_M,"Finished initialiing all tasks");
 }
 
 
@@ -36,6 +37,7 @@ void TaskManager::notifyAllTasks(UBaseType_t notificationIdx){
 }
 
 void TaskManager::T_HandleBLE(void *pvParameters){
+    ESP_LOGI(TASK_M,"Starting BLE task");
     std::shared_ptr<BLEHandler> bHandler = std::make_shared<BLEHandler>();
     //The object has been created --> setting it to the TaskManager
     GlobalsManager::getInstance().setBLEHandler(bHandler);
@@ -51,18 +53,28 @@ void TaskManager::T_HandleBLE(void *pvParameters){
 } */
 
 
-void TaskManager::T_HandleDisplay(void* pvParameters){
-    DisplayManager* display_mgr;
+void TaskManager::T_HandleDisplay(void* pvParameters){    
+    ESP_LOGI(TASK_M,"Starting Display task");
+    std::shared_ptr<DisplayManager> display_mgr;
     {
         GlobalsManager& glob_mgr = GlobalsManager::getInstance();
-        display_mgr = &glob_mgr.getDeviceManager().getDisplayManager();
+        display_mgr = glob_mgr.getDeviceManager().getDisplayManager();
         display_mgr->setDisplayTask(glob_mgr.getTaskManager().getTaskHandle(T_DISPLAY));
     }
+    ESP_LOGI(TASK_M,"Finished setting up display");
     while(1){
         display_mgr->refreshDisplay();
     }
 }
 
 void TaskManager::T_HandleUOS(void * pvParameters){
+    ESP_LOGI(TASK_M,"Starting uOS task");
+    std::shared_ptr<uOS> uOS_p = std::make_shared<uOS>();
+    uOS_p->setup();
+    GlobalsManager::getInstance().setUOS(uOS_p);
+    ESP_LOGI(TASK_M,"Finished setting up uOS");
 
+    while(1){
+
+    }
 }

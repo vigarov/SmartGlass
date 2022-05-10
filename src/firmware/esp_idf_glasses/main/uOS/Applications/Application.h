@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-
+#include "DisplayManager.h"
 
 namespace SmartGlasses{
 
@@ -22,11 +22,12 @@ namespace SmartGlasses{
     class Application{
     friend class ApplicationContainer;
     public:
-        Application(std::shared_ptr<uOS> uOS_p) : m_uOS(uOS_p){};
+        Application(std::shared_ptr<uOS> uOS_p);
 
         APP_ID id = NONE;
     protected:
         std::shared_ptr<uOS> m_uOS;
+        std::shared_ptr<DisplayManager> m_displayManager;
     private:
         /**
          * @brief Function called when closing the application

@@ -1,5 +1,6 @@
 #pragma once
-#include "Display.h"
+#include "DisplayManager.h"
+#include <memory>
 
 namespace SmartGlasses{
 
@@ -11,9 +12,9 @@ namespace SmartGlasses{
     class DeviceManager{
         friend class GlobalsManager;
     public:
-        DisplayManager& getDisplayManager();
+        std::shared_ptr<DisplayManager> getDisplayManager();
     private:
         DeviceManager() = default;
-        DisplayManager displayManager;
+        std::shared_ptr<DisplayManager> displayManager = std::make_shared<DisplayManager>();
     };
 };
