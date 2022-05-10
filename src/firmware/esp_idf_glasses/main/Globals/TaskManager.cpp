@@ -29,7 +29,7 @@ void TaskManager::setBLEHandler(std::shared_ptr<BLEHandler> bleHandler){
     bHandler = bleHandler;
 }
 
-void notifyAllTasks(UBaseType_t notificationIdx){
+void TaskManager::notifyAllTasks(UBaseType_t notificationIdx){
     for (uint8_t i=0; i<NB_TASKS; i++) {
         TaskHandle_t* taskI = allTasks[i];
         if(taskI != nullptr){

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstdint>
+
 namespace SmartGlasses{
     struct __attribute__((packed)) utc_time_t{
     uint16_t year;

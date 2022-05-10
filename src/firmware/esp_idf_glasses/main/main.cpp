@@ -1,15 +1,13 @@
-//Includes
 #include "GlobalsManager.h"
+#include "esp_log.h"
+#include "constants.h"
 
 //----------------------Entry point----------------------
-extern "C" void app_main() //TODO: why extern "C" ?
+extern "C" void app_main()
 {
-    SmartGlasses::GlobalsManager& glob_mgr = SmartGlasses::GlobalsManager::getInstance();
-    vTaskDelay(0); // need to let 0 run too; TODO:?
-
-    glob_mgr.getTaskManager().initAllTasks();
-
-
-	
-    while (true) {Serial.println("hi 123"); delay(2000);} //TODO: Useless? see application flow of esp32, scheduled atsks should remain alive iirc
+    SmartGlasses::GlobalsManager::getInstance().getTaskManager().initAllTasks();
+    ESP_LOGI(APP_NAME,"Initialised all tasks, exiting main");
+    //The [esp32 application flow](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/startup.html#app-main-task)
+    //shows that there is no need for the app_main task to be kept alive
+    //all tasks scheduled by it will keep living
 }

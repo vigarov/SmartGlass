@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include "GenericTypes.h"
 
 namespace SmartGlasses{ //TODO: additional Sensors namespace to not polute the SmartGlasses one with all these defines?
