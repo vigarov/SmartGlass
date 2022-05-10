@@ -1,8 +1,10 @@
 #pragma once
 
+#include <cstdint>
+
 namespace SmartGlasses{
     //TODO: Maybe temporary
-    template<size_t SIZE>
+    template<std::size_t SIZE>
     struct __attribute__((packed, aligned(1))) content_t{
         unsigned char terminated;
         char text[SIZE];

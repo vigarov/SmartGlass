@@ -16,9 +16,17 @@ DeviceManager& GlobalsManager::getDeviceManager(){
 }
 
 void GlobalsManager::setBLEHandler(std::shared_ptr<BLEHandler> bleHandler){
-    bHandler = bleHandler;
+    m_bHandler = bleHandler;
 }
 
 std::shared_ptr<BLEHandler> GlobalsManager::getBLEHandler(){
-    return bHandler;
+    return m_bHandler;
+}
+
+void GlobalsManager::setUOS(std::shared_ptr<uOS> uOS_p){
+    m_uOS = uOS_p;
+}
+
+std::shared_ptr<uOS> GlobalsManager::getUOS(){
+    return m_uOS;
 }

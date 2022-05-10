@@ -36,7 +36,7 @@ namespace SmartGlasses{
          */
         void setCurrentApplication(std::shared_ptr<Application> app);
     private:
-        ApplicationContainer(){}
+        ApplicationContainer() = default;
         
         std::shared_ptr<Application> currentApplication;
     };

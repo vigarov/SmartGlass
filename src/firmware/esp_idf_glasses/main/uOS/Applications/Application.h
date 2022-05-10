@@ -1,15 +1,19 @@
 #pragma once
 
-#include "uOS.h"
 #include <memory>
 
+
 namespace SmartGlasses{
+
     enum APP_ID{
         NONE=-1,
         IDLE,
         //...
         NB_APPS
     };
+
+
+    class uOS;//Forward declaration
 
     /**
      * @brief Base class for any application.
