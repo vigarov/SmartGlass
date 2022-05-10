@@ -18,13 +18,11 @@ TaskHandle_t* TaskManager::getTaskHandle(task_t taskType){
 void TaskManager::initAllTasks(){
 
     int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
-    error = createTask(T_HandleDisplay,"DisplayHandler",1024,2,allTasks[T_DISPLAY],APP_CPU);
+    error = createTask(T_HandleDisplay,"DisplayHandler",1024,configMAX_PRIORITIES-1,allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
+    error = createTask(T_HandleUOS,"uOS",20480,2,allTasks[T_UOS],APP_CPU);
 }
 
-void TaskManager::setBLEHandler(std::shared_ptr<BLEHandler> bleHandler){
-    bHandler = bleHandler;
-}
 
 void TaskManager::notifyAllTasks(UBaseType_t notificationIdx){
     for (uint8_t i=0; i<NB_TASKS; i++) {
@@ -40,7 +38,7 @@ void TaskManager::notifyAllTasks(UBaseType_t notificationIdx){
 void TaskManager::T_HandleBLE(void *pvParameters){
     std::shared_ptr<BLEHandler> bHandler = std::make_shared<BLEHandler>();
     //The object has been created --> setting it to the TaskManager
-    GlobalsManager::getInstance().getTaskManager().setBLEHandler(bHandler);
+    GlobalsManager::getInstance().setBLEHandler(bHandler);
 
     while(1){
         //The BLE Task technically does nohting, since the server is event (and callback) driven
@@ -65,3 +63,6 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
     }
 }
 
+void TaskManager::T_HandleUOS(void * pvParameters){
+
+}

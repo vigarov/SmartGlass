@@ -11,7 +11,8 @@ namespace SmartGlasses{
     enum task_t{
         T_BLE,
         T_DISPLAY,
-        T_GNSS,
+        //T_GNSS,
+        T_UOS,
         NB_TASKS
     };
 
@@ -38,13 +39,6 @@ namespace SmartGlasses{
         void initAllTasks();
 
         /**
-         * @brief Sets the BLEHandler pointer (makes a copy of the shared_ptr)
-         * 
-         * @param bHandler the (copy of) the shared ptr
-         */
-        void setBLEHandler(std::shared_ptr<BLEHandler> bleHandler);
-
-        /**
          * @brief Notifies all the tasks of an event
          * 
          * @param notification_idx the index of the notification
@@ -55,9 +49,7 @@ namespace SmartGlasses{
         TaskManager() = default;
 
         TaskHandle_t* allTasks[NB_TASKS] = {0};
-        
-        std::shared_ptr<BLEHandler> bHandler; //shared_ptr because there will be two 'holders' the TaskManager, as well as the Task itself (which is static --> not same context)
-        
+
 
         //---------------------Tasks
         /**
@@ -71,7 +63,7 @@ namespace SmartGlasses{
          */
         static void T_HandleDisplay(void* pvParameters);
         //static void T_HandleGNSS(void *pvParameters);
-
+        static void T_HandleUOS(void* parameters);
     };
 
 };
