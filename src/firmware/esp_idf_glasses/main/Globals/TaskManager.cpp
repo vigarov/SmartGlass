@@ -8,7 +8,7 @@
 using namespace SmartGlasses;
 
 
-TaskHandle_t* TaskManager::getTaskHandle(task_t taskType){
+TaskHandle_t TaskManager::getTaskHandle(task_t taskType){
     if(taskType<NB_TASKS){
         return allTasks[taskType];
     }
@@ -17,21 +17,21 @@ TaskHandle_t* TaskManager::getTaskHandle(task_t taskType){
 
 void TaskManager::initAllTasks(){
     ESP_LOGI(TASK_M,"Initialising all tasks");
-    int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
-    error = createTask(T_HandleDisplay,"DisplayHandler",1024,configMAX_PRIORITIES-1,allTasks[T_DISPLAY],APP_CPU);
+    int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
+    error = createTask(T_HandleDisplay,"DisplayHandler",1024,configMAX_PRIORITIES-1,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
-    error = createTask(T_HandleUOS,"uOS",20480,2,allTasks[T_UOS],APP_CPU);
+    error = createTask(T_HandleUOS,"uOS",20480,2,&allTasks[T_UOS],APP_CPU);
     ESP_LOGI(TASK_M,"Finished initialiing all tasks");
 }
 
 
 void TaskManager::notifyAllTasks(UBaseType_t notificationIdx){
     for (uint8_t i=0; i<NB_TASKS; i++) {
-        TaskHandle_t* taskI = allTasks[i];
+        TaskHandle_t taskI = allTasks[i];
         if(taskI != nullptr){
             //xTaskNotifyGeneric is an internal function, not meant to be used (and not documented officially by esp)
             //using xTaskNotifyGiveIndexed, as specified by https://www.freertos.org/xTaskNotifyGive.html
-            xTaskNotifyGiveIndexed(*taskI,notificationIdx); 
+            xTaskNotifyGiveIndexed(taskI,notificationIdx); 
         }
     }
 }
@@ -75,6 +75,6 @@ void TaskManager::T_HandleUOS(void * pvParameters){
     ESP_LOGI(TASK_M,"Finished setting up uOS");
 
     while(1){
-
+        vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }

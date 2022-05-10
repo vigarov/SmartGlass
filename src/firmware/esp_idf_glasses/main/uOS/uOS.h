@@ -15,7 +15,7 @@ namespace SmartGlasses{
     private:
         unsigned short nbUnreadNotifications = 0;
         
-        std::array<std::shared_ptr<SmartGlasses::Application>, NB_APPS> applications{};
+        std::array<std::shared_ptr<Application>, NB_APPS> applications{};
     };
 
 };

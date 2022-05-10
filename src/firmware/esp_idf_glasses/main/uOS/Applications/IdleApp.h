@@ -11,6 +11,7 @@ namespace SmartGlasses{
     private:
         void onClose() override;
         void onResume() override;
+        void run() override;
 
         void displayHeader(); //TODO: const?
     };

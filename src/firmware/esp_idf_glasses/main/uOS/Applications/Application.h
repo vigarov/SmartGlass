@@ -20,15 +20,10 @@ namespace SmartGlasses{
      * 
      */
     class Application{
-    friend class ApplicationContainer;
     public:
         Application(std::shared_ptr<uOS> uOS_p);
 
         APP_ID id = NONE;
-    protected:
-        std::shared_ptr<uOS> m_uOS;
-        std::shared_ptr<DisplayManager> m_displayManager;
-    private:
         /**
          * @brief Function called when closing the application
          * 
@@ -39,6 +34,15 @@ namespace SmartGlasses{
          * 
          */
         virtual void onResume() = 0;
+
+        /**
+         * @brief Function continuously called to execute (in a while(1) fashion)
+         * 
+         */
+        virtual void run() = 0;
+    protected:
+        std::shared_ptr<uOS> m_uOS;
+        std::shared_ptr<DisplayManager> m_displayManager;
     };
 
 };

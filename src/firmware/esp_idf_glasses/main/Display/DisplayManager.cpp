@@ -15,7 +15,7 @@ void DisplayManager::init() {
     this->backend_display.begin(CS_PIN, DC_PIN, SPI);
 }
 
-void DisplayManager::setDisplayTask(TaskHandle_t* displayTask){
+void DisplayManager::setDisplayTask(TaskHandle_t displayTask){
     displaySenderTask = displayTask;
 }
 

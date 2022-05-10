@@ -30,9 +30,9 @@ namespace SmartGlasses{
          * @brief Get the TaskHandle of the running task
          * 
          * @param taskType the requested task
-         * @return (const TaskHandle_t*) The TaskHandle associated to this task
+         * @return (TaskHandle_t) The TaskHandle associated to this task
          */
-        TaskHandle_t* getTaskHandle(task_t taskType);
+        TaskHandle_t getTaskHandle(task_t taskType);
 
         /**
          * @brief Creates and starts all the tasks
@@ -50,7 +50,7 @@ namespace SmartGlasses{
     private:
         TaskManager() = default;
 
-        TaskHandle_t* allTasks[NB_TASKS] = {0};
+        TaskHandle_t allTasks[NB_TASKS] = {0};
 
 
         //---------------------Tasks

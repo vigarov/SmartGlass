@@ -18,14 +18,14 @@ namespace SmartGlasses{
         SemaphoreHandle_t xDisplayUpdateSemaphore;
         std::unique_ptr<display_t> currentFrames = std::make_unique<display_t>();
 
-        TaskHandle_t* displaySenderTask;
+        TaskHandle_t displaySenderTask;
 
         void init();
     public:
         DisplayManager();
 
         void update_awaiting_display(std::unique_ptr<display_t> newFrames); //Accepting ownership, call with std::move
-        void setDisplayTask(TaskHandle_t* displayTask);
+        void setDisplayTask(TaskHandle_t displayTask);
         void refreshDisplay();
     };
 };

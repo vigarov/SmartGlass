@@ -10,6 +10,8 @@ void IdleApp::onResume(){
     displayHeader();
 }
 
+void IdleApp::run(){}
+
 void IdleApp::displayHeader(){
     std::vector<pixel_pair_t> p = {
 (pixel_pair_t){37, 0},(pixel_pair_t){57, 0},(pixel_pair_t){99, 0},

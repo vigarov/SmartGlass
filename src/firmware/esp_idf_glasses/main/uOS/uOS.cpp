@@ -11,5 +11,5 @@ void uOS::setup(){
 
     std::shared_ptr<IdleApp> idleApp = std::make_shared<IdleApp>(shared_from_this());
     applications[IDLE] = idleApp;
-    ApplicationContainer::getInstance().setCurrentApplication(idleApp);
+    ApplicationContainer::getInstance().init(idleApp);
 }
