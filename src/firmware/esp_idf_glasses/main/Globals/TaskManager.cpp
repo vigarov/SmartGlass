@@ -17,12 +17,9 @@ TaskHandle_t* TaskManager::getTaskHandle(task_t taskType){
 
 void TaskManager::initAllTasks(){
 
-    int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, allTasks[T_BLE], PRO_CPU);
+    int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
     error = createTask(T_HandleDisplay,"DisplayHandler",1024,2,allTasks[T_DISPLAY],APP_CPU);
-    
-    DisplayManager& display_mgr = GlobalsManager::getInstance().getDeviceManager().getDisplayManager();
-    display_mgr.setDisplayTask(getTaskHandle(T_DISPLAY));
-    error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
+    // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
 }
 
 void TaskManager::setBLEHandler(std::shared_ptr<BLEHandler> bleHandler){
@@ -46,20 +43,25 @@ void TaskManager::T_HandleBLE(void *pvParameters){
     GlobalsManager::getInstance().getTaskManager().setBLEHandler(bHandler);
 
     while(1){
-        //The BLE Task technically does nohting, since the server is event (and callback driven)
+        //The BLE Task technically does nohting, since the server is event (and callback) driven
         vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }
 
-void TaskManager::T_HandleGNSS(void *pvParameters){
+/* void TaskManager::T_HandleGNSS(void *pvParameters){
     
-}
+} */
 
 
 void TaskManager::T_HandleDisplay(void* pvParameters){
-    DisplayManager& display_mgr = GlobalsManager::getInstance().getDeviceManager().getDisplayManager();
+    DisplayManager* display_mgr;
+    {
+        GlobalsManager& glob_mgr = GlobalsManager::getInstance();
+        display_mgr = &glob_mgr.getDeviceManager().getDisplayManager();
+        display_mgr->setDisplayTask(glob_mgr.getTaskManager().getTaskHandle(T_DISPLAY));
+    }
     while(1){
-        display_mgr.refreshDisplay();
+        display_mgr->refreshDisplay();
     }
 }
 

@@ -65,8 +65,12 @@ namespace SmartGlasses{
          * @arg pvParameters (void *) pointer to context parameters. Unused
          */
         static void T_HandleBLE( void *pvParameters);
+        /**
+         * @brief Task in charge of handling the Display.
+         * @arg pvParameters (void *) pointer to context parameters. Unused
+         */
         static void T_HandleDisplay(void* pvParameters);
-        static void T_HandleGNSS(void *pvParameters);
+        //static void T_HandleGNSS(void *pvParameters);
 
     };
 
