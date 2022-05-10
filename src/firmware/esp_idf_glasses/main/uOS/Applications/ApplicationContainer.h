@@ -27,19 +27,18 @@ namespace SmartGlasses{
          * 
          * @return (Application*) the current application
          */
-        Application* getCurrentApplication();
+        const Application* getCurrentApplication();
         
         /**
          * @brief Sets the current Application by closing the current one and resuming the new one 
          * 
          * @param app the application
          */
-        void setCurrentApplication(Application* app);
-        void setCurrentApplication(Application& app);
+        void setCurrentApplication(std::shared_ptr<Application> app);
     private:
         ApplicationContainer(){}
         
-        Application* currentApplication;
+        std::shared_ptr<Application> currentApplication;
     };
 
 };

@@ -2,16 +2,12 @@
 
 using namespace SmartGlasses;
 
-Application* ApplicationContainer::getCurrentApplication(){
-    return currentApplication; //from ApplicationContainer
+const Application* ApplicationContainer::getCurrentApplication(){
+    return currentApplication.get(); //from ApplicationContainer
 }
 
-void ApplicationContainer::setCurrentApplication(Application* app){
+void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> app){
     currentApplication->onClose();
     currentApplication = app;
     currentApplication->onResume();
-}
-
-void ApplicationContainer::setCurrentApplication(Application& app){
-    setCurrentApplication(&app);
 }

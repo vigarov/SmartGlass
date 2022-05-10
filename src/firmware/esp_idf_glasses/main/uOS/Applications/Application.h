@@ -1,6 +1,7 @@
 #pragma once
 
 #include "uOS.h"
+#include <memory>
 
 namespace SmartGlasses{
     enum APP_ID{
@@ -17,11 +18,11 @@ namespace SmartGlasses{
     class Application{
     friend class ApplicationContainer;
     public:
-        Application(uOS* uOS) : uOS_p(uOS){};
+        Application(std::shared_ptr<uOS> uOS_p) : m_uOS(uOS_p){};
 
         APP_ID id = NONE;
     protected:
-        uOS* uOS_p = nullptr;
+        std::shared_ptr<uOS> m_uOS;
     private:
         /**
          * @brief Function called when closing the application
