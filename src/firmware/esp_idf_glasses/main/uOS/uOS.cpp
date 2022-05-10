@@ -13,3 +13,12 @@ void uOS::setup(){
     applications[IDLE] = idleApp;
     ApplicationContainer::getInstance().init(idleApp);
 }
+
+void uOS::handleEvent(){
+    if(xQueueReceive(xEventsQueue,&eventBuffer,2000/portTICK_PERIOD_MS) == pdPASS){
+
+    }
+    else{
+        ESP_LOGI(UOS_M,"Didn't get an event after 2 seconds");
+    }
+}

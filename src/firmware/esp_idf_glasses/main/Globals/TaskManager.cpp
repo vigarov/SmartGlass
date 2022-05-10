@@ -64,6 +64,7 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
     ESP_LOGI(TASK_M,"Finished setting up display");
     while(1){
         display_mgr->refreshDisplay();
+        vTaskDelay(1/portTICK_PERIOD_MS);
     }
 }
 
@@ -75,6 +76,7 @@ void TaskManager::T_HandleUOS(void * pvParameters){
     ESP_LOGI(TASK_M,"Finished setting up uOS");
 
     while(1){
-        vTaskDelay(10/portTICK_PERIOD_MS);
+        uOS_p->handleEvent();
+        vTaskDelay(5/portTICK_PERIOD_MS);
     }
 }
