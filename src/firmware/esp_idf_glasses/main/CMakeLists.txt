@@ -28,17 +28,22 @@ set(DISPLAY_DIR Display)
 set(FONTS_DIR 
     ${DISPLAY_DIR}/fonts)
 set(OBJECTS_DIR ${DISPLAY_DIR}/Objects)
+set(IMM_O_D ${OBJECTS_DIR}/Immutable)
 set(DISPLAY_DIRS
     ${DISPLAY_DIR}
     ${FONTS_DIR}
-    ${OBJECTS_DIR})
-set(DISPLAY_SRCS 
-    ${DISPLAY_DIR}/Display.cpp
-    ${DISPLAY_DIR}/DisplayManager.cpp
-    ${FONTS_SRC}
-    )
+    ${OBJECTS_DIR}
+    ${IMM_O_D})
 set(FONTS_SRC
     ${FONTS_DIR}/font.cpp)
+set(OBJECTS_SRC
+    ${IMM_O_D}/RawText.cpp)
+set(DISPLAY_SRCS 
+    ${DISPLAY_DIR}/DisplayManager.cpp
+    ${DISPLAY_DIR}/Content.cpp
+    ${FONTS_SRC}
+    ${OBJECTS_SRC}
+    )
 
 set(SENSORS_DIR Sensors)
 set(GNSS_DIR ${SENSORS_DIR}/GNSS)

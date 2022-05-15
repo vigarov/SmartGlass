@@ -2,6 +2,8 @@
 
 #include <memory>
 #include "DisplayManager.h"
+#include "Content.h"
+#include <vector>
 
 namespace SmartGlasses{
 
@@ -43,6 +45,7 @@ namespace SmartGlasses{
     protected:
         std::shared_ptr<uOS> m_uOS;
         std::shared_ptr<DisplayManager> m_displayManager;
+        std::vector<std::unique_ptr<Content>> m_contents;
     };
 
 };

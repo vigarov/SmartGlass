@@ -10,7 +10,7 @@ namespace SmartGlasses{
     #define NB_ASCII_CHARS 128
     #define CHAR_WIDTH_8x8 8
 
-    constexpr unsigned char font8x8_basic[NB_ASCII_CHARS][CHAR_WIDTH_8x8] = {
+    const unsigned char font8x8_basic[NB_ASCII_CHARS][CHAR_WIDTH_8x8] = {
         { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0000 (nul)
         { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0001
         { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},   // U+0002

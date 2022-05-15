@@ -1,6 +1,6 @@
 #pragma once
 
-#include <vector>
+#include <unordered_set>
 
 namespace SmartGlasses{
     
@@ -8,21 +8,37 @@ namespace SmartGlasses{
      * @brief a pair of pixels
      * could also use std::pair<unsigned char> instead, but this is clearer
      */
-    struct __attribute__((packed)) pixel_pair_t{
+    struct __attribute__((packed,aligned(2))) pixel_pair_t{
         unsigned char x;
         unsigned char y;
+        bool operator==(pixel_pair_t const & rhs) const {
+                return x==rhs.x && y==rhs.y;
+        }
+        struct HashFunction
+        {
+            size_t operator()(const pixel_pair_t& pp) const
+            {
+            size_t xHash = std::hash<int>()(pp.x);
+            size_t yHash = std::hash<int>()(pp.y) << 1;
+            return xHash ^ yHash;
+            }
+        };
+    };
+
+    struct __attribute__((packed,aligned(4))) border_t{
+        pixel_pair_t topLeft;
+        pixel_pair_t bottomRight;
     };
 
     /**
-     * @brief A drawable object, defined as a set of pixels at an offset
+     * @brief A drawable object, defined as a unordered_set of pixels at an offunordered_set
      * 
      */
     class Drawable{
     public:
-        std::vector<pixel_pair_t> pixels;
-        unsigned char offsetX=0;
-        unsigned char offsetY=0;
-        unsigned char overwrite =1;
+        std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> pixels ; 
+        std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> border ; //must have pixels \cap border == 0. border = 0 <=> don't overwrite
+        pixel_pair_t offsets = {0,0};
     };
 
     /**

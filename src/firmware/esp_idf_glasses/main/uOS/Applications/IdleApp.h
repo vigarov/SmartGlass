@@ -13,7 +13,7 @@ namespace SmartGlasses{
         void onResume() override;
         void run() override;
 
-        void displayHeader(); //TODO: const?
+        void createAndDisplayHeader(); //TODO: const?
     };
 
 }

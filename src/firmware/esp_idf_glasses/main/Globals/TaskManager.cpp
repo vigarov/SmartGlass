@@ -15,12 +15,16 @@ TaskHandle_t TaskManager::getTaskHandle(task_t taskType){
     return nullptr;
 }
 
+#define DISPLAY_TASK_PRIORITY 5
+#define UOS_TASK_PRIORITY 4
+#define BLE_TASK_PRIORITY 1
+
 void TaskManager::initAllTasks(){
     ESP_LOGI(TASK_M,"Initialising all tasks");
-    int error = createTask(T_HandleBLE,"BLEHandler",10240,configMAX_PRIORITIES-1, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
-    error = createTask(T_HandleDisplay,"DisplayHandler",1024,configMAX_PRIORITIES-1,&allTasks[T_DISPLAY],APP_CPU);
+    int error = createTask(T_HandleBLE,"BLEHandler",10240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
+    error = createTask(T_HandleDisplay,"DisplayHandler",2048,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
-    error = createTask(T_HandleUOS,"uOS",20480,2,&allTasks[T_UOS],APP_CPU);
+    error = createTask(T_HandleUOS,"uOS",20480,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
     ESP_LOGI(TASK_M,"Finished initialiing all tasks");
 }
 
