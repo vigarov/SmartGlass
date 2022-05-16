@@ -3,25 +3,36 @@
 #include "BLEServer.h"
 #include "BLEUtils.h"
 #include "GeneralUtils.h" // Also from BLE library
+#include "GlobalsManager.h"
 
 namespace SmartGlasses{
     class ServerCB : public BLEServerCallbacks{
+        #define SCB_M "ServerCallback Module"
         void onConnect(BLEServer* pServer) override {
-            //Notify the uOS to change the header
-            //TODO: either taskNotify uOS or semaphore unlock (not preferrable)
-            //      AND write to some bitset/flag (atomically) to show what is updated (in that case BT connectivity)
-
+            QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
+            uOSEvent e = {.id=BT_CONNECT};
+            if(xQueueSendToBack(q,(void *)&e,2/portTICK_PERIOD_MS) !=pdTRUE){
+                ESP_LOGE(SCB_M,"Connected but couldn't push to queue: it is full");
+            }
         }
 
         void onDisconnect(BLEServer* pServer) override {
-            //TODO: Opposite, but same as above
+            QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
+            uOSEvent e = {.id=BT_DISCONNECT};
+            if(xQueueSendToBack(q,(void *)&e,2/portTICK_PERIOD_MS) !=pdTRUE){
+                ESP_LOGE(SCB_M,"Disconnected but couldn't push to queue: it is full");
+            }
         }
 
     };
 
     class NotificationBufferCB : public BLECharacteristicCallbacks {
         void onWrite(BLECharacteristic *pCharacteristic){
-            //New notification has arrived: "save" it locally and clear the buffer
+            QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
+            uOSEvent e = {.id=NOTIFICATION_NEW};
+            if(xQueueSendToBack(q,(void *)&e,10/portTICK_PERIOD_MS) !=pdTRUE){
+                ESP_LOGE("BLE Notification CB","New notification but couldn't push to queue: it is full");
+            }
         }
     };
 };

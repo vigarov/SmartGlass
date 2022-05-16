@@ -4,6 +4,7 @@
 
 namespace SmartGlasses{
 
+
     #define APPCONT_M "Application Container"
     /**
      * @brief Container for the current application object. Thread safe singleton
@@ -54,4 +55,6 @@ namespace SmartGlasses{
         TaskHandle_t appTaskHandler = nullptr;
     };
 
+    #define APPLICATIONCONTAINER (ApplicationContainer::getInstance())
+    #define CURRENTAPP ((APPLICATIONCONTAINER).getCurrentApplication())
 };

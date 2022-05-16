@@ -7,7 +7,7 @@ namespace SmartGlasses{
 
     class IdleApp : public Application{
     public:
-        IdleApp(std::shared_ptr<uOS> uOS_p) : Application(uOS_p){}
+        IdleApp(std::shared_ptr<uOS> uOS_p) : Application(uOS_p,IDLE){}
     private:
         void onClose() override;
         void onResume() override;
