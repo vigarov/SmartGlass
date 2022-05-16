@@ -1,5 +1,7 @@
 #include "utils.h"
 #include "esp_log.h"
+#include <sys/time.h>
+#include <time.h>
 
 //using namespace SmartGlasses; Somehow linker doesn't find definition of createTask if it is not explicitely prefixed by the namespace...
 
@@ -27,4 +29,22 @@ constexpr void SmartGlasses::constexpr_for(F&& f)
         f(std::integral_constant<decltype(Start), Start>());
         constexpr_for<Start + Inc, End, Inc>(f);
     }
+}
+
+void SmartGlasses::resetTime(){
+    setenv("TZ","Europe/Zurich",1);
+    tzset();
+
+    struct tm t;
+    if(strptime(__DATE__ " " __TIME__,"%b %d %Y %H:%M:%S",&t) == NULL){
+        ESP_LOGE("Utils Module", "Unable to convert date/time");
+    }
+    else {
+        time_t tt = mktime(&t);
+        struct timeval tv{tt,0};
+        if(tt==-1 || settimeofday(&tv,NULL) == -1){
+            ESP_LOGE("Utils Module", "Failed to set date/time");
+        }
+    }
+
 }

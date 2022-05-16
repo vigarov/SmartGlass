@@ -1,10 +1,12 @@
 #include "GlobalsManager.h"
 #include "esp_log.h"
 #include "constants.h"
+#include "utils.h"
 
 //----------------------Entry point----------------------
 extern "C" void app_main()
 {
+    SmartGlasses::resetTime(); //TODO: rather emulate an SNTP server over BLE with the Arduino Phone
     SmartGlasses::GlobalsManager::getInstance().getTaskManager().initAllTasks();
     ESP_LOGI(APP_NAME,"Initialised all tasks, exiting main");
     //The [esp32 application flow](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-guides/startup.html#app-main-task)

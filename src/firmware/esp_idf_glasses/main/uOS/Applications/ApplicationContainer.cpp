@@ -32,7 +32,7 @@ void ApplicationContainer::runApplication(void *pvParameters){
     std::shared_ptr<Application> usedApp = *(std::shared_ptr<Application>*)pvParameters;
     ApplicationContainer& ac = ApplicationContainer::getInstance();
     while(1){
-        if(xSemaphoreTake(ac.xAppSemaphore, 5/portTICK_RATE_MS) == pdPASS){
+        if(xSemaphoreTake(ac.xAppSemaphore, 5/portTICK_PERIOD_MS) == pdPASS){
             std::shared_ptr<Application> currA = ac.getCurrentApplication();
             xSemaphoreGive(ac.xAppSemaphore);
             if(usedApp->id != currA->id){

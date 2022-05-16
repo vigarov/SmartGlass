@@ -68,4 +68,10 @@ namespace SmartGlasses{
         std::shared_ptr<uOS> m_uOS;
         
     };
+
+    #define GLOBALSMANAGER (GlobalsManager::getInstance())
+    #define DEVICEMANAGER ((GLOBALSMANAGER).getDeviceManager())
+    #define TASKMANAGER ((GLOBALSMANAGER).getTaskManager())
+    #define DISPLAYMANAGER ((DEVICEMANAGER).getDisplayManager())
+
 };

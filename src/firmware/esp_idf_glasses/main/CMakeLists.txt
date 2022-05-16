@@ -29,15 +29,25 @@ set(FONTS_DIR
     ${DISPLAY_DIR}/fonts)
 set(OBJECTS_DIR ${DISPLAY_DIR}/Objects)
 set(IMM_O_D ${OBJECTS_DIR}/Immutable)
+set(IMM_O_D_SRCS 
+    ${IMM_O_D}/RawText.cpp)
+set(M_O_D ${OBJECTS_DIR}/Mutable)
+set(M_O_D_SRCS 
+    ${M_O_D}/BLEIcon.cpp)
+set(OBJECTS_DIRS 
+    ${OBJECT_DIR}
+    ${IMM_O_D}
+    ${M_O_D})
 set(DISPLAY_DIRS
     ${DISPLAY_DIR}
     ${FONTS_DIR}
-    ${OBJECTS_DIR}
-    ${IMM_O_D})
+    ${OBJECTS_DIRS}
+    )
 set(FONTS_SRC
     ${FONTS_DIR}/font.cpp)
 set(OBJECTS_SRC
-    ${IMM_O_D}/RawText.cpp)
+    ${IMM_O_D_SRCS}
+    ${M_O_D_SRCS})
 set(DISPLAY_SRCS 
     ${DISPLAY_DIR}/DisplayManager.cpp
     ${DISPLAY_DIR}/Content.cpp
@@ -48,12 +58,16 @@ set(DISPLAY_SRCS
 set(SENSORS_DIR Sensors)
 set(GNSS_DIR ${SENSORS_DIR}/GNSS)
 set(GNSS_SRCS ${GNSS_DIR}/GNSS.cpp)
+set(TIMER_DIR ${SENSORS_DIR}/Timer)
+set(TIMER_SRCS ${TIMER_DIR}/Timers.cpp)
 set(SENSORS_DIRS
     ${SENSORS_DIR}
-    ${GNSS_DIR}    
+    ${GNSS_DIR}  
+    ${TIMER_DIR}  
 )
 set(SENSOR_SRCS 
     ${GNSS_SRCS}
+    ${TIMER_SRCS}
 )
 
 set(GLOBALS_DIR Globals)

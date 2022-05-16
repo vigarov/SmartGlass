@@ -3,6 +3,7 @@
 #include <memory>
 #include "HyperDisplay_UG2856KLBAG01.h"
 #include "Display.h"
+#include "Device.h"
 
 namespace SmartGlasses{
 
@@ -10,7 +11,7 @@ namespace SmartGlasses{
     #define CS_PIN 4
     #define DC_PIN 5
 
-    class DisplayManager {
+    class DisplayManager : public Device{
         friend class DeviceManager;
     private:
         UG2856KLBAG01_SPI backend_display;
@@ -20,7 +21,7 @@ namespace SmartGlasses{
 
         TaskHandle_t displaySenderTask;
 
-        void init();
+        void init() override;
     public:
         DisplayManager();
 

@@ -10,10 +10,15 @@ void Content::update(){
     }
 }
 
+void Content::createUpdateTask(){
+    createTask(T_Update,(m_contentName.substr(0,configMAX_TASK_NAME_LEN - 4) + "_UT").c_str(),4096,DISPLAYABLE_UPDATE_PRIORITY,&m_innerObjectTask,APP_CPU,this);
+}
+
 void Content::setup(){
-    createTask(T_Update,(m_contentName.substr(0,configMAX_TASK_NAME_LEN - 4) + "_UT").c_str(),1024,DISPLAYABLE_UPDATE_PRIORITY,&m_innerObjectTask,APP_CPU,this);
+    createUpdateTask();
     m_setup=true;
     updatePixels();
+    canvasAndUpdate();
     ESP_LOGI(m_contentName.c_str(),"Finished Setup");
 }
 
@@ -24,15 +29,14 @@ void Content::T_Update(void* pvParameters){
             ESP_LOGI(currentContent->m_contentName.c_str(),"No new content received after 20 seconds");
         }else{
             currentContent->updatePixels(); 
-            currentContent->borderAndUpdate();
+            currentContent->canvasAndUpdate();
         }
     }
 }
 
-std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> Content::computeBorder(std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>& pixelSet){
-    std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> retSet;
-    if(m_overwrite){
-        for(auto &p : pixelSet){
+void Content::computeCanvas(){
+    if(m_overwrite && m_modifiedSinceLastUpdate){
+        for(auto &p : m_pixels){
             if(p.x<m_borders.topLeft.x){
                 m_borders.topLeft.x = p.x;
             }
@@ -49,13 +53,12 @@ std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> Content::computeBord
         for(unsigned char x=m_borders.topLeft.x ; x<m_borders.bottomRight.x ; x++){
             for(unsigned char y = m_borders.topLeft.y; y<m_borders.bottomRight.y; y++){
                 pixel_pair_t p = {x,y};
-                if(!pixelSet.count(p)){
-                    retSet.insert(std::move(p));
+                if(!m_pixels.count(p)){
+                    m_canvas.insert(std::move(p));
                 }
             }
         }
     }
-    return std::move(retSet);
 }
 
 Content::~Content(){
@@ -64,10 +67,13 @@ Content::~Content(){
     }
 }
 
-void Content::borderAndUpdate(){
-    //Now that the new values for the pixels have been fetch, we can compute the new border
-    std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> notInPixelsSet = std::move(computeBorder(m_pixels));
-    //and then update the display
-    GlobalsManager::getInstance().getDeviceManager().getDisplayManager()->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,{m_pixels,std::move(notInPixelsSet),m_offsets}}))); 
-    //We don't move the m_pixels since we might not be updating them each time
+void Content::canvasAndUpdate(){
+    if(m_modifiedSinceLastUpdate){
+        //Now that the new values for the pixels have been fetched, we can compute the new canvas
+        computeCanvas();
+        //and then update the display
+        DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,{m_pixels,m_canvas,m_offsets}}))); 
+        //We don't move the m_pixels since we might not be updating them each time
+        m_modifiedSinceLastUpdate = false;
+    }
 }

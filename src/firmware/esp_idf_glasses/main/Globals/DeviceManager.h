@@ -1,5 +1,7 @@
 #pragma once
 #include "DisplayManager.h"
+#include "Timers.h"
+#include "Device.h"
 #include <memory>
 
 namespace SmartGlasses{
@@ -12,9 +14,21 @@ namespace SmartGlasses{
     class DeviceManager{
         friend class GlobalsManager;
     public:
+        void initAll();
         std::shared_ptr<DisplayManager> getDisplayManager();
+        std::shared_ptr<Timer<SYSTEM_TIMER_GROUP,ONE_S_ID>> getOneSecondTimer();
+        std::shared_ptr<Timer<SYSTEM_TIMER_GROUP,SIXTY_S_ID>> getSixtySecondTimer();
     private:
-        DeviceManager() = default;
-        std::shared_ptr<DisplayManager> displayManager = std::make_shared<DisplayManager>();
+        enum device_idx{
+            DISPLAY_IDX,
+            TIMER_1s_IDX,
+            TIMER_60s_IDX,
+            //...
+            NB_DEVICES
+        };
+
+        DeviceManager();
+
+        std::shared_ptr<Device> m_allDevices[NB_DEVICES];
     };
 };

@@ -18,9 +18,9 @@ namespace SmartGlasses{
         {
             size_t operator()(const pixel_pair_t& pp) const
             {
-            size_t xHash = std::hash<int>()(pp.x);
-            size_t yHash = std::hash<int>()(pp.y) << 1;
-            return xHash ^ yHash;
+                size_t x = static_cast<size_t>(pp.x);
+                size_t y = static_cast<size_t>(pp.y);
+                return x<<8|y; //This way, no collisions can happen over our input space
             }
         };
     };

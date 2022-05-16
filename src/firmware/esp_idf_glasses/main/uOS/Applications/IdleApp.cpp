@@ -17,5 +17,5 @@ void IdleApp::run(){}
 
 void IdleApp::createAndDisplayHeader(){
     std::string s = "test";
-    m_contents.push_back(std::move(std::make_unique<RawText>(s)));
+    m_contents.push_back(std::move(std::make_unique<RawText>(s,true)));
 }
