@@ -1,3 +1,4 @@
 /src/firmware/esp_idf_glasses/build/
 /src/firmware/esp_idf_glasses/.devcontainer
 /src/firmware/esp_idf_glasses/sdkconfig.old
+**.vscode**
