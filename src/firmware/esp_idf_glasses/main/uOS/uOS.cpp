@@ -1,6 +1,7 @@
 #include "uOS.h"
 #include "IdleApp.h"
 #include "ApplicationContainer.h"
+#include "BLECharacteristic.h"
 
 using namespace SmartGlasses;
 
@@ -30,6 +31,17 @@ void uOS::handleEvent(){
                 //Start blinking the BL icon <=> add as task handle to notify to the 1s Timer the handle of the updatePixel task of the BLEIcon (or its Container, see how this gets implemented)
                 
             }
+            break;
+        }
+        case NOTIFICATION_NEW:
+        {
+            auto notifCharac = static_cast<BLECharacteristic*>(eventBuffer.sender);
+            std::string notifData = notifCharac->getValue();
+            ESP_LOGI(UOS_M,"Received new notification %s",notifData.c_str());
+            notification_t notification = {};
+            memcpy(&notification,notifData.data(),sizeof(notification_t));
+            notifCharac->setValue(0);
+            //TODO: Do something with the notifiaction
             break;
         }
         default:

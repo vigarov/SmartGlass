@@ -10,7 +10,7 @@ namespace SmartGlasses{
         #define SCB_M "ServerCallback Module"
         void onConnect(BLEServer* pServer) override {
             QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
-            uOSEvent e = {.id=BT_CONNECT};
+            uOSEvent e = {.id=BT_CONNECT,.sender=static_cast<void*>(pServer)};
             if(xQueueSendToBack(q,(void *)&e,2/portTICK_PERIOD_MS) !=pdTRUE){
                 ESP_LOGE(SCB_M,"Connected but couldn't push to queue: it is full");
             }
@@ -18,7 +18,7 @@ namespace SmartGlasses{
 
         void onDisconnect(BLEServer* pServer) override {
             QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
-            uOSEvent e = {.id=BT_DISCONNECT};
+            uOSEvent e = {.id=BT_DISCONNECT,.sender=static_cast<void*>(pServer)};
             if(xQueueSendToBack(q,(void *)&e,2/portTICK_PERIOD_MS) !=pdTRUE){
                 ESP_LOGE(SCB_M,"Disconnected but couldn't push to queue: it is full");
             }
@@ -29,7 +29,7 @@ namespace SmartGlasses{
     class NotificationBufferCB : public BLECharacteristicCallbacks {
         void onWrite(BLECharacteristic *pCharacteristic){
             QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
-            uOSEvent e = {.id=NOTIFICATION_NEW};
+            uOSEvent e = {.id=NOTIFICATION_NEW,.sender=static_cast<void*>(pCharacteristic)};
             if(xQueueSendToBack(q,(void *)&e,10/portTICK_PERIOD_MS) !=pdTRUE){
                 ESP_LOGE("BLE Notification CB","New notification but couldn't push to queue: it is full");
             }

@@ -21,6 +21,7 @@ namespace SmartGlasses{
 
     struct uOSEvent{
         uOSEventID id;
+        void* sender;
     };
 
     class uOS: public std::enable_shared_from_this<uOS>{
