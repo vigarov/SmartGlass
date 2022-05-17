@@ -14,6 +14,7 @@ void DisplayManager::init() {
     SPI.begin();
     backend_display.begin(CS_PIN, DC_PIN, SPI);
     backend_display.buffer(NULL); //set window in buffered mode: we will be doing writes of several pixels each time we write --> might as well only write to the display once per call
+    ESP_LOGI(DISPLAY_M,"Finished setting up the display");
 }
 
 void DisplayManager::setDisplayTask(TaskHandle_t displayTask){

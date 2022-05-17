@@ -18,6 +18,7 @@ namespace SmartGlasses{
          * @return ApplicationContainer& the application Conatiner
          */
         static ApplicationContainer& getInstance(){
+            ESP_LOGI(APPCONT_M,"Getting application container instance");
             static ApplicationContainer instance;
             return instance;
         }
@@ -46,7 +47,9 @@ namespace SmartGlasses{
 
         
     private:
-        ApplicationContainer() = default;
+        ApplicationContainer(){
+            ESP_LOGI(APPCONT_M,"Creating application container");
+        };
         
         std::shared_ptr<Application> currentApplication;
         

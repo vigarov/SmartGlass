@@ -12,7 +12,7 @@
 
 using namespace SmartGlasses;
 
-#define MODULE_NAME "BLEHandler"
+#define BLE_M "BLEHandler"
 
 BLEHandler::BLEHandler(){
     initServer();
@@ -21,24 +21,27 @@ BLEHandler::BLEHandler(){
 }
 
 void BLEHandler::initServer(){
+    ESP_LOGI(BLE_M,"Starting initializing server");
     //Setting up server
     esp_err_t errRc = ::nvs_flash_init(); // it looks like BLEDevice::init doesn't actually do this for some reason.
     if (errRc != ESP_OK) {
-        ESP_LOGE(MODULE_NAME, "nvs_flash_init: rc=%d %s", errRc, GeneralUtils::errorToString(errRc));
+        ESP_LOGE(BLE_M, "nvs_flash_init: rc=%d %s", errRc, GeneralUtils::errorToString(errRc));
         return;
     }
     BLEDevice::init(APP_NAME);
     server = BLEDevice::createServer();
     server->setCallbacks(new ServerCB()); //TODO: memory safety?
+    ESP_LOGI(BLE_M,"Finished initializing server");
 }
 
 void BLEHandler::initServices(){
+    ESP_LOGI(BLE_M,"Starting initializing services");
     BLEAdvertising* advertiser = BLEDevice::getAdvertising();
     for(uint8_t i = NOTIF_SERVICE; i<NB_SERVICES;i++){
         auto& uuid = servicesUUID[i];
         BLEService* service = server->createService(uuid);
         if(service == nullptr){
-            ESP_LOGE(MODULE_NAME, "failed to create service w/ uuid %s",uuid.toString().c_str());
+            ESP_LOGE(BLE_M, "failed to create service w/ uuid %s",uuid.toString().c_str());
             return;//TODO:Handle error better (propagate back, set flag, ...)
         }
         addCharacteristics(static_cast<services_t>(i),service);
@@ -47,11 +50,12 @@ void BLEHandler::initServices(){
         //(advertiser is a (non-thread safe) singleton)
         advertiser->addServiceUUID(uuid); 
     }
+    ESP_LOGI(BLE_M,"Finished initializing services");
 }
 
 #define INLINE_CHECK_FOR_ERROR(characteristic, uuid_char_arr) \
     if((characteristic) == nullptr){ \
-        ESP_LOGE(MODULE_NAME, "failed to create characteristic w/ uuid %s",(uuid_char_arr)); \
+        ESP_LOGE(BLE_M, "failed to create characteristic w/ uuid %s",(uuid_char_arr)); \
         return; \
     }
 
@@ -94,5 +98,6 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
 }
 
 void BLEHandler::startAdvertise(){
-    BLEDevice::startAdvertising();
+    BLEDevice::startAdvertising();    
+    ESP_LOGI(BLE_M,"Started advertising");
 }

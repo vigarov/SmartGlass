@@ -68,7 +68,7 @@ void Timer<GROUP,ID>::T_NotifyAlarmSubscribers(void* pvParameters){
             //Since we have come to this point from a direct context switch from the ISR,
             //it is definitely possible that a lower priority tak currently handled the semaphore
             //we must therefore take it in a "polling" fashion
-            while(xSemaphoreTake(t->xSetSemaphore, 1 / portTICK_PERIOD_MS) != pdPASS){
+            while(xSemaphoreTake(t->xSetSemaphore, 1 / portTICK_PERIOD_MS) != pdTRUE){
                 vTaskDelay(5 / portTICK_PERIOD_MS);
             }
             //we have the semaphore, we can now update all tasks needing it
@@ -88,7 +88,7 @@ bool Timer<GROUP,ID>::addTaskNotifiedOnAlarm(TaskHandle_t handle){
         ESP_LOGE(TIMER_M,"Adding tasks before timer setup!");
         return false;
     }
-    if(xSemaphoreTake(xSetSemaphore,50 / portTICK_RATE_MS) == pdPASS){
+    if(xSemaphoreTake(xSetSemaphore,50 / portTICK_RATE_MS) == pdTRUE){
         bool wasEmpty = m_tasksToNotify.empty();
         m_tasksToNotify.insert(handle);
         xSemaphoreGive(xSetSemaphore);
@@ -114,7 +114,7 @@ bool Timer<GROUP,ID>::removeTaskNotifiedOnAlarm(TaskHandle_t handle){
         ESP_LOGE(TIMER_M,"Removing tasks in empty set!");
         return false;
     }
-    if(xSemaphoreTake(xSetSemaphore,50 / portTICK_RATE_MS) == pdPASS){
+    if(xSemaphoreTake(xSetSemaphore,50 / portTICK_RATE_MS) == pdTRUE){
         bool removed = m_tasksToNotify.erase(handle);
         bool isEmpty = m_tasksToNotify.empty();
         xSemaphoreGive(xSetSemaphore);

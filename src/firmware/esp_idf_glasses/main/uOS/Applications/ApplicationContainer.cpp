@@ -9,8 +9,10 @@ std::shared_ptr<Application> ApplicationContainer::getCurrentApplication(){
 }
 
 void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> app){
+    ESP_LOGI(APPCONT_M,"Setting the current application to app with id: %d", app->id);
     // currentApplication->onClose();
-    if(xSemaphoreTake(xAppSemaphore, 15/portTICK_PERIOD_MS) == pdPASS){
+    if(xSemaphoreTake(xAppSemaphore, 15/portTICK_PERIOD_MS) == pdTRUE){
+        ESP_LOGI(APPCONT_M,"Taking application semaphore to change it");
         currentApplication = app;
         xSemaphoreGive(xAppSemaphore);
     }
@@ -21,10 +23,11 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
 }
 
 void ApplicationContainer::init(std::shared_ptr<Application> app){
-    ESP_LOGI(APPCONT_M,"Initiliazing App. Container");
+    ESP_LOGI(APPCONT_M,"Initialiazing App. Container");
     currentApplication = app;
     xAppSemaphore = xSemaphoreCreateBinary();
     createTask(runApplication,"ApplicationRunner",10240,1,&appTaskHandler,APP_CPU,&currentApplication);
+    ESP_LOGI(APPCONT_M,"Initialiazed App. Container. app semaphore pointer : %p",xAppSemaphore);
 }
 
 void ApplicationContainer::runApplication(void *pvParameters){
@@ -32,19 +35,22 @@ void ApplicationContainer::runApplication(void *pvParameters){
     std::shared_ptr<Application> usedApp = *(std::shared_ptr<Application>*)pvParameters;
     ApplicationContainer& ac = ApplicationContainer::getInstance();
     while(1){
-        if(xSemaphoreTake(ac.xAppSemaphore, 5/portTICK_PERIOD_MS) == pdPASS){
+        if(xSemaphoreTake(ac.xAppSemaphore, 5/portTICK_PERIOD_MS) == pdTRUE){
+            ESP_LOGI(APPCONT_M,"Taking application semaphore to run it");
             std::shared_ptr<Application> currA = ac.getCurrentApplication();
             xSemaphoreGive(ac.xAppSemaphore);
             if(usedApp->id != currA->id){
                 usedApp->onClose();
                 usedApp = currA;
                 usedApp->onResume();
+                continue;
             }
+            usedApp->run();
         }
         else{
-            ESP_LOGW("App Thread", "Couldn't get semaphore to update the current application in the thread");
+            ESP_LOGW(APPCONT_M, "Couldn't get semaphore to run the application");
         }
-        usedApp->run();
+        vTaskDelay(100/portTICK_PERIOD_MS);
     }
 
 }

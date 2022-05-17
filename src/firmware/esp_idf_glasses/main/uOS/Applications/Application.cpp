@@ -1,5 +1,6 @@
 #include "Application.h"
 #include "GlobalsManager.h"
+#include "esp_log.h"
 
 using namespace SmartGlasses;
 
@@ -8,4 +9,5 @@ Application::Application(std::shared_ptr<uOS> uOS_p, APP_ID id){
     m_uOS = uOS_p;
     m_displayManager = DISPLAYMANAGER;
     this->id = id;
+    ESP_LOGI("Base Application","Created application w/ id=%d",id);
 }

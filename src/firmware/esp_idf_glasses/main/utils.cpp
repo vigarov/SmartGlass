@@ -32,6 +32,7 @@ constexpr void SmartGlasses::constexpr_for(F&& f)
 }
 
 void SmartGlasses::resetTime(){
+    ESP_LOGI("Utils","Setting system time");
     setenv("TZ","Europe/Zurich",1);
     tzset();
 
@@ -46,5 +47,5 @@ void SmartGlasses::resetTime(){
             ESP_LOGE("Utils Module", "Failed to set date/time");
         }
     }
-
+    ESP_LOGI("Utils","Successfully set system time");
 }
