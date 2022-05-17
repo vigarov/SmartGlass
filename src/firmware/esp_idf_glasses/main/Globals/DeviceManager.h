@@ -5,6 +5,11 @@
 #include <memory>
 
 namespace SmartGlasses{
+    //TODO: change if needed
+    #define BUT_UP_PIN GPIO_NUM_32
+    #define BUT_DOWN_PIN GPIO_NUM_33
+    #define BUT_LEFT_BACK_PIN GPIO_NUM_34
+    #define BUT_RIGHT_SELECT_PIN GPIO_NUM_35
 
     /**
      * @brief Manager objects for our devices, such as the display, GNSS module, ...
@@ -30,5 +35,12 @@ namespace SmartGlasses{
         DeviceManager();
 
         std::shared_ptr<Device> m_allDevices[NB_DEVICES];
+    
+        static void button_pressed_ISR(void* arg);
+        /**
+        * @brief Configures the Buttons as GPIO inputs and set their ISRs
+        */
+        void initButtons();
     };
+    
 };
