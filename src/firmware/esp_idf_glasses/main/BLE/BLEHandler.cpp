@@ -21,6 +21,7 @@ BLEHandler::BLEHandler(){
 }
 
 void BLEHandler::initServer(){
+    esp_log_level_set(MODULE_NAME, ESP_LOG_VERBOSE);
     //Setting up server
     esp_err_t errRc = ::nvs_flash_init(); // it looks like BLEDevice::init doesn't actually do this for some reason.
     if (errRc != ESP_OK) {
@@ -63,6 +64,22 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 INLINE_CHECK_FOR_ERROR(characteristic,NOTIF_BUFFER_ATTR_UUID)
                 characteristic->setCallbacks(new NotificationBufferCB());
                 break;
+            }
+        case IMU_SERVICE:
+            {
+                auto* accel_x_char = service->createCharacteristic(IMU_SERVICE_ACCEL_X_CHAR_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_ACCEL_X_CHAR_UUID)
+                auto* accel_y_char = service->createCharacteristic(IMU_SERVICE_ACCEL_Y_CHAR_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_ACCEL_Y_CHAR_UUID)
+                auto* accel_z_char = service->createCharacteristic(IMU_SERVICE_ACCEL_Z_CHAR_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_ACCEL_Z_CHAR_UUID)
+                auto* gyro_x_char = service->createCharacteristic(IMU_SERVICE_GYRO_X_CHAR_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_GYRO_X_CHAR_UUID)
+                auto* gyro_y_char = service->createCharacteristic(IMU_SERVICE_GYRO_Y_CHAR_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_GYRO_Y_CHAR_UUID)
+                auto* gyro_z_char = service->createCharacteristic(IMU_SERVICE_GYRO_Z_CHAR_UUID,BLECharacteristic::PROPERTY_READ | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_GYRO_Z_CHAR_UUID)
+                // now really should store these somewhere so they can be updated later
             }
         case GNSS_SERVICE:
             {

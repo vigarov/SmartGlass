@@ -11,7 +11,8 @@ namespace SmartGlasses{
     enum task_t{
         T_BLE,
         T_DISPLAY,
-        //T_GNSS,
+        T_IMU,
+        T_GNSS,
         T_UOS,
         NB_TASKS
     };
@@ -66,6 +67,7 @@ namespace SmartGlasses{
         static void T_HandleDisplay(void* pvParameters);
         //static void T_HandleGNSS(void *pvParameters);
         static void T_HandleUOS(void* parameters);
+        static void T_HandleIMU(void* parameters);
     };
 
 };

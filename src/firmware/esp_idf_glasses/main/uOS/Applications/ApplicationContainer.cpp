@@ -21,6 +21,7 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
 }
 
 void ApplicationContainer::init(std::shared_ptr<Application> app){
+    esp_log_level_set(APPCONT_M, ESP_LOG_VERBOSE);
     ESP_LOGI(APPCONT_M,"Initiliazing App. Container");
     currentApplication = app;
     xAppSemaphore = xSemaphoreCreateBinary();

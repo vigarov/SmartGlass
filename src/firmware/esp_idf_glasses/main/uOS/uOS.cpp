@@ -11,14 +11,14 @@ void uOS::setup(){
 
     std::shared_ptr<IdleApp> idleApp = std::make_shared<IdleApp>(shared_from_this());
     applications[IDLE] = idleApp;
-    ApplicationContainer::getInstance().init(idleApp);
+    //ApplicationContainer::getInstance().init(idleApp);
 }
 
 void uOS::handleEvent(){
-    if(xQueueReceive(xEventsQueue,&eventBuffer,2000/portTICK_PERIOD_MS) == pdPASS){
+    if(xQueueReceive(xEventsQueue,&eventBuffer,100/portTICK_PERIOD_MS) == pdPASS){
 
     }
     else{
-        ESP_LOGI(UOS_M,"Didn't get an event after 2 seconds");
+        //ESP_LOGI(UOS_M,"Didn't get an event after 2 seconds");
     }
 }

@@ -11,6 +11,7 @@ Timer<GROUP,ID>::Timer(){
 
 template<timer_group_t GROUP, timer_idx_t ID>
 void Timer<GROUP,ID>::init(){
+    esp_log_level_set(TIMER_M, ESP_LOG_VERBOSE);
     ESP_LOGI(TIMER_M,"Prefer setup(..) for setting up a timer. Using default values ");
     setup(TIMER_AUTORELOAD_EN,ID==ONE_S_ID?1000:60000);
 }

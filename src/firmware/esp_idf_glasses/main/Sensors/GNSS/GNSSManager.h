@@ -7,11 +7,11 @@
 
 namespace SmartGlasses{
 
-    #define DISPLAY_M "Display Manager Module"
+    #define GNSS_M "GNSS Manager Module"
     #define CS_PIN 4
     #define DC_PIN 5
 
-    class DisplayManager : public Device{
+    class GNSSManager : public Device{
         friend class DeviceManager;
     private:
         UG2856KLBAG01_SPI backend_display;
@@ -20,10 +20,10 @@ namespace SmartGlasses{
         std::unique_ptr<display_t> currentFrames = std::make_unique<display_t>();
 
         TaskHandle_t displaySenderTask;
-    public:
-        DisplayManager();
 
         void init() override;
+    public:
+        GNSSManager();
 
         void update_awaiting_display(std::unique_ptr<display_t> newFrames); //Accepting ownership, call with std::move
         void setDisplayTask(TaskHandle_t displayTask);

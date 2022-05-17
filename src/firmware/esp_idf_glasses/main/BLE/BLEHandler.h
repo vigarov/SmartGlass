@@ -9,7 +9,7 @@ namespace SmartGlasses{
     enum services_t : uint8_t{
 	NOTIF_SERVICE,
 	GNSS_SERVICE,
-	//IMU_SERVICE,
+	IMU_SERVICE,
 	BATTERY_SERVICE,
 	NB_SERVICES
     };
@@ -24,6 +24,13 @@ namespace SmartGlasses{
     #define GNSS_CHAR_UUID 0x2a67 // these come from UUIDs with allocation type=GATT Characteristic and Object Type here: https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
     #define GNSS_FEATURES_CHAR_UUID 0x2a6a
     
+    #define IMU_SERVICE_UUID "319d217a-10e6-4cf1-95ea-d011aace7c01"
+    #define IMU_SERVICE_ACCEL_X_CHAR_UUID "53e9a03c-eba3-4caf-a9f1-29ce88345644"
+    #define IMU_SERVICE_ACCEL_Y_CHAR_UUID "9c84d685-a5be-4733-add7-ea04bb4a9d3b"
+    #define IMU_SERVICE_ACCEL_Z_CHAR_UUID "1ec72f79-8809-41f7-a2da-6ffd3e1a0c3a"
+    #define IMU_SERVICE_GYRO_X_CHAR_UUID "51056f51-e38a-4be8-a80d-7b7b838a3a56"
+    #define IMU_SERVICE_GYRO_Y_CHAR_UUID "6add9f79-ef0d-45fa-bed5-9bdfe4c270b8"
+    #define IMU_SERVICE_GYRO_Z_CHAR_UUID "273e3d6a-a507-422f-970b-e389295585b9"
 
     /**
      * @brief Handler for the BLE connection and interfacing
@@ -55,6 +62,7 @@ namespace SmartGlasses{
         BLEUUID servicesUUID[NB_SERVICES] = {
             BLEUUID(NOTIF_SERVICE_UUID),
             BLEUUID((uint16_t)GNSS_SERVICE_UUID),
+            BLEUUID((uint16_t)IMU_SERVICE_UUID),
             BLEUUID((uint16_t)BATTERY_SERVICE_UUID)
         };
     };

@@ -1,4 +1,4 @@
-#include "DisplayManager.h"
+#include "GNSSManager.h"
 #include "utils.h"
 #include "constants.h"
 #include "esp_log.h"
@@ -6,23 +6,22 @@
 using namespace SmartGlasses;
 
 
-DisplayManager::DisplayManager(){
+GNSSManager::GNSSManager(){
     xDisplayUpdateSemaphore = xSemaphoreCreateBinary();
 }
 
-void DisplayManager::init() {
-    esp_log_level_set(DISPLAY_M, ESP_LOG_VERBOSE);
-    ESP_LOGI(DISPLAY_M, "starting display initialisation");
+void GNSSManager::init() {
+    esp_log_level_set(GNSS_M, ESP_LOG_VERBOSE);
     SPI.begin();
     backend_display.begin(CS_PIN, DC_PIN, SPI);
     backend_display.buffer(NULL); //set window in buffered mode: we will be doing writes of several pixels each time we write --> might as well only write to the display once per call
 }
 
-void DisplayManager::setDisplayTask(TaskHandle_t displayTask){
+void GNSSManager::setDisplayTask(TaskHandle_t displayTask){
     displaySenderTask = displayTask;
 }
 
-void DisplayManager::update_awaiting_display(std::unique_ptr<display_t> newFrames){
+void GNSSManager::update_awaiting_display(std::unique_ptr<display_t> newFrames){
     TAKE_S_INF(xDisplayUpdateSemaphore); 
     if(newFrames->priority > this->currentFrames->priority){ 
     //Not >= since if two events with the same priority happen to occur at the same time, it is logical to keep to first and disregard the second
@@ -34,9 +33,9 @@ void DisplayManager::update_awaiting_display(std::unique_ptr<display_t> newFrame
     //xTaskNotifyGive(allTasks[T_DISPLAY]); // FreeRTOS will already handle task switching and doing this sounds like a bad idea
 }
 
-void DisplayManager::refreshDisplay() {
+void GNSSManager::refreshDisplay() {
     ulTaskNotifyTake(pdTRUE,portMAX_DELAY); //TODO: RTOS suggests to not wait indefinitely, but rather TO at some point and e.g. log error. Why not, can also refactor infinite semaphore take
-    ESP_LOGI(DISPLAY_M,"Notified to update the display");
+    ESP_LOGI(GNSS_M,"Notified to update the display");
     TAKE_S_INF(xDisplayUpdateSemaphore);
     Drawable object = currentFrames->object; //Deep copy of the Drawable
     currentFrames.reset(nullptr);

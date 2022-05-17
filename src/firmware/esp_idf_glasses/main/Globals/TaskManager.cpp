@@ -15,14 +15,17 @@ TaskHandle_t TaskManager::getTaskHandle(task_t taskType){
     return nullptr;
 }
 
-#define DISPLAY_TASK_PRIORITY 5
-#define UOS_TASK_PRIORITY 4
+#define IMU_TASK_PRIORITY 4
+#define DISPLAY_TASK_PRIORITY 4
+#define UOS_TASK_PRIORITY 3
 #define BLE_TASK_PRIORITY 1
 
 void TaskManager::initAllTasks(){
+    esp_log_level_set(TASK_M, ESP_LOG_VERBOSE);
     ESP_LOGI(TASK_M,"Initialising all tasks");
     int error = createTask(T_HandleBLE,"BLEHandler",10240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
     error = createTask(T_HandleDisplay,"DisplayHandler",10240,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
+    error = createTask(T_HandleIMU,"IMUHandler",10240,IMU_TASK_PRIORITY,&allTasks[T_IMU],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",40960,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
     ESP_LOGI(TASK_M,"Finished initialiing all tasks");
@@ -59,12 +62,27 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
     {
         GlobalsManager& glob_mgr = GlobalsManager::getInstance();
         display_mgr = glob_mgr.getDeviceManager().getDisplayManager();
+        display_mgr->init();
         display_mgr->setDisplayTask(glob_mgr.getTaskManager().getTaskHandle(T_DISPLAY));
     }
     ESP_LOGI(TASK_M,"Finished setting up display");
     while(1){
         display_mgr->refreshDisplay();
         vTaskDelay(1/portTICK_PERIOD_MS);
+    }
+}
+
+void TaskManager::T_HandleIMU(void* pvParameters) {
+    ESP_LOGI(TASK_M, "Starting IMU task");
+    std::shared_ptr<IMUManager> imu_mgr;
+    GlobalsManager& glob_mgr = GlobalsManager::getInstance();
+    imu_mgr = glob_mgr.getDeviceManager().getIMUManager();
+    imu_mgr->init();
+    ESP_LOGI(TASK_M,"Finished setting up IMU");
+    while (true) {
+        imu_mgr->debug_print_latest_event();
+
+        vTaskDelay(2500/portTICK_PERIOD_MS);
     }
 }
 
@@ -77,6 +95,6 @@ void TaskManager::T_HandleUOS(void * pvParameters){
 
     while(1){
         uOS_p->handleEvent();
-        vTaskDelay(5/portTICK_PERIOD_MS);
+        vTaskDelay(50/portTICK_PERIOD_MS); // wait a good while because high priority task = others otherwise can't run.
     }
 }
