@@ -8,6 +8,7 @@
 
 namespace SmartGlasses{
     #define MAX_PENDING_EVENTS 5
+    #define MAX_BUTTON_EVENTS 1
     #define UOS_M "uOS Module"
 
     enum uOSEventID{
@@ -16,6 +17,7 @@ namespace SmartGlasses{
         BT_STOP_SEARCHING,
         BT_CONNECT,
         NOTIFICATION_NEW,
+        BUTTON_PRESSED,
         NB_EVENTS
     };
 
@@ -30,10 +32,16 @@ namespace SmartGlasses{
         void setup();
         void handleEvent();
         QueueHandle_t getQueueHandle();
+        QueueHandle_t getButtonsQueue();
     private:
         unsigned short nbUnreadNotifications = 0;
         QueueHandle_t xEventsQueue = xQueueCreate(MAX_PENDING_EVENTS,sizeof(uOSEvent));
+        QueueHandle_t xButtonsQueue = xQueueCreate(MAX_BUTTON_EVENTS,sizeof(uOSEvent));
+        
         uOSEvent eventBuffer = {};
+        uOSEvent buttonBuffer = {};
+
+        void handleButtonPress(gpio_num_t button);
 
         std::array<std::shared_ptr<Application>, NB_APPS> applications{};
     };
