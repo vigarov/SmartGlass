@@ -16,14 +16,14 @@ namespace SmartGlasses{
     private:
         UG2856KLBAG01_SPI backend_display;
 
-        SemaphoreHandle_t xDisplayUpdateSemaphore;
+        SemaphoreHandle_t xDisplayUpdateSemaphore = xSemaphoreCreateBinary();
         std::unique_ptr<display_t> currentFrames = std::make_unique<display_t>();
 
-        TaskHandle_t displaySenderTask;
+        TaskHandle_t displaySenderTask = NULL;
 
         void init() override;
     public:
-        DisplayManager();
+        DisplayManager() = default;
 
         void update_awaiting_display(std::unique_ptr<display_t> newFrames); //Accepting ownership, call with std::move
         void setDisplayTask(TaskHandle_t displayTask);

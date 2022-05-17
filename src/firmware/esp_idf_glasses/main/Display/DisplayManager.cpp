@@ -5,16 +5,11 @@
 
 using namespace SmartGlasses;
 
-
-DisplayManager::DisplayManager(){
-    xDisplayUpdateSemaphore = xSemaphoreCreateBinary();
-}
-
 void DisplayManager::init() {
     SPI.begin();
     backend_display.begin(CS_PIN, DC_PIN, SPI);
     backend_display.buffer(NULL); //set window in buffered mode: we will be doing writes of several pixels each time we write --> might as well only write to the display once per call
-    ESP_LOGI(DISPLAY_M,"Finished setting up the display");
+    ESP_LOGI(DISPLAY_M,"Finished initializing up the display");
 }
 
 void DisplayManager::setDisplayTask(TaskHandle_t displayTask){
@@ -22,7 +17,11 @@ void DisplayManager::setDisplayTask(TaskHandle_t displayTask){
 }
 
 void DisplayManager::update_awaiting_display(std::unique_ptr<display_t> newFrames){
-    TAKE_S_INF(xDisplayUpdateSemaphore); 
+    ESP_LOGI(DISPLAY_M,"Got update request");
+    while(xSemaphoreTake(xDisplayUpdateSemaphore,100/portTICK_PERIOD_MS)==pdFALSE){
+        ESP_LOGE(DISPLAY_M,"Couldn't get display update semaphore, even after 100 ms");
+    } 
+    ESP_LOGI(DISPLAY_M,"UAD taking xDisplayUpdateSemaphore");
     if(newFrames->priority > this->currentFrames->priority){ 
     //Not >= since if two events with the same priority happen to occur at the same time, it is logical to keep to first and disregard the second
     //This however should be rare (only e.g. I can think of is if you press on a "menu UP/DOWN" button before the menu has actually displayed)
@@ -30,13 +29,14 @@ void DisplayManager::update_awaiting_display(std::unique_ptr<display_t> newFrame
     }
     xSemaphoreGive(xDisplayUpdateSemaphore);
     xTaskNotifyGive(displaySenderTask);
-    //xTaskNotifyGive(allTasks[T_DISPLAY]); // FreeRTOS will already handle task switching and doing this sounds like a bad idea
+    ESP_LOGI(DISPLAY_M,"handled display update request");
 }
 
 void DisplayManager::refreshDisplay() {
     ulTaskNotifyTake(pdTRUE,portMAX_DELAY); //TODO: RTOS suggests to not wait indefinitely, but rather TO at some point and e.g. log error. Why not, can also refactor infinite semaphore take
     ESP_LOGI(DISPLAY_M,"Notified to update the display");
     TAKE_S_INF(xDisplayUpdateSemaphore);
+    ESP_LOGI(DISPLAY_M,"Refresh taking xDisplayUpdateSemaphore");
     Drawable object = currentFrames->object; //Deep copy of the Drawable
     currentFrames.reset(nullptr);
     xSemaphoreGive(xDisplayUpdateSemaphore);

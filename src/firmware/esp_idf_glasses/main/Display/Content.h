@@ -13,7 +13,6 @@ namespace SmartGlasses{
     class Container; //Forward Declaration
 
     class Content {
-        
     public:
         Content(std::string contentName = "Default Name",bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char priority = 1,std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>pixels = std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>()) : 
         m_pixels(std::move(pixels)),m_offsets(std::move(offsets)),m_contentName(std::move(contentName)),m_overwrite(overwrites), m_priority(priority) {
@@ -67,7 +66,7 @@ namespace SmartGlasses{
          *  ! Important Note: childrent classes are responsible for updating it accordingly when updatePixels() is called
          * 
          */
-        bool m_modifiedSinceLastUpdate = false;
+        bool m_modifiedSinceLastUpdate = true;
     private :
         std::string m_contentName;
         bool m_setup = false;

@@ -13,6 +13,9 @@ void IdleApp::onClose(){
 void IdleApp::onResume(){
     ESP_LOGI(IDLE_M,"Resuming application");
     createAndDisplayHeader();
+    for(auto& content_p : m_contents){
+        content_p->setup();
+    }
 }
 
 void IdleApp::run(){}

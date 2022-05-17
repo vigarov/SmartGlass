@@ -12,7 +12,7 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
     ESP_LOGI(APPCONT_M,"Setting the current application to app with id: %d", app->id);
     // currentApplication->onClose();
     if(xSemaphoreTake(xAppSemaphore, 15/portTICK_PERIOD_MS) == pdTRUE){
-        ESP_LOGI(APPCONT_M,"Taking application semaphore to change it");
+        ESP_LOGI(APPCONT_M,"Taking application semaphore to change app");
         currentApplication = app;
         xSemaphoreGive(xAppSemaphore);
     }
@@ -25,7 +25,6 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
 void ApplicationContainer::init(std::shared_ptr<Application> app){
     ESP_LOGI(APPCONT_M,"Initialiazing App. Container");
     currentApplication = app;
-    xAppSemaphore = xSemaphoreCreateBinary();
     createTask(runApplication,"ApplicationRunner",10240,1,&appTaskHandler,APP_CPU,&currentApplication);
     ESP_LOGI(APPCONT_M,"Initialiazed App. Container. app semaphore pointer : %p",xAppSemaphore);
 }
@@ -33,10 +32,11 @@ void ApplicationContainer::init(std::shared_ptr<Application> app){
 void ApplicationContainer::runApplication(void *pvParameters){
     ESP_LOGI(APPCONT_M,"Starting application thread");
     std::shared_ptr<Application> usedApp = *(std::shared_ptr<Application>*)pvParameters;
+    usedApp->onResume(); // Starting the app for the first time
     ApplicationContainer& ac = ApplicationContainer::getInstance();
     while(1){
-        if(xSemaphoreTake(ac.xAppSemaphore, 5/portTICK_PERIOD_MS) == pdTRUE){
-            ESP_LOGI(APPCONT_M,"Taking application semaphore to run it");
+        if(xSemaphoreTake(ac.xAppSemaphore, 50/portTICK_PERIOD_MS) == pdTRUE){
+            ESP_LOGI(APPCONT_M,"Taking application semaphore to run app");
             std::shared_ptr<Application> currA = ac.getCurrentApplication();
             xSemaphoreGive(ac.xAppSemaphore);
             if(usedApp->id != currA->id){

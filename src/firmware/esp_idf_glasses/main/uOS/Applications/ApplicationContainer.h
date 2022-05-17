@@ -53,7 +53,7 @@ namespace SmartGlasses{
         
         std::shared_ptr<Application> currentApplication;
         
-        SemaphoreHandle_t xAppSemaphore;
+        SemaphoreHandle_t xAppSemaphore = xSemaphoreCreateBinary();
         static void runApplication(void* pvParameters);
         TaskHandle_t appTaskHandler = nullptr;
     };

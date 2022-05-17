@@ -5,6 +5,7 @@
 using namespace SmartGlasses;
 
 void Content::update(){
+    ESP_LOGI(m_contentName.c_str(),"Got update request");
     if(m_setup){
         xTaskNotifyGive(m_innerObjectTask);
     }
@@ -35,6 +36,7 @@ void Content::T_Update(void* pvParameters){
 }
 
 void Content::computeCanvas(){
+    ESP_LOGI(m_contentName.c_str(),"Requested canvas update (ow=%d,modif=%d)",m_overwrite,m_modifiedSinceLastUpdate);
     if(m_overwrite && m_modifiedSinceLastUpdate){
         for(auto &p : m_pixels){
             if(p.x<m_borders.topLeft.x){
@@ -59,6 +61,7 @@ void Content::computeCanvas(){
             }
         }
     }
+
 }
 
 Content::~Content(){
@@ -68,6 +71,7 @@ Content::~Content(){
 }
 
 void Content::canvasAndUpdate(){
+    ESP_LOGI(m_contentName.c_str(),"request canvas recomputation and update");
     if(m_modifiedSinceLastUpdate){
         //Now that the new values for the pixels have been fetched, we can compute the new canvas
         computeCanvas();

@@ -25,7 +25,7 @@ void TaskManager::initAllTasks(){
     error = createTask(T_HandleDisplay,"DisplayHandler",10240,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",40960,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
-    ESP_LOGI(TASK_M,"Finished initialiing all tasks");
+    ESP_LOGI(TASK_M,"Finished initialiing all tasks with error %d",error);
 }
 
 
@@ -63,6 +63,7 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
     }
     ESP_LOGI(TASK_M,"Finished setting up display");
     while(1){
+        ESP_LOGI(TASK_M,"-------------");
         display_mgr->refreshDisplay();
         vTaskDelay(10/portTICK_PERIOD_MS);
     }
