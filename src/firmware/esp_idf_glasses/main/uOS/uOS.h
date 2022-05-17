@@ -11,11 +11,17 @@ namespace SmartGlasses{
     #define UOS_M "uOS Module"
 
     enum uOSEventID{
+        BT_DISCONNECT,
+        BT_START_SEARCHING,
+        BT_STOP_SEARCHING,
+        BT_CONNECT,
+        NOTIFICATION_NEW,
         NB_EVENTS
     };
 
     struct uOSEvent{
         uOSEventID id;
+        void* sender;
     };
 
     class uOS: public std::enable_shared_from_this<uOS>{
@@ -23,6 +29,7 @@ namespace SmartGlasses{
         uOS() = default;
         void setup();
         void handleEvent();
+        QueueHandle_t getQueueHandle();
     private:
         unsigned short nbUnreadNotifications = 0;
         QueueHandle_t xEventsQueue = xQueueCreate(MAX_PENDING_EVENTS,sizeof(uOSEvent));

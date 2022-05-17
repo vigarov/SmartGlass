@@ -17,7 +17,8 @@ namespace SmartGlasses{
             m_pixels.insert(std::move(pixel_pair_t{1, 7})); m_pixels.insert(std::move(pixel_pair_t{3, 7})); m_pixels.insert(std::move(pixel_pair_t{6, 7})); 
             m_pixels.insert(std::move(pixel_pair_t{0, 8})); m_pixels.insert(std::move(pixel_pair_t{3, 8})); m_pixels.insert(std::move(pixel_pair_t{6, 8})); 
             m_pixels.insert(std::move(pixel_pair_t{3, 9})); m_pixels.insert(std::move(pixel_pair_t{5, 9})); 
-            m_pixels.insert(std::move(pixel_pair_t{3, 10})); m_pixels.insert(std::move(pixel_pair_t{4, 10})); 
+            m_pixels.insert(std::move(pixel_pair_t{3, 10})); m_pixels.insert(std::move(pixel_pair_t{4, 10}));
+
         }
     //To finish: override updatePixels, somehow save the handle of the task somewhere where the BT callback can call it (add getter for task handle and yeet in globals?)
     protected:

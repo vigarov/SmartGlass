@@ -23,7 +23,7 @@ namespace SmartGlasses{
      */
     class Application{
     public:
-        Application(std::shared_ptr<uOS> uOS_p);
+        Application(std::shared_ptr<uOS> uOS_p, APP_ID id);
 
         APP_ID id = NONE;
         /**
