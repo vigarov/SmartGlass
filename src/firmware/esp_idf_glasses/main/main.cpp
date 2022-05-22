@@ -1,11 +1,13 @@
 #include "GlobalsManager.h"
 #include "esp_log.h"
+#include "esp_heap_trace.h"
 #include "constants.h"
 #include "utils.h"
 
 //----------------------Entry point----------------------
 extern "C" void app_main()
 {
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
     SmartGlasses::resetTime(); //TODO: rather emulate an SNTP server over BLE with the Arduino Phone
     auto& globMgr = SmartGlasses::GlobalsManager::getInstance();
     globMgr.getDeviceManager().initAll();

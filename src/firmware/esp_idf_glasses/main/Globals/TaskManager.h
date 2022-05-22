@@ -18,6 +18,10 @@ namespace SmartGlasses{
 
     #define TASK_M "Task Module"
 
+    #define DISPLAY_TASK_PRIORITY 5
+    #define UOS_TASK_PRIORITY 4
+    #define BLE_TASK_PRIORITY 1
+
     /**
      * @brief Manager object for of our tasks.
      * Note: Is guaranteed to be created by the GlobalsManager

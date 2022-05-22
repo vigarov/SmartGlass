@@ -2,7 +2,11 @@
 #include "IdleApp.h"
 #include "ApplicationContainer.h"
 #include "BLECharacteristic.h"
+#include "utils.h"
 #include "DeviceManager.h"
+#include "TaskManager.h"
+#include "constants.h"
+
 
 using namespace SmartGlasses;
 
@@ -14,6 +18,7 @@ void uOS::setup(){
     ESP_LOGI(UOS_M,"Created IdleApp");
     applications[IDLE] = idleApp;
     ApplicationContainer::getInstance().init(idleApp);
+    createTask(T_buttonPress,"Button Handler",4098,UOS_TASK_PRIORITY+1,&m_buttonTask,APP_CPU,this);
     ESP_LOGI(UOS_M,"Initialized AC");
 }   
 
@@ -28,17 +33,6 @@ QueueHandle_t uOS::getButtonsQueue(){
 void uOS::handleEvent(){
     if(xQueueReceive(xEventsQueue,&eventBuffer,500/portTICK_PERIOD_MS) == pdPASS){
         ESP_LOGI(UOS_M,"Got new event");
-        //First check whether a button press hasn't happened in the meantime
-        if(uxQueueMessagesWaiting(xButtonsQueue)!=0){
-            ESP_LOGI(UOS_M,"But first got a button press");
-            if(xQueueReceive(xButtonsQueue,&buttonBuffer,0) == pdPASS){
-                uint32_t temp = (uint32_t)buttonBuffer.sender;
-                handleButtonPress(static_cast<gpio_num_t>(temp));
-            }
-            else{
-                ESP_LOGI(UOS_M,"one pending message in the queue, yet unable to take it: this shouldn't be possible");
-            }
-        }
         switch (eventBuffer.id)
         {
         case BT_START_SEARCHING:
@@ -71,11 +65,32 @@ void uOS::handleEvent(){
     }
 }
 
+uOS::~uOS(){
+    vTaskDelete(m_buttonTask);
+    vQueueDelete(xEventsQueue);
+    vQueueDelete(xButtonsQueue);
+}
+
+void uOS::T_buttonPress(void* pvParameters){
+    uOS* u = static_cast<uOS*>(pvParameters);
+    while(1){
+        if(xQueueReceive(u->xButtonsQueue,&u->buttonBuffer,portMAX_DELAY) == pdPASS){
+            ESP_LOGI(UOS_M,"Got a button press");
+            uint32_t temp = (uint32_t)u->buttonBuffer.sender;
+            u->handleButtonPress(static_cast<gpio_num_t>(temp));
+        }
+        else{
+            ESP_LOGI(UOS_M,"No pending button presses even after max delay");
+        }
+    }
+}
+
 void uOS::handleButtonPress(gpio_num_t button){
     switch (button)
     {
     case BUT_UP_PIN:
     {
+        
         //TODO:do something
         break;
     }

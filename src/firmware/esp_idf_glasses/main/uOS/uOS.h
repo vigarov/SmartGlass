@@ -33,6 +33,7 @@ namespace SmartGlasses{
         void handleEvent();
         QueueHandle_t getQueueHandle();
         QueueHandle_t getButtonsQueue();
+        ~uOS();
     private:
         unsigned short nbUnreadNotifications = 0;
         QueueHandle_t xEventsQueue = xQueueCreate(MAX_PENDING_EVENTS,sizeof(uOSEvent));
@@ -44,6 +45,9 @@ namespace SmartGlasses{
         void handleButtonPress(gpio_num_t button);
 
         std::array<std::shared_ptr<Application>, NB_APPS> applications{};
+
+        TaskHandle_t m_buttonTask = NULL;
+        static void T_buttonPress(void* pvParameters);
     };
 
 };

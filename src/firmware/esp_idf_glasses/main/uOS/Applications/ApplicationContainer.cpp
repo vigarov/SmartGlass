@@ -26,7 +26,9 @@ void ApplicationContainer::init(std::shared_ptr<Application> app){
     ESP_LOGI(APPCONT_M,"Initialiazing App. Container");
     xSemaphoreGive(xAppSemaphore);
     currentApplication = app;
-    createTask(runApplication,"ApplicationRunner",10240,1,&appTaskHandler,APP_CPU,&currentApplication);
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+    createTask(runApplication,"ApplicationRunner",20960,1,&appTaskHandler,APP_CPU,&currentApplication);
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
     ESP_LOGI(APPCONT_M,"Initialiazed App. Container. app semaphore pointer : %p",xAppSemaphore);
 }
 

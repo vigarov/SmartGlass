@@ -2,6 +2,7 @@
 
 #include "Content.h"
 #include "Display.h"
+#include <memory>
 #include <vector>
 
 namespace SmartGlasses{
@@ -9,5 +10,5 @@ namespace SmartGlasses{
     class Container{   
     protected:
         std::vector<std::shared_ptr<Content>> m_contents;
-    }
+    };
 };

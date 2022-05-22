@@ -4,6 +4,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include <algorithm>
 
 namespace SmartGlasses{
 
@@ -41,5 +42,20 @@ namespace SmartGlasses{
      * 
      */
     void resetTime();
+
+    //@see: https://stackoverflow.com/a/896440/8352508 
+    template <typename InIt1, typename InIt2, typename OutIt>
+    OutIt unordered_set_intersection(InIt1 b1, InIt1 e1, InIt2 b2, InIt2 e2, OutIt out) {
+        while (!(b1 == e1)) {
+            if (!(std::find(b2, e2, *b1) == e2)) {
+                *out = *b1;
+                ++out;
+            }
+
+            ++b1;
+        }
+
+        return out;
+    }
 
 };

@@ -33,7 +33,9 @@ set(IMM_O_D_SRCS
     ${IMM_O_D}/RawText.cpp)
 set(M_O_D ${OBJECTS_DIR}/Mutable)
 set(M_O_D_SRCS 
-    ${M_O_D}/BLEIcon.cpp)
+    ${M_O_D}/BLEIcon.cpp
+    ${M_O_D}/Text.cpp
+    ${M_O_D}/Battery.cpp)
 set(OBJECTS_DIRS 
     ${OBJECT_DIR}
     ${IMM_O_D}

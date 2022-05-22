@@ -27,8 +27,10 @@ void DisplayManager::update_awaiting_display(std::unique_ptr<display_t> newFrame
     if(!this->currentFrames || newFrames->priority > this->currentFrames->priority){ 
     //Not >= since if two events with the same priority happen to occur at the same time, it is logical to keep to first and disregard the second
     //This however should be rare (only e.g. I can think of is if you press on a "menu UP/DOWN" button before the menu has actually displayed)
+      currentFrames.reset(nullptr);
       currentFrames = std::move(newFrames);
     }
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
     xSemaphoreGive(xDisplayUpdateSemaphore);
     xTaskNotifyGive(displaySenderTask);
     ESP_LOGI(DISPLAY_M,"handled display update request");
@@ -39,20 +41,27 @@ void DisplayManager::refreshDisplay() {
     ESP_LOGI(DISPLAY_M,"Notified to update the display");
     TAKE_S_INF(xDisplayUpdateSemaphore);
     ESP_LOGI(DISPLAY_M,"Refresh taking xDisplayUpdateSemaphore");
-    Drawable object = currentFrames->object; //Deep copy of the Drawable
-    currentFrames.reset(nullptr);
-    xSemaphoreGive(xDisplayUpdateSemaphore);
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+    {    
+        Drawable object = currentFrames->object; //Deep copy of the Drawable
+        currentFrames.reset(nullptr);
+        xSemaphoreGive(xDisplayUpdateSemaphore);
 
-    ESP_LOGI(DISPLAY_M,"Drawing using offset (%d,%d)",object.offsets.x,object.offsets.y);
-    //We can now update the display
-    for(auto& p: object.border){ //when doesn't overwrite, object.border will be empty --> loop is skipped
-        ESP_LOGI(DISPLAY_M,"Border pixel (%d,%d)",p.x,p.y);
-        backend_display.pixelClear(p.x+object.offsets.x,p.y+object.offsets.y);
+        heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+        ESP_LOGI(DISPLAY_M,"Drawing using offset (%d,%d)",object.offsets.x,object.offsets.y);
+        //We can now update the display
+        for(auto& p: object.border){ //when doesn't overwrite, object.border will be empty --> loop is skipped
+            ESP_LOGI(DISPLAY_M,"Border pixel (%d,%d)",p.x,p.y);
+            backend_display.pixelClear(p.x+object.offsets.x,p.y+object.offsets.y);
+        }
+        for(auto &p : object.pixels){
+            ESP_LOGI(DISPLAY_M,"Drawing pixel (%d,%d)",p.x,p.y);
+            backend_display.pixelSet(p.x+object.offsets.x,p.y+object.offsets.y);
+        }
+        
+        ESP_LOGI(DISPLAY_M,"Finished drawing");
     }
-    for(auto &p : object.pixels){
-        ESP_LOGI(DISPLAY_M,"Drawing pixel (%d,%d)",p.x,p.y);
-        backend_display.pixelSet(p.x+object.offsets.x,p.y+object.offsets.y);
-    }
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
     //The contrast of 128 is too strong imo, see opinions of others
     //Refresh display is useless without buffer
     //backend_display.setContrastControl(128); //TODO: needed to be done @ every write? 

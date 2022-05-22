@@ -14,7 +14,7 @@ void DeviceManager::initAll(){
     for(auto& device: m_allDevices){
         device->init();
     }
-    //initButtons();
+    initButtons();
 }
 
 //see https://github.com/espressif/esp-idf/blob/31b7694551620522cc3fde0623321a38bfea762f/examples/peripherals/gpio/generic_gpio/main/gpio_example_main.c

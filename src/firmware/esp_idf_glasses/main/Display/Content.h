@@ -37,6 +37,10 @@ namespace SmartGlasses{
         
 
     protected:
+        
+        void forceDisplay();
+        void forceHide();
+
         /**
          * @brief Function called every time new content is available. Is in charge of updating the pixels. 
          * 
@@ -71,28 +75,31 @@ namespace SmartGlasses{
 
         /**
          * @brief Flag indicating whether the pixels have changed since the last update
-         *  ! Important Note: childrent classes are responsible for updating it accordingly when updatePixels() is called
+         *  ! Important Note: children classes are responsible for updating it accordingly when updatePixels() is called
          * 
          */
         bool m_modifiedSinceLastUpdate = true;
-    private :
         std::string m_contentName;
+        bool m_overwrite;
+        unsigned char m_priority;
+    private :
         bool m_setup = false;
         
-        bool m_overwrite;
 
         TaskHandle_t m_innerObjectTask = NULL;
 
-        unsigned char m_priority;
 
         static void T_Update(void* pvParameters);
+
+        void actuallyComputeCanvas();
+        void actuallyUpdateDisplay();
     };
 
     class ConstantContent : public Content{
     public:
         ConstantContent(std::string contentName = "Constant Content", bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char priority = 1) : Content(std::move(contentName),overwrites,std::move(offsets),priority){m_modifiedSinceLastUpdate = true;}
         void setup() override {canvasAndUpdate();}
-        void update() override {}
+        void update() override {forceDisplay();}
     protected:
         void createUpdateTask() override {} //constant --> no update task
         void updatePixels() override{} //constant --> will be no case to update the pixels

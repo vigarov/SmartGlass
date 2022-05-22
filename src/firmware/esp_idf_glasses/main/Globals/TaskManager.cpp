@@ -4,6 +4,7 @@
 #include "TaskManager.h"
 #include "GlobalsManager.h"
 #include "DeviceManager.h"
+#include "esp_heap_trace.h"
 
 using namespace SmartGlasses;
 
@@ -15,16 +16,15 @@ TaskHandle_t TaskManager::getTaskHandle(task_t taskType){
     return nullptr;
 }
 
-#define DISPLAY_TASK_PRIORITY 5
-#define UOS_TASK_PRIORITY 4
-#define BLE_TASK_PRIORITY 1
 
 void TaskManager::initAllTasks(){
     ESP_LOGI(TASK_M,"Initialising all tasks");
-    int error = createTask(T_HandleBLE,"BLEHandler",10240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
-    error = createTask(T_HandleDisplay,"DisplayHandler",10240,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+    int error = createTask(T_HandleBLE,"BLEHandler",5240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
+    error = createTask(T_HandleDisplay,"DisplayHandler",40960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
-    error = createTask(T_HandleUOS,"uOS",40960,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
+    error = createTask(T_HandleUOS,"uOS",5240,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
+    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
     ESP_LOGI(TASK_M,"Finished initialiing all tasks with error %d",error);
 }
 

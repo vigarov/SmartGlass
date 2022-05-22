@@ -23,6 +23,13 @@ namespace SmartGlasses{
                 return x<<8|y; //This way, no collisions can happen over our input space
             }
         };
+
+        pixel_pair_t operator+(const pixel_pair_t& a) const
+        {
+            return (pixel_pair_t){static_cast<unsigned char>(a.x+x), static_cast<unsigned char>(a.y+y)};
+        }
+
+
     };
 
     struct __attribute__((packed,aligned(4))) border_t{
