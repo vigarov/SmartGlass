@@ -9,6 +9,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Camera
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
@@ -21,6 +22,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -38,8 +40,11 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.navigation.NavigationView
 import com.smartglass.smartglassapp.databinding.ActivityMainBinding
 
+
 //Making sure Bluetooth is on
 private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
+
+
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -50,6 +55,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private const val BLUETOOTH_SCAN_PERMISSION: Int = 103
         private const val FINE_LOCATION_PERMISSION: Int = 104
         private const val COARSE_LOCATION_PERMISSION: Int = 105
+    }
+
+    val bluetoothAdapter: BluetoothAdapter by lazy {
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        bluetoothManager.adapter
     }
 
     lateinit var mapFragment: SupportMapFragment
@@ -102,6 +112,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.S)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         if(item.itemId == R.id.nav_message){
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
