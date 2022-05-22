@@ -37,6 +37,8 @@ void Timer<GROUP,ID>::setup(timer_autoreload_t auto_reload, uint64_t timer_inter
         timer_enable_intr(GROUP, ID);
 
         timer_isr_callback_add(GROUP, ID, alarmISR, this, 0);
+
+        xSemaphoreGive(xSetSemaphore);
         m_setup = true;
     }
 }

@@ -9,13 +9,17 @@ using namespace SmartGlasses;
 template<typename CHAR_T,unsigned int CHAR_WIDTH,unsigned long NB_CHARS>
 void Font<CHAR_T,CHAR_WIDTH,NB_CHARS>::getPixelPairs(const Font<CHAR_T,CHAR_WIDTH,NB_CHARS>& f,const std::string& s, std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>&v){
     unsigned short numberNewlines = 0;
+    unsigned short xCursor = 0;
     for(int i=0;i<s.size();i++){
         char c = s[i];
         if(static_cast<int>(c)<NB_CHARS){
             if(c=='\n'){
                 numberNewlines++;
+                xCursor = 0;
+            }else{
+                getPixelPairsWithOffset(f,c,v,xCursor,numberNewlines*(8*sizeof(CHAR_T)+LINE_ADD_SPACING));
+                xCursor += 8*sizeof(CHAR_T) + CHAR_SPACING;
             }
-            getPixelPairsWithOffset(f,c,v,i*CHAR_SPACING,numberNewlines*sizeof(CHAR_T)+LINE_ADD_SPACING);
         }
     }
 }

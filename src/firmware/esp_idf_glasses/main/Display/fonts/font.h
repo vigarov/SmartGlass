@@ -2,6 +2,7 @@
 
 #include "font_8x8ASCII.h"
 #include "Display.h"
+#include <string>
 #include <memory>
 #include <unordered_set>
 

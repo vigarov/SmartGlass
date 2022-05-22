@@ -24,6 +24,7 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
 
 void ApplicationContainer::init(std::shared_ptr<Application> app){
     ESP_LOGI(APPCONT_M,"Initialiazing App. Container");
+    xSemaphoreGive(xAppSemaphore);
     currentApplication = app;
     createTask(runApplication,"ApplicationRunner",10240,1,&appTaskHandler,APP_CPU,&currentApplication);
     ESP_LOGI(APPCONT_M,"Initialiazed App. Container. app semaphore pointer : %p",xAppSemaphore);

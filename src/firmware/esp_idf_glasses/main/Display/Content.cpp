@@ -53,7 +53,7 @@ void Content::computeCanvas(){
             }
         }
         for(unsigned char x=m_borders.topLeft.x ; x<m_borders.bottomRight.x ; x++){
-            for(unsigned char y = m_borders.topLeft.y; y<m_borders.bottomRight.y; y++){
+            for(unsigned char y = m_borders.topLeft.y; y<=m_borders.bottomRight.y; y++){
                 pixel_pair_t p = {x,y};
                 if(!m_pixels.count(p)){
                     m_canvas.insert(std::move(p));

@@ -82,7 +82,7 @@ namespace SmartGlasses{
 
     class ConstantContent : public Content{
     public:
-        ConstantContent(std::string contentName = "Constant Content", bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char priority = 1) : Content(contentName,overwrites,std::move(offsets),priority){m_modifiedSinceLastUpdate = true;}
+        ConstantContent(std::string contentName = "Constant Content", bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char priority = 1) : Content(std::move(contentName),overwrites,std::move(offsets),priority){m_modifiedSinceLastUpdate = true;}
         void setup() override {canvasAndUpdate();}
         void update() override {}
     protected:
