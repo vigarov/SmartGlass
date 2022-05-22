@@ -30,7 +30,7 @@ set(FONTS_DIR
 set(OBJECTS_DIR ${DISPLAY_DIR}/Objects)
 
 set(SENSORS_DIR Sensors)
-set(GNSS_DIR ${SENSORS_DIR}/GNSS)
+#set(GNSS_DIR ${SENSORS_DIR}/GNSS)
 set(IMM_O_D ${OBJECTS_DIR}/Immutable)
 set(IMU_DIR ${SENSORS_DIR}/IMU)
 set(IMM_O_D_SRCS 
@@ -50,9 +50,9 @@ set(DISPLAY_DIRS
 set(IMU_DIRS
     ${IMU_DIR}
     )
-set(GNSS_DIRS
-    ${GNSS_DIR}
-    )
+#set(GNSS_DIRS
+#    ${GNSS_DIR}
+#    )
 set(FONTS_SRC
     ${FONTS_DIR}/font.cpp)
 set(OBJECTS_SRC
@@ -67,19 +67,20 @@ set(DISPLAY_SRCS
 set(IMU_SRCS
     ${IMU_DIR}/IMUManager.cpp
     )
-set(GNSS_SRCS
-    ${GNSS_DIR}/GNSSManager.cpp
     )
+#set(GNSS_SRCS
+#    ${GNSS_DIR}/GNSSManager.cpp
+#    )
 
 set(TIMER_DIR ${SENSORS_DIR}/Timer)
 set(TIMER_SRCS ${TIMER_DIR}/Timers.cpp)
 set(SENSORS_DIRS
     ${SENSORS_DIR}
-    ${GNSS_DIR}  
+#    ${GNSS_DIR}  
     ${TIMER_DIR}  
 )
 set(SENSOR_SRCS 
-    ${GNSS_SRCS}
+#    ${GNSS_SRCS}
     ${IMU_SRCS}
     ${TIMER_SRCS}
 )
@@ -103,7 +104,7 @@ set(INCLUDES
     ${APP_DIR}
     ${DISPLAY_DIRS}
     ${IMU_DIRS}
-    ${GNSS_DIRS}
+#    ${GNSS_DIRS}
     ${GLOBALS_DIR}
     ${SENSORS_DIRS}    
 )

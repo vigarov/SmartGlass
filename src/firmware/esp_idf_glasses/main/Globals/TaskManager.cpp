@@ -1,3 +1,6 @@
+#include <memory>
+#include "esp_log.h"
+
 #include "utils.h"
 #include "constants.h"
 

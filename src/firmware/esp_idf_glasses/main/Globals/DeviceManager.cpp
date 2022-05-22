@@ -6,8 +6,8 @@ using namespace SmartGlasses;
 
 DeviceManager::DeviceManager(){
     m_allDevices[DISPLAY_IDX] = std::make_shared<DisplayManager>();
-    m_allDevices[GNSS_IDX] = std::make_shared<GNSSManager>();
     m_allDevices[IMU_IDX] = std::make_shared<IMUManager>();
+//    m_allDevices[GNSS_IDX] = std::make_shared<GNSSManager>();
     m_allDevices[TIMER_1s_IDX] = std::make_shared<Timer<SYSTEM_TIMER_GROUP,ONE_S_ID>>();
     m_allDevices[TIMER_60s_IDX] = std::make_shared<Timer<SYSTEM_TIMER_GROUP,SIXTY_S_ID>>();
 }
@@ -68,9 +68,9 @@ std::shared_ptr<DisplayManager> DeviceManager::getDisplayManager(){
 std::shared_ptr<IMUManager> DeviceManager::getIMUManager(){
     return std::static_pointer_cast<IMUManager>(m_allDevices[IMU_IDX]);
 }
-std::shared_ptr<GNSSManager> DeviceManager::getGNSSManager(){
+/*std::shared_ptr<GNSSManager> DeviceManager::getGNSSManager(){
     return std::static_pointer_cast<GNSSManager>(m_allDevices[GNSS_IDX]);
-}
+}*/
 
 std::shared_ptr<Timer<SYSTEM_TIMER_GROUP,ONE_S_ID>> DeviceManager::getOneSecondTimer(){
     return std::static_pointer_cast<Timer<SYSTEM_TIMER_GROUP,ONE_S_ID>>(m_allDevices[TIMER_1s_IDX]);

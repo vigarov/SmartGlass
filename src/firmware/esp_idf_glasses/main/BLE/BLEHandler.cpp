@@ -8,7 +8,7 @@
 #include "BLEDevice.h"
 #include "callbacks.h"
 
-#include "GNSS.h"
+//#include "GNSS.h"
 
 using namespace SmartGlasses;
 
@@ -81,7 +81,7 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 INLINE_CHECK_FOR_ERROR(accel_x_char,IMU_SERVICE_GYRO_Z_CHAR_UUID)
                 // now really should store these somewhere so they can be updated later
             }
-        case GNSS_SERVICE:
+/*        case GNSS_SERVICE:
             {
                 auto gCharUUID = BLEUUID((uint16_t)GNSS_CHAR_UUID); 
                 auto* characteristic = service->createCharacteristic(gCharUUID, BLECharacteristic::PROPERTY_NOTIFY|BLECharacteristic::PROPERTY_READ);
@@ -91,7 +91,7 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 INLINE_CHECK_FOR_ERROR(characteristic,gCharUUID.toString().c_str())
                 uint32_t ln_feature_val=LN_FEATURE_LOCATION_SUPPORTED|LN_FEATURE_ELEV_SUPPORTED;
                 characteristic->setValue((uint8_t*)&ln_feature_val,sizeof(ln_feature_val));
-            }
+            }*/
         case BATTERY_SERVICE:
             {
                 auto bCharUUID = BLEUUID((uint16_t)BATTERY_CHAR_UUID);

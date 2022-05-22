@@ -12,7 +12,7 @@ namespace SmartGlasses{
         T_BLE,
         T_DISPLAY,
         T_IMU,
-        T_GNSS,
+//        T_GNSS,
         T_UOS,
         NB_TASKS
     };
