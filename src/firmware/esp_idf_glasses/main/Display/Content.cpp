@@ -81,3 +81,7 @@ void Content::canvasAndUpdate(){
         m_modifiedSinceLastUpdate = false;
     }
 }
+
+border_t Content::getBorders() {
+    return m_borders;
+}

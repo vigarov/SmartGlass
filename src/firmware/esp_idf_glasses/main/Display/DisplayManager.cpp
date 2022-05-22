@@ -7,8 +7,9 @@ using namespace SmartGlasses;
 
 void DisplayManager::init() {
     SPI.begin();
+    ESP_LOGI(DISPLAY_M,"Began SPI");
     backend_display.begin(CS_PIN, DC_PIN, SPI);
-    backend_display.buffer(NULL); //set window in buffered mode: we will be doing writes of several pixels each time we write --> might as well only write to the display once per call
+    //backend_display.buffer(NULL); //set window in buffered mode: we will be doing writes of several pixels each time we write --> might as well only write to the display once per call
     xSemaphoreGive(xDisplayUpdateSemaphore);
     ESP_LOGI(DISPLAY_M,"Finished initializing up the display");
 }
@@ -52,7 +53,9 @@ void DisplayManager::refreshDisplay() {
         ESP_LOGI(DISPLAY_M,"Drawing pixel (%d,%d)",p.x,p.y);
         backend_display.pixelSet(p.x+object.offsets.x,p.y+object.offsets.y);
     }
-    backend_display.setContrastControl(128); //TODO: needed to be done @ every write? 
-    backend_display.refreshDisplay(); //we're in buffered mode, we must refresh() @ every ... refresh
+    //The contrast of 128 is too strong imo, see opinions of others
+    //Refresh display is useless without buffer
+    //backend_display.setContrastControl(128); //TODO: needed to be done @ every write? 
+    //backend_display.refreshDisplay(); //we're in buffered mode, we must refresh() @ every ... refresh
 
 }

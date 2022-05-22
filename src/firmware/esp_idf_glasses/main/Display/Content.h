@@ -29,6 +29,13 @@ namespace SmartGlasses{
         virtual void update();
         virtual ~Content();
 
+        /**
+         * getter for the borders
+         * @return (border_t) the last computed border
+         */
+        border_t getBorders();
+        
+
     protected:
         /**
          * @brief Function called every time new content is available. Is in charge of updating the pixels. 
@@ -59,6 +66,7 @@ namespace SmartGlasses{
         std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> m_canvas;
 
         border_t m_borders = {{UINT8_MAX,UINT8_MAX},{0,0}};
+        
         const pixel_pair_t m_offsets;
 
         /**
