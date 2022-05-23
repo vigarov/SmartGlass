@@ -28,6 +28,7 @@ namespace SmartGlasses{
 
     class NotificationBufferCB : public BLECharacteristicCallbacks {
         void onWrite(BLECharacteristic *pCharacteristic){
+            ESP_LOGI("Notification CB","Got new notification, sending to uOS");
             QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
             uOSEvent e = {.id=NOTIFICATION_NEW,.sender=static_cast<void*>(pCharacteristic)};
             if(xQueueSendToBack(q,(void *)&e,10/portTICK_PERIOD_MS) !=pdTRUE){

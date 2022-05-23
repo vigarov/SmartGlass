@@ -1,9 +1,10 @@
 #include "IdleApp.h"
-#include "RawText.h"
+ #include "RawText.h"
 #include "Battery.h"
 #include "StraightArrow.h"
 #include "LeftArrow.h"
-#include "RightArrow.h"
+#include "RightArrow.h" 
+#include "Header.h"
 #include "utils.h"
 #include "constants.h"
 
@@ -32,8 +33,8 @@ void IdleApp::run(){}
 
 void IdleApp::createAndDisplayHeader(){
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
-    std::string s = "test";
-    m_contents.push_back(std::make_shared<RawText>(s,false));
+    std::string s = "Header";
+     m_contents.push_back(std::make_shared<RawText>(s,false));
     m_contents.push_back(std::make_shared<Battery>(88,false,(pixel_pair_t){100,0},0,3));
     //s = "arrowTop";
     //m_contents.push_back(std::make_shared<StraightArrow>(s,true,(pixel_pair_t){36,0}));
@@ -44,5 +45,6 @@ void IdleApp::createAndDisplayHeader(){
     m_contents.push_back(std::make_shared<Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>>(Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>::textWithDefaultFontFrom("500 m",true,{36,50},USE_ANIMATIONS,1)));
     //s = "arrowRight";
     //m_contents.push_back(std::make_shared<RightArrow>(s,true,(pixel_pair_t){36,20}));
-    IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
+    IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);) 
+    //m_contents.push_back(std::make_shared<Header>(s,15,37));
 }

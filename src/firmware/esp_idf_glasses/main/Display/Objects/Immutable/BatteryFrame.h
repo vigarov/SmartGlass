@@ -4,6 +4,8 @@
 
 namespace SmartGlasses{
 
+    #define BATTERYFRAME_WIDTH 16
+
     class BatteryFrame : public ConstantContent{
     public:
         BatteryFrame(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority){      

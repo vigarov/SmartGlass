@@ -10,8 +10,11 @@
 #define APP_NAME "SmartGlasses"
 
 #ifndef DEBUG
-#define DEBUG 0
+#define DEBUG 1
 #endif
 
 #define USE_ANIMATIONS 0
 #define ANIMATION_DELAY 5
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 56

@@ -30,7 +30,8 @@ set(FONTS_DIR
 set(OBJECTS_DIR ${DISPLAY_DIR}/Objects)
 set(IMM_O_D ${OBJECTS_DIR}/Immutable)
 set(IMM_O_D_SRCS 
-    ${IMM_O_D}/RawText.cpp)
+    ${IMM_O_D}/RawText.cpp
+    ${IMM_O_D}/Header.cpp)
 set(M_O_D ${OBJECTS_DIR}/Mutable)
 set(M_O_D_SRCS 
     ${M_O_D}/BLEIcon.cpp

@@ -3,6 +3,8 @@
 
 namespace SmartGlasses{
 
+    #define BELL_WIDTH 7
+
     class Bell: public ConstantContent{
     public:
         Bell(const std::string& name, bool overwrites, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {        

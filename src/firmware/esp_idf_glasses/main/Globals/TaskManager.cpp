@@ -21,7 +21,7 @@ void TaskManager::initAllTasks(){
     ESP_LOGI(TASK_M,"Initialising all tasks");
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     int error = createTask(T_HandleBLE,"BLEHandler",5240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
-    error = createTask(T_HandleDisplay,"DisplayHandler",40960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
+    error = createTask(T_HandleDisplay,"DisplayHandler",50960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",5240,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
