@@ -8,3 +8,10 @@
 #endif
 
 #define APP_NAME "SmartGlasses"
+
+#ifndef DEBUG
+#define DEBUG 0
+#endif
+
+#define USE_ANIMATIONS 0
+#define ANIMATION_DELAY 5

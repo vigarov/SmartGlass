@@ -5,8 +5,8 @@ namespace SmartGlasses{
 
     class BLEIcon : public Content{
     public:
-        BLEIcon(std::string name, bool overwrites = true,pixel_pair_t offsets = {0,0}, unsigned char priority = 1 ) :
-            Content(name,overwrites,offsets,priority){
+        BLEIcon(std::string name, bool overwrites = true,pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1 ) :
+            Content(name,overwrites,offsets,animate,priority){
             m_pixels.insert(std::move(pixel_pair_t{3, 0})); m_pixels.insert(std::move(pixel_pair_t{4, 0})); 
             m_pixels.insert(std::move(pixel_pair_t{3, 1})); m_pixels.insert(std::move(pixel_pair_t{5, 1})); 
             m_pixels.insert(std::move(pixel_pair_t{0, 2})); m_pixels.insert(std::move(pixel_pair_t{3, 2})); m_pixels.insert(std::move(pixel_pair_t{6, 2})); 

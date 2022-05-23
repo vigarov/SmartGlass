@@ -18,7 +18,7 @@ namespace SmartGlasses{
          * @return ApplicationContainer& the application Conatiner
          */
         static ApplicationContainer& getInstance(){
-            ESP_LOGI(APPCONT_M,"Getting application container instance");
+            ESP_LOGD(APPCONT_M,"Getting application container instance");
             static ApplicationContainer instance;
             return instance;
         }

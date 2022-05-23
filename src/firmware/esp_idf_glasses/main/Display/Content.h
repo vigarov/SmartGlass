@@ -4,7 +4,8 @@
 #include <string>
 #include "Display.h"
 #include "esp_log.h"
-#include "utils.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 namespace SmartGlasses{
 
@@ -14,8 +15,8 @@ namespace SmartGlasses{
 
     class Content {
     public:
-        Content(std::string contentName = "Default Name",bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char priority = 1,std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>pixels = std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>()) : 
-        m_pixels(std::move(pixels)),m_offsets(std::move(offsets)),m_contentName(std::move(contentName)),m_overwrite(overwrites), m_priority(priority) {
+        Content(std::string contentName = "Default Name",bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1,std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>pixels = std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction>()) : 
+        m_pixels(std::move(pixels)),m_offsets(std::move(offsets)),m_contentName(std::move(contentName)),m_overwrite(overwrites), m_animate(animate) ,m_priority(priority) {
             ESP_LOGI(m_contentName.c_str(), "Creating displayable object");
         }
         /**
@@ -35,7 +36,7 @@ namespace SmartGlasses{
          */
         border_t getBorders();
         
-
+        
     protected:
         
         void forceDisplay();
@@ -64,7 +65,7 @@ namespace SmartGlasses{
          * Only useful if object is mutable
          * 
          */
-        virtual void createUpdateTask();
+        virtual void createUpdateTask(size_t stackSize = 1024);
 
         std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> m_pixels;
         std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> m_canvas;
@@ -81,7 +82,9 @@ namespace SmartGlasses{
         bool m_modifiedSinceLastUpdate = true;
         std::string m_contentName;
         bool m_overwrite;
+        unsigned char m_animate = false;
         unsigned char m_priority;
+        void finishSetup();
     private :
         bool m_setup = false;
         
@@ -93,15 +96,16 @@ namespace SmartGlasses{
 
         void actuallyComputeCanvas();
         void actuallyUpdateDisplay();
+
     };
 
     class ConstantContent : public Content{
     public:
-        ConstantContent(std::string contentName = "Constant Content", bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char priority = 1) : Content(std::move(contentName),overwrites,std::move(offsets),priority){m_modifiedSinceLastUpdate = true;}
+        ConstantContent(std::string contentName = "Constant Content", bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1) : Content(std::move(contentName),overwrites,std::move(offsets),animate,priority){m_modifiedSinceLastUpdate = true;}
         void setup() override {canvasAndUpdate();}
         void update() override {forceDisplay();}
     protected:
-        void createUpdateTask() override {} //constant --> no update task
+        void createUpdateTask(size_t stackSize = 1024) override {} //constant --> no update task
         void updatePixels() override{} //constant --> will be no case to update the pixels
     };
 };

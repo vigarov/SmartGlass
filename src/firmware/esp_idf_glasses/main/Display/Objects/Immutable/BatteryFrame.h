@@ -6,7 +6,7 @@ namespace SmartGlasses{
 
     class BatteryFrame : public ConstantContent{
     public:
-        BatteryFrame(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,priority){      
+        BatteryFrame(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority){      
             m_pixels.insert(std::move(pixel_pair_t{2, 1})); m_pixels.insert(std::move(pixel_pair_t{3, 1})); m_pixels.insert(std::move(pixel_pair_t{4, 1})); m_pixels.insert(std::move(pixel_pair_t{5, 1})); m_pixels.insert(std::move(pixel_pair_t{6, 1})); m_pixels.insert(std::move(pixel_pair_t{7, 1})); m_pixels.insert(std::move(pixel_pair_t{8, 1})); m_pixels.insert(std::move(pixel_pair_t{9, 1})); m_pixels.insert(std::move(pixel_pair_t{10, 1})); m_pixels.insert(std::move(pixel_pair_t{11, 1})); m_pixels.insert(std::move(pixel_pair_t{12, 1})); m_pixels.insert(std::move(pixel_pair_t{13, 1})); m_pixels.insert(std::move(pixel_pair_t{14, 1})); m_pixels.insert(std::move(pixel_pair_t{15, 1})); m_pixels.insert(std::move(pixel_pair_t{16, 1})); 
             m_pixels.insert(std::move(pixel_pair_t{2, 2})); m_pixels.insert(std::move(pixel_pair_t{16, 2})); 
             m_pixels.insert(std::move(pixel_pair_t{2, 3})); m_pixels.insert(std::move(pixel_pair_t{16, 3})); 

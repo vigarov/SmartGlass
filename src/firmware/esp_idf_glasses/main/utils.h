@@ -5,8 +5,17 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include <algorithm>
+#include "Text.h"
+#include "constants.h"
 
 namespace SmartGlasses{
+
+    #if DEBUG
+    #define IFD(expression) expression
+    #else 
+    #define IFD(expression)
+    #endif
+
 
     /**
      * @brief Utilitary method to compute constexpr for-loops

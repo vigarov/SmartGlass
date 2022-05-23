@@ -6,18 +6,22 @@
 using namespace SmartGlasses;
 
 void Content::update(){
-    ESP_LOGI(m_contentName.c_str(),"Got update request");
+    ESP_LOGD(m_contentName.c_str(),"Got update request");
     if(m_setup){
         xTaskNotifyGive(m_innerObjectTask);
     }
 }
 
-void Content::createUpdateTask(){
-    createTask(T_Update,(m_contentName.substr(0,configMAX_TASK_NAME_LEN - 4) + "_UT").c_str(),1024,DISPLAYABLE_UPDATE_PRIORITY,&m_innerObjectTask,APP_CPU,this);
+void Content::createUpdateTask(size_t stackSize ){
+    createTask(T_Update,(m_contentName.substr(0,configMAX_TASK_NAME_LEN - 4) + "_UT").c_str(),stackSize,DISPLAYABLE_UPDATE_PRIORITY,&m_innerObjectTask,APP_CPU,this);
 }
 
 void Content::setup(){
     createUpdateTask();
+    finishSetup();
+}
+
+void Content::finishSetup(){
     m_setup=true;
     updatePixels();
     canvasAndUpdate();
@@ -28,7 +32,7 @@ void Content::T_Update(void* pvParameters){
     Content* currentContent = (Content*) pvParameters;
     while(true){
         if(ulTaskNotifyTake(pdTRUE,20000 / portTICK_PERIOD_MS) == pdFALSE){
-            ESP_LOGI(currentContent->m_contentName.c_str(),"No new content received after 20 seconds");
+            ESP_LOGD(currentContent->m_contentName.c_str(),"No new content received after 20 seconds");
         }else{
             currentContent->updatePixels(); 
             currentContent->canvasAndUpdate();
@@ -69,7 +73,7 @@ void Content::actuallyComputeCanvas(){
 }
 
 void Content::actuallyUpdateDisplay(){
-    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,{m_pixels,m_canvas,m_offsets}}))); 
+    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,m_animate,{m_pixels,m_canvas,m_offsets}}))); 
 }
 
 void Content::forceDisplay(){
@@ -80,10 +84,7 @@ void Content::forceDisplay(){
 void Content::forceHide(){
     actuallyComputeCanvas();
     std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> temp;
-    unordered_set_intersection(m_pixels.begin(),m_pixels.end(),
-                    m_canvas.begin(),m_canvas.end(),
-                    std::inserter(temp, temp.begin()));
-    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,{temp,temp,m_offsets}}))); 
+    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,m_animate,{temp,m_pixels,m_offsets}}))); 
 }
 
 Content::~Content(){
@@ -93,7 +94,7 @@ Content::~Content(){
 }
 
 void Content::canvasAndUpdate(){
-    ESP_LOGI(m_contentName.c_str(),"request canvas recomputation and update");
+    ESP_LOGD(m_contentName.c_str(),"request canvas recomputation and update");
     if(m_modifiedSinceLastUpdate){
         //Now that the new values for the pixels have been fetched, we can compute the new canvas
         computeCanvas();

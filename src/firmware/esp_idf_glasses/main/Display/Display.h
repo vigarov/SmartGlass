@@ -55,6 +55,7 @@ namespace SmartGlasses{
     struct display_t{
         // display_t(unsigned char p, Drawable&& d) : priority(p),object(std::move(d)){}
         unsigned char priority{}; //TODO: can make it a bitfield to save... one byte if necessary
+        unsigned char animate{};
         Drawable object;
     };
     

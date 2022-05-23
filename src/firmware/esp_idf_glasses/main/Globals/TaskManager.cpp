@@ -19,12 +19,12 @@ TaskHandle_t TaskManager::getTaskHandle(task_t taskType){
 
 void TaskManager::initAllTasks(){
     ESP_LOGI(TASK_M,"Initialising all tasks");
-    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+    IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     int error = createTask(T_HandleBLE,"BLEHandler",5240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
     error = createTask(T_HandleDisplay,"DisplayHandler",40960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",5240,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
-    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+    IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     ESP_LOGI(TASK_M,"Finished initialiing all tasks with error %d",error);
 }
 
@@ -61,9 +61,7 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
         display_mgr = glob_mgr.getDeviceManager().getDisplayManager();
         display_mgr->setDisplayTask(glob_mgr.getTaskManager().getTaskHandle(T_DISPLAY));
     }
-    ESP_LOGI(TASK_M,"Finished setting up display");
     while(1){
-        ESP_LOGI(TASK_M,"-------------");
         display_mgr->refreshDisplay();
         vTaskDelay(10/portTICK_PERIOD_MS);
     }

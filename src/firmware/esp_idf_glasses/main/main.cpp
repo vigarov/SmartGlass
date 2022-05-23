@@ -7,7 +7,7 @@
 //----------------------Entry point----------------------
 extern "C" void app_main()
 {
-    heap_caps_print_heap_info(MALLOC_CAP_8BIT);
+    IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     SmartGlasses::resetTime(); //TODO: rather emulate an SNTP server over BLE with the Arduino Phone
     auto& globMgr = SmartGlasses::GlobalsManager::getInstance();
     globMgr.getDeviceManager().initAll();

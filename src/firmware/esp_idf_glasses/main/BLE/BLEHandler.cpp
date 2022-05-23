@@ -87,7 +87,7 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 #if DEBUG==1
                 {
                     int testValue = 67;
-                    tempP->setValue(testValue);
+                    characteristic->setValue(testValue);
                 }
                 #endif
                 break;

@@ -7,7 +7,7 @@ namespace SmartGlasses{
 
     class RightArrow : public ConstantContent{
     public:
-        RightArrow(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,priority) {
+        RightArrow(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0},unsigned char animate = false,  unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {
             m_pixels.insert(std::move(pixel_pair_t{38, 0})); m_pixels.insert(std::move(pixel_pair_t{39, 0})); m_pixels.insert(std::move(pixel_pair_t{40, 0})); m_pixels.insert(std::move(pixel_pair_t{41, 0})); m_pixels.insert(std::move(pixel_pair_t{42, 0})); m_pixels.insert(std::move(pixel_pair_t{43, 0})); m_pixels.insert(std::move(pixel_pair_t{44, 0})); m_pixels.insert(std::move(pixel_pair_t{45, 0})); 
 m_pixels.insert(std::move(pixel_pair_t{39, 1})); m_pixels.insert(std::move(pixel_pair_t{40, 1})); m_pixels.insert(std::move(pixel_pair_t{41, 1})); m_pixels.insert(std::move(pixel_pair_t{44, 1})); m_pixels.insert(std::move(pixel_pair_t{45, 1})); m_pixels.insert(std::move(pixel_pair_t{46, 1})); 
 m_pixels.insert(std::move(pixel_pair_t{40, 2})); m_pixels.insert(std::move(pixel_pair_t{41, 2})); m_pixels.insert(std::move(pixel_pair_t{42, 2})); m_pixels.insert(std::move(pixel_pair_t{45, 2})); m_pixels.insert(std::move(pixel_pair_t{46, 2})); m_pixels.insert(std::move(pixel_pair_t{47, 2})); 

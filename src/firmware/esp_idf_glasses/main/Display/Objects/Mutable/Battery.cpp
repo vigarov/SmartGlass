@@ -2,13 +2,15 @@
 
 using namespace SmartGlasses;
 
-Battery::Battery(battery_level_t initialLevel,bool overwrites, pixel_pair_t offsets, unsigned char priority): Content("Header Battery",overwrites,offsets,priority){
-    m_contents.push_back(std::make_shared<BatteryFrame>("Header battery frame",false,offsets,priority));
+Battery::Battery(battery_level_t initialLevel,bool overwrites, pixel_pair_t offsets, unsigned char animate,unsigned char priority): Content("Header Battery",overwrites,offsets,animate,priority){
+    m_contents.push_back(std::make_shared<BatteryFrame>("Header battery frame",false,offsets,animate,priority));
     updateBatteryLevel(initialLevel);
 }
 
 void Battery::updateBatteryLevel(battery_level_t newLevel){
-    const unsigned char numberOfBars = newLevel/PERCENTAGE_PER_BAR;
+    const unsigned char numberOfBars = newLevel <= ONE_BAR_PERCENTAGE ? 1 : 
+                                            newLevel <= TWO_BAR_PERCENTAGE ? 2 :
+                                            newLevel <= THREE_BAR_BERCENTAGE ? 3 : 4; 
     const int currentNbBars = m_contents.size()-1;
     if(numberOfBars<currentNbBars){
         for(int i=currentNbBars-numberOfBars;i>0;i--){
@@ -22,7 +24,7 @@ void Battery::updateBatteryLevel(battery_level_t newLevel){
             std::string s = "Header Battery Bar";
             m_contents.push_back(std::make_shared<BatteryBar>(
                 s + static_cast<char>('0'+i),m_overwrite, 
-                m_offsets+(pixel_pair_t){static_cast<unsigned char>(BATTERY_BAR_X_MIN_OFFSET - (i+1)*(BATTERY_BAR_SPACING+BATTERY_BAR_WIDTH)),BATTERY_BAR_Y_OFFSET}
+                m_offsets+(pixel_pair_t){static_cast<unsigned char>(BATTERY_BAR_X_MIN_OFFSET - (i+1)*(BATTERY_BAR_SPACING+BATTERY_BAR_WIDTH)),BATTERY_BAR_Y_OFFSET},m_animate,m_priority
             ));
         }
         m_modifiedSinceLastUpdate = true;
@@ -32,5 +34,9 @@ void Battery::updateBatteryLevel(battery_level_t newLevel){
 void Battery::updatePixels(){
     for(auto& content : m_contents){
         content->update();
+        //When DEBUG = 0, we setup the objects too fast, and they don't have time to show (cannot go in the "toDisplay" buffer)
+        #if (DEBUG==0)
+        vTaskDelay(100/portTICK_PERIOD_MS);
+        #endif
     }
 }

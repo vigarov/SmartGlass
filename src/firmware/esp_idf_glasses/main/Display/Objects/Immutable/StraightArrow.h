@@ -6,7 +6,7 @@ namespace SmartGlasses{
 
     class StraightArrow : public ConstantContent{
     public:
-        StraightArrow(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,priority) {
+        StraightArrow(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {
             m_pixels.insert(std::move(pixel_pair_t{7, 0})); m_pixels.insert(std::move(pixel_pair_t{8, 0})); m_pixels.insert(std::move(pixel_pair_t{9, 0})); 
             m_pixels.insert(std::move(pixel_pair_t{6, 1})); m_pixels.insert(std::move(pixel_pair_t{7, 1})); m_pixels.insert(std::move(pixel_pair_t{9, 1})); m_pixels.insert(std::move(pixel_pair_t{10, 1})); 
             m_pixels.insert(std::move(pixel_pair_t{5, 2})); m_pixels.insert(std::move(pixel_pair_t{6, 2})); m_pixels.insert(std::move(pixel_pair_t{8, 2})); m_pixels.insert(std::move(pixel_pair_t{10, 2})); m_pixels.insert(std::move(pixel_pair_t{11, 2})); 

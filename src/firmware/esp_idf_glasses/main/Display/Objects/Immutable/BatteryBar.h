@@ -7,7 +7,7 @@ namespace SmartGlasses{
 
     class BatteryBar : public ConstantContent{
     public:
-        BatteryBar(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,priority) {
+        BatteryBar(const std::string& name, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {
             m_pixels.insert(std::move(pixel_pair_t{0, 0})); m_pixels.insert(std::move(pixel_pair_t{1, 0})); 
             m_pixels.insert(std::move(pixel_pair_t{0, 1})); m_pixels.insert(std::move(pixel_pair_t{1, 1})); 
             m_pixels.insert(std::move(pixel_pair_t{0, 2})); m_pixels.insert(std::move(pixel_pair_t{1, 2})); 

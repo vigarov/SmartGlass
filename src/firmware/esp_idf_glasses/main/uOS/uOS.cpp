@@ -15,11 +15,10 @@ void uOS::setup(){
     //doing it here insted of in ctor because we need `this` pointer to be created
     //TODO: loading screen beforehand?
     std::shared_ptr<IdleApp> idleApp = std::make_shared<IdleApp>(shared_from_this());
-    ESP_LOGI(UOS_M,"Created IdleApp");
     applications[IDLE] = idleApp;
     ApplicationContainer::getInstance().init(idleApp);
     createTask(T_buttonPress,"Button Handler",4098,UOS_TASK_PRIORITY+1,&m_buttonTask,APP_CPU,this);
-    ESP_LOGI(UOS_M,"Initialized AC");
+    ESP_LOGI(UOS_M,"Finished uOS setup");
 }   
 
 QueueHandle_t uOS::getQueueHandle(){
@@ -61,7 +60,6 @@ void uOS::handleEvent(){
     }
     else{
         ESP_LOGI(UOS_M,"Didn't get an event after .5 seconds. Now checking for button presses");
-
     }
 }
 
