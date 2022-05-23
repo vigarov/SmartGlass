@@ -1,8 +1,8 @@
 package com.smartglass.smartglassapp
 
+
 import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.bluetooth.*
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
@@ -10,29 +10,30 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
-import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import com.smartglass.smartglassapp.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.fragment_bluetooth.*
+import com.smartglass.smartglassapp.databinding.ActivityBluetoothBinding
+import kotlinx.android.synthetic.main.activity_bluetooth.scan_results_recycler_view
 import java.util.*
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.S)
-class BluetoothFragment : Fragment() {
+
+class BluetoothActivity : MainActivity() {
+    //--------------------------------------------------------
+    //Private Variables Below
+
+
 
     companion object {
         //Permission Codes
@@ -49,48 +50,6 @@ class BluetoothFragment : Fragment() {
         private const val GATT_MAX_MTU_SIZE = 64
     }
 
-    @Nullable
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        isScanning = false
-
-        val btPermissionsButton: Button? = view?.findViewById(R.id.bluetooth_permissions)
-        val bleConnectButton: Button? = view?.findViewById(R.id.ble_connect)
-        val locPermissionsButton: Button? = view?.findViewById(R.id.location_permissions)
-
-        btPermissionsButton?.setOnClickListener{
-            checkPermission(Manifest.permission.BLUETOOTH, BLUETOOTH_PERMISSION)
-            checkPermission(Manifest.permission.BLUETOOTH_ADMIN, BLUETOOTH_ADMIN_PERMISSION)
-            checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_CONNECT_PERMISSION)
-            checkPermission(Manifest.permission.BLUETOOTH_SCAN, BLUETOOTH_SCAN_PERMISSION)
-        }
-
-        bleConnectButton?.setOnClickListener{
-            Log.d("bleConnectButton", "Are we scanning? $isScanning")
-            if(isScanning){
-                Log.d("bleConnectButton", "Stopping Scan!")
-                stopBleScan()
-            }
-            else{
-                Log.d("bleConnectButton", "Starting Scan!")
-                startBleScan()
-            }
-        }
-
-        locPermissionsButton?.setOnClickListener{
-            checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, FINE_LOCATION_PERMISSION)
-            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, COARSE_LOCATION_PERMISSION)
-        }
-
-        setupRecyclerView()
-
-        return inflater.inflate(R.layout.fragment_bluetooth, container, false)
-    }
-
     //Remember to set the notification lists up properly
     //When a new notification arrives, it will go to the end of the list
     //When a notification is sent, it will be deleted from the list
@@ -100,12 +59,15 @@ class BluetoothFragment : Fragment() {
     //packForDelivery, which converts the Notification object into a ByteArray (which you can use
     //as argument for the writeDescriptor method, calling which will send this data to the connected
     //BLE device (in our case, the smart glasses)
+
     private var notifQueue: List<Notification> = listOf()
 
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityBluetoothBinding
 
-    val mainAct: MainActivity = MainActivity()
-    val bluetoothAdapter = mainAct.bluetoothAdapter
+    private val bluetoothAdapter: BluetoothAdapter by lazy {
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        bluetoothManager.adapter
+    }
 
     private val bleScanner by lazy {
         bluetoothAdapter.bluetoothLeScanner
@@ -122,7 +84,7 @@ class BluetoothFragment : Fragment() {
             else{
                 with(result.device) {
                     if (ActivityCompat.checkSelfPermission(
-                            activity as Activity,
+                            this@BluetoothActivity,
                             Manifest.permission.BLUETOOTH_CONNECT
                         ) != PackageManager.PERMISSION_GRANTED
                     ) {
@@ -239,7 +201,7 @@ class BluetoothFragment : Fragment() {
             with(result.device) {
                 Log.d("ScanResultAdapter", "Connecting to $address")
                 if (ActivityCompat.checkSelfPermission(
-                        activity as Activity,
+                        this@BluetoothActivity,
                         Manifest.permission.BLUETOOTH_CONNECT
                     ) != PackageManager.PERMISSION_GRANTED
                 ) {
@@ -261,7 +223,7 @@ class BluetoothFragment : Fragment() {
                     )
                     return@ScanResultAdapter
                 }
-                connectGatt(activity, false, gattCallback)
+                connectGatt(this@BluetoothActivity, false, gattCallback)
             }
         }
     }
@@ -322,11 +284,11 @@ class BluetoothFragment : Fragment() {
     }
 
     private fun checkPermission(permission: String, requestCode: Int){
-        if(ContextCompat.checkSelfPermission(activity as Activity, permission)
+        if(ContextCompat.checkSelfPermission(this@BluetoothActivity, permission)
             != PackageManager.PERMISSION_GRANTED)
         {
             ActivityCompat.requestPermissions(
-                activity as Activity,
+                this@BluetoothActivity,
                 arrayOf(permission),
                 requestCode
             )
@@ -340,7 +302,7 @@ class BluetoothFragment : Fragment() {
         scan_results_recycler_view.apply {
             adapter = scanResultAdapter
             layoutManager = LinearLayoutManager(
-                activity as Activity,
+                this@BluetoothActivity,
                 RecyclerView.VERTICAL,
                 false
             )
@@ -372,7 +334,7 @@ class BluetoothFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun startBleScan(){
         if (ActivityCompat.checkSelfPermission(
-                context as Context,
+                this,
                 Manifest.permission.BLUETOOTH_SCAN
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -391,7 +353,7 @@ class BluetoothFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.S)
     private fun stopBleScan() {
         if (ActivityCompat.checkSelfPermission(
-                context as Context,
+                this,
                 Manifest.permission.BLUETOOTH_SCAN
             ) != PackageManager.PERMISSION_GRANTED
         ) {
@@ -401,6 +363,48 @@ class BluetoothFragment : Fragment() {
         isScanning = false
     }
 
+    //----------------------------------------------------
+    //Android Stuff Below
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityBluetoothBinding.inflate(layoutInflater)
+        allocateActivityTitle("Bluetooth")
+        setContentView(binding.root)
+
+        isScanning = false
+
+        val btPermissionsButton: Button? = findViewById(R.id.bluetooth_permissions)
+        val bleConnectButton: Button? = findViewById(R.id.ble_connect)
+        val locPermissionsButton: Button? = findViewById(R.id.location_permissions)
+
+        btPermissionsButton?.setOnClickListener{
+            checkPermission(Manifest.permission.BLUETOOTH, BLUETOOTH_PERMISSION)
+            checkPermission(Manifest.permission.BLUETOOTH_ADMIN, BLUETOOTH_ADMIN_PERMISSION)
+            checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_CONNECT_PERMISSION)
+            checkPermission(Manifest.permission.BLUETOOTH_SCAN, BLUETOOTH_SCAN_PERMISSION)
+        }
+
+        bleConnectButton?.setOnClickListener{
+            Log.d("bleConnectButton", "Are we scanning? $isScanning")
+            if(isScanning){
+                Log.d("bleConnectButton", "Stopping Scan!")
+                stopBleScan()
+            }
+            else{
+                Log.d("bleConnectButton", "Starting Scan!")
+                startBleScan()
+            }
+        }
+
+        locPermissionsButton?.setOnClickListener{
+            checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, FINE_LOCATION_PERMISSION)
+            checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, COARSE_LOCATION_PERMISSION)
+        }
+
+        setupRecyclerView()
+    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,

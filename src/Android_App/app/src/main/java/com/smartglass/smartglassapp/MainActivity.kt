@@ -20,6 +20,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -46,7 +48,7 @@ private const val ENABLE_BLUETOOTH_REQUEST_CODE = 1
 
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+open class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         private const val BLUETOOTH_PERMISSION: Int = 100
@@ -57,24 +59,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         private const val COARSE_LOCATION_PERMISSION: Int = 105
     }
 
-    val bluetoothAdapter: BluetoothAdapter by lazy {
-        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-        bluetoothManager.adapter
-    }
-
     lateinit var mapFragment: SupportMapFragment
     lateinit var googleMap: GoogleMap
     private var permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
 
     private lateinit var drawer: DrawerLayout;
+
+    override fun setContentView(view: View?) {
+        drawer = findViewById(R.id.drawer_layout)
+        val container: FrameLayout = drawer.findViewById(R.id.activityContainer)
+        container.addView(view)
+        super.setContentView(drawer)
+
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        drawer = findViewById(R.id.drawer_layout)
         val toolbar: Toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
 
-        drawer = findViewById(R.id.drawer_layout)
+
 
         var toggle: ActionBarDrawerToggle = ActionBarDrawerToggle(this, drawer, toolbar,
             R.string.naviagtion_drawer_open, R.string.naviagtion_drawer_close)
@@ -84,11 +92,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener(this)
 
-        if(savedInstanceState == null){
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                MessageFragment()).commit()
-            navigationView.setCheckedItem(R.id.nav_message)
-        }
+
         /*
         mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(OnMapReadyCallback {
@@ -114,27 +118,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        drawer.closeDrawer(GravityCompat.START)
         if(item.itemId == R.id.nav_message){
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+            supportFragmentManager.beginTransaction().replace(R.id.activityContainer,
                 MessageFragment()).commit()
         }else if(item.itemId == R.id.nav_bluetooth){
             checkPermission(Manifest.permission.BLUETOOTH, BLUETOOTH_PERMISSION)
             checkPermission(Manifest.permission.BLUETOOTH_ADMIN, BLUETOOTH_ADMIN_PERMISSION)
             checkPermission(Manifest.permission.BLUETOOTH_CONNECT, BLUETOOTH_CONNECT_PERMISSION)
             checkPermission(Manifest.permission.BLUETOOTH_SCAN, BLUETOOTH_SCAN_PERMISSION)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
-                BluetoothFragment()).commit()
+            drawer.closeDrawer(GravityCompat.START)
+            startActivity(Intent(this, BluetoothActivity::class.java))
+            overridePendingTransition(0, 0)
+
         }else if(item.itemId == R.id.nav_map){
             checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, FINE_LOCATION_PERMISSION)
             checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, COARSE_LOCATION_PERMISSION)
-            supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+            supportFragmentManager.beginTransaction().replace(R.id.activityContainer,
                 MapsFragment()).commit()
         }else if(item.itemId == R.id.nav_share){
             Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show()
         }
 
-        drawer.closeDrawer(GravityCompat.START)
+
         return true
+    }
+
+    protected fun allocateActivityTitle(titleString: String){
+        supportActionBar?.setTitle(titleString)
     }
 
     private fun checkPermission(permission: String, requestCode: Int){
