@@ -134,8 +134,14 @@ open class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSe
         }else if(item.itemId == R.id.nav_map){
             checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, FINE_LOCATION_PERMISSION)
             checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, COARSE_LOCATION_PERMISSION)
+            drawer.closeDrawer(GravityCompat.START)
+            startActivity(Intent(this, MapsActivity::class.java))
+            overridePendingTransition(0, 0)
+            /*
             supportFragmentManager.beginTransaction().replace(R.id.activityContainer,
                 MapsFragment()).commit()
+
+             */
         }else if(item.itemId == R.id.nav_share){
             Toast.makeText(this, "Share", Toast.LENGTH_SHORT).show()
         }
