@@ -63,7 +63,7 @@ void uOS::handleEvent(){
             memcpy(&notification,notifData.data(),copySize);
 
             ESP_LOGI(UOS_M,"The notification's values are type ordinal =%d, titleTerminated=%d,title=%s,additionalInfoTerminated = %d,addidionalInfo=%s",notification.application,(int)(notification.title.isTerminated),notification.title.text,(int)(notification.additionalInfo.isTerminated),notification.additionalInfo.text);
-            notifCharac->setValue("");
+            notifCharac->setValue("-1");
             notifCharac->notify();
             //TODO: Do something with the notifiaction
             break;
