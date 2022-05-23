@@ -10,7 +10,6 @@ import android.bluetooth.le.ScanSettings
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -23,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.smartglass.smartglassapp.databinding.ActivityBluetoothBinding
-import kotlinx.android.synthetic.main.activity_bluetooth.scan_results_recycler_view
+import kotlinx.android.synthetic.main.activity_bluetooth.*
 import java.util.*
 
 @SuppressLint("MissingPermission")
@@ -45,7 +44,7 @@ class BluetoothActivity : MainActivity() {
         private const val COARSE_LOCATION_PERMISSION: Int = 105
 
         //Bluetooth UUIDs
-        //private const val SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
+        private const val SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
         private const val BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
         private const val GATT_MAX_MTU_SIZE = 64
     }
@@ -59,8 +58,6 @@ class BluetoothActivity : MainActivity() {
     //packForDelivery, which converts the Notification object into a ByteArray (which you can use
     //as argument for the writeDescriptor method, calling which will send this data to the connected
     //BLE device (in our case, the smart glasses)
-
-    private var notifQueue: List<Notification> = listOf()
 
     private lateinit var binding: ActivityBluetoothBinding
 
@@ -120,7 +117,6 @@ class BluetoothActivity : MainActivity() {
         override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
             val deviceAddress = gatt.device.address
             stopBleScan()
-            Log.d("BluetoothGattCallback", "I was here!")
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 when (newState) {
                     BluetoothProfile.STATE_CONNECTED -> {
@@ -131,8 +127,9 @@ class BluetoothActivity : MainActivity() {
                         btGatt = gatt
                         Handler(Looper.getMainLooper()).post {
                             btGatt.discoverServices()
+                            btGatt.requestMtu(GATT_MAX_MTU_SIZE)
                         }
-                        btGatt.requestMtu(GATT_MAX_MTU_SIZE)
+
                     }
                     BluetoothProfile.STATE_DISCONNECTED -> {
                         Log.d(
@@ -160,8 +157,22 @@ class BluetoothActivity : MainActivity() {
                     "BluetoothGattCallback",
                     "Discovered ${services.size} services for ${device.address}"
                 )
-                printGattTable() // See implementation just above this section
-                // Consider connection setup as complete here
+                val service = btGatt.getService(
+                    UUID.fromString(SERVICE_UUID)
+                )
+                val characteristic = service.getCharacteristic(
+                    UUID.fromString(BUFFER_ATTR_UUID)
+                )
+
+                btGatt.setCharacteristicNotification(characteristic, true)
+
+                val notification = Notification(
+                    APP.SMS,
+                    "System",
+                    "Alert"
+                )
+
+                writeCharacteristic(characteristic, notification.packForDelivery())
             }
         }
 
@@ -177,13 +188,16 @@ class BluetoothActivity : MainActivity() {
             characteristic: BluetoothGattCharacteristic
         ) {
             with(characteristic) {
-                Log.d("BluetoothGattCallback", "Characteristic $uuid changed | value: ${value.toString()}")
+                Log.d("BluetoothGattCallback", "Characteristic $uuid changed | value: $value")
+                writeCharacteristic(
+                    characteristic,
+                    Notification(APP.SMS, "Joe", "Mama").packForDelivery()
+                )
             }
         }
     }
 
     private lateinit var btGatt: BluetoothGatt
-    private lateinit var btServices: List<BluetoothGattService>
 
     private var isScanning: Boolean = false
 
@@ -224,6 +238,7 @@ class BluetoothActivity : MainActivity() {
                     return@ScanResultAdapter
                 }
                 connectGatt(this@BluetoothActivity, false, gattCallback)
+                disconnect.setOnClickListener{closeConnection()}
             }
         }
     }
@@ -231,56 +246,15 @@ class BluetoothActivity : MainActivity() {
     //------------------------------------------------------------------------
     //Utility Functions Below
 
-    private fun writeDescriptor(descriptor: BluetoothGattDescriptor, payload: ByteArray) {
+    private fun writeCharacteristic(characteristic: BluetoothGattCharacteristic, payload: ByteArray){
         btGatt.let { gatt ->
-            descriptor.value = payload
-            gatt.writeDescriptor(descriptor)
+            characteristic.value = payload
+            gatt.writeCharacteristic(characteristic)
         }
     }
 
-    private fun BluetoothGattCharacteristic.isIndicatable(): Boolean =
-        containsProperty(BluetoothGattCharacteristic.PROPERTY_INDICATE)
-
-    private fun BluetoothGattCharacteristic.isNotifiable(): Boolean =
-        containsProperty(BluetoothGattCharacteristic.PROPERTY_NOTIFY)
-
-    private fun BluetoothGattCharacteristic.containsProperty(property: Int): Boolean =
-        properties and property != 0
-
-    private fun enableNotifications(characteristic: BluetoothGattCharacteristic) {
-        val cccdUuid = UUID.fromString(BUFFER_ATTR_UUID)
-        val payload = when {
-            characteristic.isIndicatable() -> BluetoothGattDescriptor.ENABLE_INDICATION_VALUE
-            characteristic.isNotifiable() -> BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-            else -> {
-                Log.d("ConnectionManager", "${characteristic.uuid} doesn't support notifications/indications")
-                return
-            }
-        }
-
-        characteristic.getDescriptor(cccdUuid)?.let { cccDescriptor ->
-            if (!btGatt.setCharacteristicNotification(characteristic, true)) {
-                Log.d("ConnectionManager", "setCharacteristicNotification failed for ${characteristic.uuid}")
-                return
-            }
-            writeDescriptor(cccDescriptor, payload)
-        } ?: Log.d("ConnectionManager", "${characteristic.uuid} doesn't contain the CCC descriptor!")
-    }
-
-    private fun disableNotifications(characteristic: BluetoothGattCharacteristic) {
-        if (!characteristic.isNotifiable() && !characteristic.isIndicatable()) {
-            Log.d("ConnectionManager", "${characteristic.uuid} doesn't support indications/notifications")
-            return
-        }
-
-        val cccdUuid = UUID.fromString(BUFFER_ATTR_UUID)
-        characteristic.getDescriptor(cccdUuid)?.let { cccDescriptor ->
-            if (!btGatt.setCharacteristicNotification(characteristic, false)) {
-                Log.d("ConnectionManager", "setCharacteristicNotification failed for ${characteristic.uuid}")
-                return
-            }
-            writeDescriptor(cccDescriptor, BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE)
-        } ?: Log.d("ConnectionManager", "${characteristic.uuid} doesn't contain the CCC descriptor!")
+    private fun closeConnection(){
+        btGatt.close()
     }
 
     private fun checkPermission(permission: String, requestCode: Int){
@@ -312,21 +286,6 @@ class BluetoothActivity : MainActivity() {
         val animator = scan_results_recycler_view.itemAnimator
         if (animator is SimpleItemAnimator) {
             animator.supportsChangeAnimations = false
-        }
-    }
-
-    private fun printGattTable() {
-        if (btServices.isEmpty()) {
-            Log.d("printGattTable", "No service and characteristic available, call discoverServices() first?")
-            return
-        }
-        btServices.forEach { service ->
-            val characteristicsTable = service.characteristics.joinToString(
-                separator = "\n|--",
-                prefix = "|--"
-            ) { it.uuid.toString() }
-            Log.d("printGattTable", "\nService ${service.uuid}\nCharacteristics:\n$characteristicsTable"
-            )
         }
     }
 

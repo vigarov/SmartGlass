@@ -1,5 +1,6 @@
 package com.smartglass.smartglassapp
 
+import android.util.Log
 import java.lang.IllegalArgumentException
 
 class Notification(
@@ -11,44 +12,58 @@ class Notification(
     private val maxAddInfoLength: Int = 48
     private val packageLength: Int = 64
 
-    private fun checkValidity(): Boolean{
-        return title.length <= maxTitleLength && additionalInfo.length <= maxAddInfoLength
-    }
-
     fun packForDelivery(): ByteArray{
         var bA: ByteArray = ByteArray(64)
 
-        if(!checkValidity()){
-            throw IllegalArgumentException("title or additional info too long!")
-        }
-
         // LSB of ByteArray is going to be the app type (1 byte)
         bA[0] = app.ordinal.toByte()
+        bA[1] = 0.toByte()
 
-        // Bytes 1 to 13 (included) are the title
-        // The byte number represents its position in a string, eg:
-        // "Title", would mean that bA[1] = 'T', bA[2] = 'i', etc
-        // Byte 13 represents the length of the string
-        // (For me the '\0' string isn't supported in Kotlin :/
+        // Bytes 2 to 14 (included) are the title
+        // Byte 2 informs us whether the string fits in the given bytes
+        // The byte number represents its position in a string + 2, eg:
+        // "Title", would mean that bA[3] = 'T', bA[4] = 'i', etc
+        // Byte 14 represents the ending character
         val titleChars = title.toCharArray()
-        var i: Int = 1
-        for(char in titleChars){
-            bA[i] = titleChars[i-1].code.toByte()
+        if(titleChars.size >= maxTitleLength){
+            bA[2] = 0.toByte()
+        }
+        else{
+            bA[2] = 1.toByte()
+        }
+        var i: Int = 3
+        while(i < titleChars.size + 3 && i < maxTitleLength + 2){
+            bA[i] = titleChars[i - 3].code.toByte()
             i++
         }
-        bA[i + maxTitleLength] = titleChars.size.toByte()
+        while(i < maxTitleLength + 2){
+            bA[i] = 0.toByte()
+            i++
+        }
+        bA[maxTitleLength + 2] = 0.toByte()
 
-        // Bytes 14 to 63 (included) are the additional info
+        // Bytes 15 to 63 (included) are the additional info
+        // Byte 15 informs us whether the string fits in the given bytes
         // Same conventions apply as for the title, but instead e.g.:
-        // "Hello", would mean bA[14] = 'H', bA[15] = 'e', etc
-        // MSB Byte represents the length of the string
-        i = 14
+        // "Hello", would mean bA[16] = 'H', bA[17] = 'e', etc
+        // Byte 63 represents the ending character
+        if(titleChars.size >= maxTitleLength){
+            bA[maxTitleLength + 3] = 0.toByte()
+        }
+        else{
+            bA[maxTitleLength + 3] = 1.toByte()
+        }
+        i = maxTitleLength + 4
         val infoChars = additionalInfo.toCharArray()
-        for(char in infoChars){
-            bA[i] = infoChars[i-14].code.toByte()
+        while(i < infoChars.size + maxTitleLength + 4 && i < maxAddInfoLength + maxTitleLength + 3){
+            bA[i] = infoChars[i - (maxTitleLength + 4)].code.toByte()
             i++
         }
-        bA[i + maxAddInfoLength] = infoChars.size.toByte()
+        while(i < maxAddInfoLength + maxTitleLength + 3){
+            bA[i] = 0.toByte()
+            i++
+        }
+        bA[63] = 0.toByte()
 
         return bA
     }
