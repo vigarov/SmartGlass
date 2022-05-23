@@ -27,13 +27,18 @@ namespace SmartGlasses{
     };
 
     class NotificationBufferCB : public BLECharacteristicCallbacks {
-        void onWrite(BLECharacteristic *pCharacteristic){
-            ESP_LOGI("Notification CB","Got new notification, sending to uOS");
+        #define NOTIFICATIONCB_M "Notification CB"
+        void onWrite(BLECharacteristic *pCharacteristic) override {
+            ESP_LOGI(NOTIFICATIONCB_M,"Got new notification, sending to uOS");
             QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
             uOSEvent e = {.id=NOTIFICATION_NEW,.sender=static_cast<void*>(pCharacteristic)};
             if(xQueueSendToBack(q,(void *)&e,10/portTICK_PERIOD_MS) !=pdTRUE){
                 ESP_LOGE("BLE Notification CB","New notification but couldn't push to queue: it is full");
             }
+        }
+
+        void onNotify(BLECharacteristic* pCharacteristic) override{
+            ESP_LOGI(NOTIFICATIONCB_M,"Notification callback: either notified or got notified");
         }
     };
 };

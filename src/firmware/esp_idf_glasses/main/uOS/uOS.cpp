@@ -4,7 +4,7 @@
 #include "BLECharacteristic.h"
 #include "utils.h"
 #include "DeviceManager.h"
-#include "TaskManager.h"
+#include "GlobalsManager.h"
 #include "constants.h"
 
 
@@ -34,7 +34,16 @@ void uOS::handleEvent(){
         ESP_LOGI(UOS_M,"Got new event");
         switch (eventBuffer.id)
         {
-        case BT_START_SEARCHING:
+        case BT_DISCONNECT:
+        {
+            //Just disconnected :
+            //Start advertising again 
+            ESP_LOGI(UOS_M,"Bluetooth connection lost, starting asdvertising again");
+            GLOBALSMANAGER.getBLEHandler()->startAdvertise();
+            //TODO: only for a while: link to timer.
+            break;
+        }
+        case BT_START_ADVERTISING:
         {
             auto currapp = CURRENTAPP;
             if(currapp->id == IDLE){
@@ -47,10 +56,15 @@ void uOS::handleEvent(){
         {
             auto notifCharac = static_cast<BLECharacteristic*>(eventBuffer.sender);
             std::string notifData = notifCharac->getValue();
-            ESP_LOGI(UOS_M,"Received new notification %s",notifData.c_str());
+            const size_t len = notifData.length();
+            ESP_LOGI(UOS_M,"Received new notification, length=%d",len);
             notification_t notification = {};
-            memcpy(&notification,notifData.data(),sizeof(notification_t));
-            notifCharac->setValue(0);
+            const size_t copySize = len > sizeof(notification_t) ? sizeof(notification_t) : len;
+            memcpy(&notification,notifData.data(),copySize);
+
+            ESP_LOGI(UOS_M,"The notification's values are type ordinal =%d, titleTerminated=%d,title=%s,additionalInfoTerminated = %d,addidionalInfo=%s",notification.application,(int)(notification.title.isTerminated),notification.title.text,(int)(notification.additionalInfo.isTerminated),notification.additionalInfo.text);
+            notifCharac->setValue("");
+            notifCharac->notify();
             //TODO: Do something with the notifiaction
             break;
         }

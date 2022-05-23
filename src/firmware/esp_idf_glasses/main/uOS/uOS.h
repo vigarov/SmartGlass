@@ -13,8 +13,8 @@ namespace SmartGlasses{
 
     enum uOSEventID{
         BT_DISCONNECT,
-        BT_START_SEARCHING,
-        BT_STOP_SEARCHING,
+        BT_START_ADVERTISING,
+        BT_STOP_ADVERTISING,
         BT_CONNECT,
         NOTIFICATION_NEW,
         BUTTON_PRESSED,

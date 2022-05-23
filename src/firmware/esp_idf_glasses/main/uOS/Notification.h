@@ -6,7 +6,7 @@ namespace SmartGlasses{
     //TODO: Maybe temporary
     template<std::size_t SIZE>
     struct __attribute__((packed, aligned(1))) content_t{
-        unsigned char terminated;
+        unsigned char isTerminated;
         char text[SIZE];
     };
 
