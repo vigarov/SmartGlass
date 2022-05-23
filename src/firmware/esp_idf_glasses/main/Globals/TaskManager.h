@@ -67,7 +67,7 @@ namespace SmartGlasses{
         static void T_HandleDisplay(void* pvParameters);
         //static void T_HandleGNSS(void *pvParameters);
         static void T_HandleUOS(void* parameters);
-        static void T_HandleIMU(void* parameters);
+        //static void T_HandleIMU(void* parameters);
     };
 
 };

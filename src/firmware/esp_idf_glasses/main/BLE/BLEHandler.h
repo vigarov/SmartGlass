@@ -61,8 +61,8 @@ namespace SmartGlasses{
 
         BLEUUID servicesUUID[NB_SERVICES] = {
             BLEUUID(NOTIF_SERVICE_UUID),
-            BLEUUID((uint16_t)IMU_SERVICE_UUID),
 //            BLEUUID((uint16_t)GNSS_SERVICE_UUID),
+            BLEUUID(IMU_SERVICE_UUID),
             BLEUUID((uint16_t)BATTERY_SERVICE_UUID)
         };
     };

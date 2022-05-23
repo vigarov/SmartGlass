@@ -65,8 +65,8 @@ set(DISPLAY_SRCS
     ${OBJECTS_SRC}
     )
 set(IMU_SRCS
-    ${IMU_DIR}/IMUManager.cpp
-    )
+#    ${IMU_DIR}/IMUManager.cpp
+    ${IMU_DIR}/IMUstatemachine.cpp
     )
 #set(GNSS_SRCS
 #    ${GNSS_DIR}/GNSSManager.cpp
