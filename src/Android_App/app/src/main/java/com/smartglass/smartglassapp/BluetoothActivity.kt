@@ -8,6 +8,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -35,6 +36,10 @@ class BluetoothActivity : MainActivity() {
 
 
     companion object {
+        val queue: Queue<Notification> = LinkedList<Notification>()
+        lateinit var btGatt: BluetoothGatt
+        var onServicesDiscoveredBool: Boolean = false
+        var messageSendBool: Boolean = true
         //Permission Codes
         const val BLUETOOTH_PERMISSION: Int = 100
         const val BLUETOOTH_ADMIN_PERMISSION: Int = 101
@@ -44,9 +49,9 @@ class BluetoothActivity : MainActivity() {
         private const val COARSE_LOCATION_PERMISSION: Int = 105
 
         //Bluetooth UUIDs
-        private const val SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
-        private const val BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
-        private const val GATT_MAX_MTU_SIZE = 64
+        const val NOTIFICATION_SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
+        const val NOTIFICATION_BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
+        const val GATT_MAX_MTU_SIZE = 64
     }
 
     //Remember to set the notification lists up properly
@@ -59,7 +64,10 @@ class BluetoothActivity : MainActivity() {
     //as argument for the writeDescriptor method, calling which will send this data to the connected
     //BLE device (in our case, the smart glasses)
 
+
+
     private lateinit var binding: ActivityBluetoothBinding
+
 
     private val bluetoothAdapter: BluetoothAdapter by lazy {
         val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
@@ -152,27 +160,23 @@ class BluetoothActivity : MainActivity() {
         }
 
         override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+
             with(gatt) {
+                onServicesDiscoveredBool = true
                 Log.d(
                     "BluetoothGattCallback",
                     "Discovered ${services.size} services for ${device.address}"
                 )
                 val service = btGatt.getService(
-                    UUID.fromString(SERVICE_UUID)
+                    UUID.fromString(NOTIFICATION_SERVICE_UUID)
                 )
                 val characteristic = service.getCharacteristic(
-                    UUID.fromString(BUFFER_ATTR_UUID)
+                    UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)
                 )
 
                 btGatt.setCharacteristicNotification(characteristic, true)
 
-                val notification = Notification(
-                    APP.SMS,
-                    "System",
-                    "Alert"
-                )
 
-                writeCharacteristic(characteristic, notification.packForDelivery())
             }
         }
 
@@ -189,15 +193,13 @@ class BluetoothActivity : MainActivity() {
         ) {
             with(characteristic) {
                 Log.d("BluetoothGattCallback", "Characteristic $uuid changed | value: $value")
-                writeCharacteristic(
-                    characteristic,
-                    Notification(APP.SMS, "Joe", "Mama").packForDelivery()
-                )
+                messageSendBool = true
+                sendMessage()
             }
         }
     }
 
-    private lateinit var btGatt: BluetoothGatt
+
 
     private var isScanning: Boolean = false
 
@@ -246,7 +248,7 @@ class BluetoothActivity : MainActivity() {
     //------------------------------------------------------------------------
     //Utility Functions Below
 
-    private fun writeCharacteristic(characteristic: BluetoothGattCharacteristic, payload: ByteArray){
+    fun writeCharacteristic(characteristic: BluetoothGattCharacteristic, payload: ByteArray){
         btGatt.let { gatt ->
             characteristic.value = payload
             gatt.writeCharacteristic(characteristic)
@@ -328,6 +330,8 @@ class BluetoothActivity : MainActivity() {
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val intent = Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS")
+        startActivity(intent)
         binding = ActivityBluetoothBinding.inflate(layoutInflater)
         allocateActivityTitle("Bluetooth")
         setContentView(binding.root)
@@ -420,4 +424,19 @@ class BluetoothActivity : MainActivity() {
             }
         }
     }
+
+    fun sendMessage(){
+        if(messageSendBool && !queue.isEmpty()){
+            val notif: Notification = queue.poll()
+
+            if(onServicesDiscoveredBool){
+                writeCharacteristic(btGatt.getService(
+                    UUID.fromString(NOTIFICATION_SERVICE_UUID)).getCharacteristic(UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID))
+                    , notif.packForDelivery())
+                messageSendBool = false
+            }
+        }
+    }
+
+
 }
