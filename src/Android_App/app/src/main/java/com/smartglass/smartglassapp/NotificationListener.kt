@@ -21,6 +21,7 @@ class NotificationListener: NotificationListenerService() {
 
         if (sbn != null && BluetoothActivity.onServicesDiscoveredBool == true) {
             val app: APP = when(sbn.packageName){
+                "com.google.android.apps.maps" -> APP.MAPS
                 "com.google.android.apps.messaging" -> APP.SMS
                 "com.whatsapp" -> APP.WHATSAPP
                 "org.thoughtcrime.securesms" -> APP.SIGNAL
@@ -30,7 +31,7 @@ class NotificationListener: NotificationListenerService() {
                 "com.discord" -> APP.DISCORD
                 "com.facebook.katana" -> APP.FACEBOOK
                 "org.telegram.messenger" -> APP.TELEGRAM
-                "com.microsoft.teams" -> APP.TEAMS
+                "com.linkedin.android" -> APP.LINKEDIN
                 else -> APP.OTHER
             }
 
