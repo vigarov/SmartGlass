@@ -24,8 +24,7 @@ namespace SmartGlasses{
             return SmartGlasses::Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>(s,overwrites,offsets,animate,priority);
         }
     protected:
-        void updatePixels() override;
-        void setup() override;
+        std::unique_ptr<pixels_set_t> createPixels();
     private:
         std::string m_s = "";
         const Font<CHAR_T,CHAR_WIDTH,NB_CHARS> *m_f;

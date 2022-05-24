@@ -24,15 +24,20 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
 
 void ApplicationContainer::init(std::shared_ptr<Application> app){
     ESP_LOGI(APPCONT_M,"Initialiazing App. Container");
-    xSemaphoreGive(xAppSemaphore);
     currentApplication = app;
+    xSemaphoreGive(xAppSemaphore);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     createTask(runApplication,"ApplicationRunner",20960,1,&appTaskHandler,APP_CPU,&currentApplication);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
+    currentApplication->changeTaskToBeUpdated(appTaskHandler);
+    xTaskNotifyGive(appTaskHandler);
     ESP_LOGD(APPCONT_M,"Initialiazed App. Container. app semaphore pointer : %p",xAppSemaphore);
 }
 
 void ApplicationContainer::runApplication(void *pvParameters){
+    if(ulTaskNotifyTake(pdTRUE,100/portTICK_PERIOD_MS) == pdFALSE){
+        ESP_LOGE(APPCONT_M,"Didn't get notified after 100ms, failed to change the task to be update to all the children?");
+    }
     ESP_LOGI(APPCONT_M,"Starting application thread");
     std::shared_ptr<Application> usedApp = *(std::shared_ptr<Application>*)pvParameters;
     usedApp->onResume(); // Starting the app for the first time

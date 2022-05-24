@@ -1,6 +1,9 @@
 #pragma once
 
 #include <unordered_set>
+#include <memory>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 namespace SmartGlasses{
     
@@ -31,6 +34,8 @@ namespace SmartGlasses{
 
 
     };
+    
+    typedef std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> pixels_set_t; 
 
     struct __attribute__((packed,aligned(4))) border_t{
         pixel_pair_t topLeft;
@@ -41,11 +46,15 @@ namespace SmartGlasses{
      * @brief A drawable object, defined as a unordered_set of pixels at an offunordered_set
      * 
      */
-    class Drawable{
-    public:
-        std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> pixels ; 
-        std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> border ; //must have pixels \cap border == 0. border = 0 <=> don't overwrite
-        pixel_pair_t offsets = {0,0};
+    struct Drawable{
+        Drawable(std::unique_ptr<pixels_set_t> pixels, std::unique_ptr<pixels_set_t> canvas,pixel_pair_t offsets = {0,0}, unsigned char animate = 0, TaskHandle_t notifyOnDraw = nullptr)
+        : pixels(std::move(pixels)), canvas(std::move(canvas)), offsets(offsets), animate(animate), notifyOnDraw(notifyOnDraw){}
+
+        std::unique_ptr<pixels_set_t> pixels; 
+        std::unique_ptr<pixels_set_t> canvas; //must have pixels \cap canvas == 0. border = 0 <=> don't overwrite
+        pixel_pair_t offsets;
+        unsigned char animate;
+        TaskHandle_t notifyOnDraw;
     };
 
     /**
@@ -55,8 +64,7 @@ namespace SmartGlasses{
     struct display_t{
         // display_t(unsigned char p, Drawable&& d) : priority(p),object(std::move(d)){}
         unsigned char priority{}; //TODO: can make it a bitfield to save... one byte if necessary
-        unsigned char animate{};
-        Drawable object;
+        std::unique_ptr<Drawable> object;
     };
     
     

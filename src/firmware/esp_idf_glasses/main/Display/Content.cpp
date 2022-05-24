@@ -7,48 +7,28 @@ using namespace SmartGlasses;
 
 void Content::update(){
     ESP_LOGD(m_contentName.c_str(),"Got update request");
-    if(m_setup){
-        xTaskNotifyGive(m_innerObjectTask);
-    }
+    canvasAndUpdate(std::move(createPixels()));
 }
 
-void Content::createUpdateTask(size_t stackSize ){
-    createTask(T_Update,(m_contentName.substr(0,configMAX_TASK_NAME_LEN - 4) + "_UT").c_str(),stackSize,DISPLAYABLE_UPDATE_PRIORITY,&m_innerObjectTask,APP_CPU,this);
+void Content::hide(){
+    forceHide();
 }
 
-void Content::setup(){
-    createUpdateTask();
-    finishSetup();
-}
-
-void Content::finishSetup(){
-    m_setup=true;
-    updatePixels();
-    canvasAndUpdate();
-    ESP_LOGI(m_contentName.c_str(),"Finished Setup");
-}
-
-void Content::T_Update(void* pvParameters){
-    Content* currentContent = (Content*) pvParameters;
-    while(true){
-        if(ulTaskNotifyTake(pdTRUE,20000 / portTICK_PERIOD_MS) == pdFALSE){
-            ESP_LOGD(currentContent->m_contentName.c_str(),"No new content received after 20 seconds");
-        }else{
-            currentContent->updatePixels(); 
-            currentContent->canvasAndUpdate();
-        }
-    }
-}
-
-void Content::computeCanvas(){
+std::unique_ptr<pixels_set_t> Content::computeCanvas(const pixels_set_t& pixels){
     ESP_LOGI(m_contentName.c_str(),"Requested canvas update (ow=%d,modif=%d)",m_overwrite,m_modifiedSinceLastUpdate);
+    auto temp = std::make_unique<pixels_set_t>();
     if(m_overwrite && m_modifiedSinceLastUpdate){
-        actuallyComputeCanvas();
+        temp.reset(nullptr);
+        temp=std::move(actuallyComputeCanvas(pixels));
     }
+    return std::move(temp);
+    
 }
 
-void Content::actuallyComputeCanvas(){
-    for(auto &p : m_pixels){
+std::unique_ptr<pixels_set_t> Content::actuallyComputeCanvas(const pixels_set_t& pixels){
+    
+    auto canvas_p = std::make_unique<pixels_set_t>();
+    for(auto &p : pixels){
         if(p.x<m_borders.topLeft.x){
             m_borders.topLeft.x = p.x;
         }
@@ -65,41 +45,40 @@ void Content::actuallyComputeCanvas(){
     for(unsigned char x=m_borders.topLeft.x ; x<m_borders.bottomRight.x ; x++){
         for(unsigned char y = m_borders.topLeft.y; y<=m_borders.bottomRight.y; y++){
             pixel_pair_t p = {x,y};
-            if(!m_pixels.count(p)){
-                m_canvas.insert(std::move(p));
+            if(!pixels.count(p)){
+                canvas_p->insert(std::move(p));
             }
         }
     }
+    return std::move(canvas_p);
 }
 
-void Content::actuallyUpdateDisplay(){
-    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,m_animate,{m_pixels,m_canvas,m_offsets}}))); 
+void Content::actuallyUpdateDisplay(std::unique_ptr<pixels_set_t> pixels,std::unique_ptr<pixels_set_t> canvas){
+    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,
+        std::make_unique<Drawable>(std::move(pixels),std::move(canvas),m_offsets,m_animate,m_taskToNotifyOnDraw)}))); 
 }
 
 void Content::forceDisplay(){
-    actuallyComputeCanvas();
-    actuallyUpdateDisplay();
+    auto pixels = std::move(createPixels());
+    auto canvas = std::move(actuallyComputeCanvas(*pixels));
+    actuallyUpdateDisplay(std::move(pixels),std::move(canvas));
 }
 
 void Content::forceHide(){
-    actuallyComputeCanvas();
-    std::unordered_set<pixel_pair_t,pixel_pair_t::HashFunction> temp;
-    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,m_animate,{temp,m_pixels,m_offsets}}))); 
+    auto pixels = std::move(createPixels());
+    auto empty = std::make_unique<pixels_set_t>();
+    DISPLAYMANAGER->update_awaiting_display(std::move(std::make_unique<display_t>(display_t{m_priority,
+    std::make_unique<Drawable>(std::move(empty),std::move(pixels),m_offsets,m_animate,m_taskToNotifyOnDraw)}))); 
+    m_modifiedSinceLastUpdate = true; //so calling update will re-show what should be shown
 }
 
-Content::~Content(){
-    if(m_innerObjectTask != NULL){
-        vTaskDelete(&m_innerObjectTask);
-    }
-}
-
-void Content::canvasAndUpdate(){
+void Content::canvasAndUpdate(std::unique_ptr<pixels_set_t> pixels){
     ESP_LOGD(m_contentName.c_str(),"request canvas recomputation and update");
     if(m_modifiedSinceLastUpdate){
         //Now that the new values for the pixels have been fetched, we can compute the new canvas
-        computeCanvas();
+        auto canvas_p = computeCanvas(*pixels);
         //and then update the display
-        actuallyUpdateDisplay();
+        actuallyUpdateDisplay(std::move(pixels),std::move(canvas_p));
         //We don't move the m_pixels since we might not be updating them each time
         m_modifiedSinceLastUpdate = false;
     }

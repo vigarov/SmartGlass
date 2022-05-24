@@ -54,6 +54,7 @@ set(OBJECTS_SRC
 set(DISPLAY_SRCS 
     ${DISPLAY_DIR}/DisplayManager.cpp
     ${DISPLAY_DIR}/Content.cpp
+    ${DISPLAY_DIR}/Container.cpp
     ${FONTS_SRC}
     ${OBJECTS_SRC}
     )

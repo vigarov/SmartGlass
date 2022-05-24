@@ -20,12 +20,9 @@ namespace SmartGlasses{
     
     #define HEADER_M "Header"
 
-    class Header : public ConstantContent, Container{
+    class Header : public Container{
     public:
-        Header(std::string& s,unsigned char hours = 0, unsigned char minutes = 0,bool overwrites = true, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 2);
-
-        void setup() override;
-        void update() override;
+        Header(std::string& s,unsigned char hours = 0, unsigned char minutes = 0,bool overwrites = true, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 2,TaskHandle_t notifyOnDraw = nullptr);
     private: 
         std::shared_ptr<Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>> m_hourText_p;
         std::shared_ptr<Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>> m_minuteText_p;

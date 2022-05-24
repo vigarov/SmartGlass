@@ -17,12 +17,10 @@ namespace SmartGlasses{
     #define BATTERY_BAR_X_MIN_OFFSET 16
     #define BATTERY_BAR_SPACING 1
 
-    class Battery : public Content,Container{
+    class Battery : public Container{
     public:
-        Battery(battery_level_t initialLevel = 100,bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1);
+        Battery(battery_level_t initialLevel = 100,bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1,TaskHandle_t notifyOnDraw = nullptr);
         void updateBatteryLevel(battery_level_t newLevel);
-    protected:
-        void updatePixels() override;
     };
 
 };

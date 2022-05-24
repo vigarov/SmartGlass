@@ -42,32 +42,38 @@ void DisplayManager::refreshDisplay() {
     TAKE_S_INF(xDisplayUpdateSemaphore);
     ESP_LOGD(DISPLAY_M,"Refresh taking xDisplayUpdateSemaphore");
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
-    {    
-        Drawable object = currentFrames->object; //Deep copy of the Drawable
-        unsigned char animate = currentFrames->animate;
+    { //Indented block to easily measure if memory is not freed correcly when debugging
+        std::unique_ptr<Drawable> object = std::move(currentFrames->object);
         currentFrames.reset(nullptr);
         xSemaphoreGive(xDisplayUpdateSemaphore);
 
         IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
-        ESP_LOGD(DISPLAY_M,"Drawing using offset (%d,%d)",object.offsets.x,object.offsets.y);
+        ESP_LOGD(DISPLAY_M,"Drawing using offset (%d,%d)",object->offsets.x,object->offsets.y);
         //We can now update the display
-        for(auto& p: object.border){ //when doesn't overwrite, object.border will be empty --> loop is skipped
+        for(auto& p: *object->canvas){ //when doesn't overwrite, object->border will be empty --> loop is skipped
             ESP_LOGD(DISPLAY_M,"Border pixel (%d,%d)",p.x,p.y);
-            backend_display.pixelClear(p.x+object.offsets.x,p.y+object.offsets.y);
-            if(animate){
+            backend_display.pixelClear(p.x+object->offsets.x,p.y+object->offsets.y);
+            if(object->animate){
                 vTaskDelay(ANIMATION_DELAY/portTICK_PERIOD_MS);
             }
         }
-        for(auto &p : object.pixels){
+        for(auto &p : *object->pixels){
             ESP_LOGD(DISPLAY_M,"Drawing pixel (%d,%d)",p.x,p.y);
-            backend_display.pixelSet(p.x+object.offsets.x,p.y+object.offsets.y);
-            if(animate){
+            backend_display.pixelSet(p.x+object->offsets.x,p.y+object->offsets.y);
+            if(object->animate){
                 vTaskDelay(ANIMATION_DELAY/portTICK_PERIOD_MS);
             }
         }
-        
-        ESP_LOGI(DISPLAY_M,"Finished drawing");
+    
+        TaskHandle_t taskToNotify = object->notifyOnDraw;
+        if(taskToNotify!=NULL){
+            xTaskNotifyGive(taskToNotify);
+        }
+
+        object.reset(nullptr); //explicitely freeing memory
     }
+    ESP_LOGI(DISPLAY_M,"Finished drawing");
+
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     //The contrast of 128 is too strong imo, see opinions of others
     //Refresh display is useless without buffer
