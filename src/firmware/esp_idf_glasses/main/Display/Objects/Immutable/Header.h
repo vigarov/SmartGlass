@@ -12,11 +12,15 @@
 
 namespace SmartGlasses{
 
-    #define MINUTES_OFFSET_X (3*(8*sizeof(unsigned char) + 1))
-    #define COLON_OFFSET_X (2*(8*sizeof(unsigned char) + 1))
-    #define BELL_OFFSET_X 39
-    #define NOTIFICATION_OFFSET_X ((BELL_OFFSET_X) + (BELL_WIDTH))
-    #define BLEICON_OFFSET_X ((SCREEN_WIDTH) - (BLEICON_WIDTH))
+    #define TEXT_OFFSET_Y 3
+    #define MINUTES_OFFSET_X (COLON_OFFSET_X + (8*sizeof(unsigned char))-1)
+    #define COLON_OFFSET_X (2*(8*sizeof(unsigned char))-1)
+    #define BELL_OFFSET_X 55
+    #define BELL_OFFSET_Y 1
+    #define NOTIFICATION_OFFSET_X ((BELL_OFFSET_X) + (BELL_WIDTH)+2)
+    #define BLEICON_OFFSET_X ((SCREEN_WIDTH) - (BLEICON_WIDTH)-1)
+    #define BLEICON_OFFSET_Y 1
+    #define BATTERY_OFFSET_X ((BLEICON_OFFSET_X)-(BATTERYFRAME_WIDTH)-5)
     
     #define HEADER_M "Header"
 

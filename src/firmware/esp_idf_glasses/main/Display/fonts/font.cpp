@@ -3,7 +3,7 @@
 
 using namespace SmartGlasses;
 
-#define CHAR_SPACING 1
+#define CHAR_SPACING 0
 #define LINE_ADD_SPACING 1
 
 template<typename CHAR_T,unsigned int CHAR_WIDTH,unsigned long NB_CHARS>

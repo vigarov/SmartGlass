@@ -52,14 +52,14 @@ void DisplayManager::refreshDisplay() {
         //We can now update the display
         for(auto& p: *object->canvas){ //when doesn't overwrite, object->border will be empty --> loop is skipped
             ESP_LOGD(DISPLAY_M,"Border pixel (%d,%d)",p.x,p.y);
-            backend_display.pixelClear(p.x+object->offsets.x,p.y+object->offsets.y);
+            backend_display.pixelClear(SCREEN_WIDTH - (p.x+object->offsets.x),SCREEN_HEIGHT - (p.y+object->offsets.y));
             if(object->animate){
                 vTaskDelay(ANIMATION_DELAY/portTICK_PERIOD_MS);
             }
         }
         for(auto &p : *object->pixels){
             ESP_LOGD(DISPLAY_M,"Drawing pixel (%d,%d)",p.x,p.y);
-            backend_display.pixelSet(p.x+object->offsets.x,p.y+object->offsets.y);
+            backend_display.pixelSet(SCREEN_WIDTH - (p.x+object->offsets.x),SCREEN_HEIGHT - (p.y+object->offsets.y));
             if(object->animate){
                 vTaskDelay(ANIMATION_DELAY/portTICK_PERIOD_MS);
             }
