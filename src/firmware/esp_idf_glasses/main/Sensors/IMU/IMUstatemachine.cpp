@@ -7,6 +7,7 @@
 
 #include "freertos/FreeRTOS.h"
 #include <driver/gpio.h>
+#include <driver/i2c.h>
 #include "esp_log.h"
 
 #include "constants.h"
@@ -159,13 +160,15 @@ namespace SmartGlasses
         mpu.setXAccelOffset(-2730);
         mpu.setYAccelOffset(-35);
         mpu.setZAccelOffset(700);
+        // empirically, after compensating for orientation (requires gyro though) anything with absolute value <1500 is "at rest"
+        mpu.setFullScaleAccelRange(3); // 1024LSB/mg
 
-        mpu.setMotionDetectionThreshold(7500);     // LSB=2mg
-        mpu.setMotionDetectionDuration(2);         // so you get an interrupt when falling LSB=1ms
-        mpu.setMotionDetectionCounterDecrement(2); // when a sample does not count as falling how much to penalise the counter for this
+        mpu.setMotionDetectionThreshold(31); // LSB=2mg
+        mpu.setMotionDetectionDuration(1); // so you get an interrupt when falling LSB=1ms
+        mpu.setMotionDetectionCounterDecrement(1); // when a sample does not count as falling how much to penalise the counter for this
 
-        mpu.setZeroMotionDetectionThreshold(7500); // LSB=2mg
-        mpu.setZeroMotionDetectionDuration(255);   // maximum interval, get an int after 16320 ms.  LSB=64 ms
+        mpu.setZeroMotionDetectionThreshold(15); // LSB=2mg
+        mpu.setZeroMotionDetectionDuration(255); // maximum interval, get an int after 16320 ms.  LSB=64 ms
 
         // disable unused gyro with setStandbyXGyroEnabled(false) & Y&Z, register map says there's power optimisation like this
         mpu.setStandbyXGyroEnabled(false);
