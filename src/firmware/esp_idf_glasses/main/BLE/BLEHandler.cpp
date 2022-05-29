@@ -8,7 +8,7 @@
 #include "BLEDevice.h"
 #include "callbacks.h"
 
-#include "GNSS.h"
+//#include "GNSS.h"
 
 using namespace SmartGlasses;
 
@@ -21,6 +21,7 @@ BLEHandler::BLEHandler(){
 }
 
 void BLEHandler::initServer(){
+    esp_log_level_set(BLE_M, ESP_LOG_VERBOSE);
     ESP_LOGI(BLE_M,"Starting initializing server");
     //Setting up server
     esp_err_t errRc = ::nvs_flash_init(); // it looks like BLEDevice::init doesn't actually do this for some reason.
@@ -68,7 +69,11 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 characteristic->setCallbacks(new NotificationBufferCB());
                 break;
             }
-        case GNSS_SERVICE:
+        case IMU_SERVICE:
+            {
+                // now really should store these somewhere so they can be updated later
+            }
+/*        case GNSS_SERVICE:
             {
                 auto gCharUUID = BLEUUID((uint16_t)GNSS_CHAR_UUID); 
                 auto* characteristic = service->createCharacteristic(gCharUUID, BLECharacteristic::PROPERTY_NOTIFY|BLECharacteristic::PROPERTY_READ);
@@ -78,7 +83,7 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 INLINE_CHECK_FOR_ERROR(characteristic,gCharUUID.toString().c_str())
                 uint32_t ln_feature_val=LN_FEATURE_LOCATION_SUPPORTED|LN_FEATURE_ELEV_SUPPORTED;
                 characteristic->setValue((uint8_t*)&ln_feature_val,sizeof(ln_feature_val));
-            }
+            }*/
         case BATTERY_SERVICE:
             {
                 auto bCharUUID = BLEUUID((uint16_t)BATTERY_CHAR_UUID);

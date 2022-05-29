@@ -18,3 +18,6 @@
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
+#define PIN_SDA 19
+#define PIN_SCL 23 // these are the same defaults as lolin 32 lite on Arduino IDE
+#define PIN_IMU_INT GPIO_NUM_27

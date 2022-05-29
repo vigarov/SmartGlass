@@ -23,7 +23,8 @@ void ApplicationContainer::setCurrentApplication(std::shared_ptr<Application> ap
 }
 
 void ApplicationContainer::init(std::shared_ptr<Application> app){
-    ESP_LOGI(APPCONT_M,"Initialiazing App. Container");
+    esp_log_level_set(APPCONT_M, ESP_LOG_VERBOSE);
+    ESP_LOGI(APPCONT_M,"Initiliazing App. Container");
     currentApplication = app;
     xSemaphoreGive(xAppSemaphore);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)

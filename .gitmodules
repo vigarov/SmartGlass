@@ -1,0 +1,4 @@
+[submodule "i2cdevlib"]
+	path = i2cdevlib
+	url = https://github.com/jrowberg/i2cdevlib.git
+	branch = master

@@ -1,3 +1,6 @@
+#include <memory>
+#include "esp_log.h"
+
 #include "utils.h"
 #include "constants.h"
 
@@ -5,6 +8,7 @@
 #include "GlobalsManager.h"
 #include "DeviceManager.h"
 #include "esp_heap_trace.h"
+#include "IMUstatemachine.h"
 
 using namespace SmartGlasses;
 
@@ -16,12 +20,13 @@ TaskHandle_t TaskManager::getTaskHandle(task_t taskType){
     return nullptr;
 }
 
-
 void TaskManager::initAllTasks(){
+    esp_log_level_set(TASK_M, ESP_LOG_VERBOSE);
     ESP_LOGI(TASK_M,"Initialising all tasks");
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     int error = createTask(T_HandleBLE,"BLEHandler",5240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); //TODO: Handle errors
     error = createTask(T_HandleDisplay,"DisplayHandler",50960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
+    error = createTask(IMU_state_machine::handler_task,"IMUHandler",10240,IMU_TASK_PRIORITY,&allTasks[T_IMU],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",5240,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
@@ -59,6 +64,7 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
     {
         GlobalsManager& glob_mgr = GlobalsManager::getInstance();
         display_mgr = glob_mgr.getDeviceManager().getDisplayManager();
+        display_mgr->init();
         display_mgr->setDisplayTask(glob_mgr.getTaskManager().getTaskHandle(T_DISPLAY));
     }
     while(1){
@@ -66,6 +72,20 @@ void TaskManager::T_HandleDisplay(void* pvParameters){
         vTaskDelay(10/portTICK_PERIOD_MS);
     }
 }
+
+/*void TaskManager::T_HandleIMU(void* pvParameters) {
+    ESP_LOGI(TASK_M, "Starting IMU task");
+    std::shared_ptr<IMU_state_machine> imu_mgr;
+    GlobalsManager& glob_mgr = GlobalsManager::getInstance();
+    imu_mgr = glob_mgr.getDeviceManager().getIMU_state_machine();
+    imu_mgr->init();
+    ESP_LOGI(TASK_M,"Finished setting up IMU");
+    while (true) {
+        imu_mgr->debug_print_latest_event();
+
+        vTaskDelay(2500/portTICK_PERIOD_MS);
+    }
+}*/
 
 void TaskManager::T_HandleUOS(void * pvParameters){
     ESP_LOGI(TASK_M,"Starting uOS task");
