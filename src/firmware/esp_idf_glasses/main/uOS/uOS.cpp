@@ -46,11 +46,8 @@ void uOS::handleEvent(){
         case BT_START_ADVERTISING:
         {
             ESP_LOGI(UOS_M,"Got started advertising");
-            auto currapp = CURRENTAPP;
-            if(currapp->id == IDLE){
-                //Start blinking the BL icon <=> add as task handle to notify to the 1s Timer the handle of the updatePixel task of the BLEIcon (or its Container, see how this gets implemented)
-                std::static_pointer_cast<IdleApp>(currapp)->changeBLE(BLE_ADVERTISING);
-            }
+            CURRENTAPP->changeBLE(BLE_ADVERTISING);
+            
             break;
         }
         case NOTIFICATION_NEW:
@@ -66,7 +63,7 @@ void uOS::handleEvent(){
             ESP_LOGI(UOS_M,"The notification's values are type ordinal =%d, titleTerminated=%d,title=%s,additionalInfoTerminated = %d,addidionalInfo=%s",notification.application,(int)(notification.title.isTerminated),notification.title.text,(int)(notification.additionalInfo.isTerminated),notification.additionalInfo.text);
             notifCharac->setValue("-1");
             notifCharac->notify();
-            //TODO: Do something with the notifiaction
+            CURRENTAPP->newNotification(std::move(notification));
             break;
         }
         default:

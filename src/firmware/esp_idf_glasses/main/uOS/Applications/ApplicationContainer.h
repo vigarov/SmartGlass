@@ -4,7 +4,7 @@
 
 namespace SmartGlasses{
 
-
+    #define APPLICATION_TASK_PRIORITY 1
     #define APPCONT_M "Application Container"
     /**
      * @brief Container for the current application object. Thread safe singleton

@@ -17,6 +17,13 @@ namespace SmartGlasses{
 
         virtual void update() = 0;
         virtual void hide() = 0;
+
+        /**
+         * @brief id for each displayable: no time to refactor so that all displayables have an unique one 
+         * -> default 0 and this field will be used iff a displayable needs it (e.g.: notification displayable in idleApp)
+         * 
+         */
+        unsigned char id = 0;
     protected:
         const pixel_pair_t m_offsets;
 

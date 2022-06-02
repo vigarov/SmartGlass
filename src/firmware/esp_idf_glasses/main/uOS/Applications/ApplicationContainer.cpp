@@ -27,7 +27,7 @@ void ApplicationContainer::init(std::shared_ptr<Application> app){
     currentApplication = app;
     xSemaphoreGive(xAppSemaphore);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
-    createTask(runApplication,"ApplicationRunner",40960,1,&appTaskHandler,APP_CPU,&currentApplication);
+    createTask(runApplication,"ApplicationRunner",40960,APPLICATION_TASK_PRIORITY,&appTaskHandler,APP_CPU,&currentApplication);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     currentApplication->changeTaskToBeUpdated(appTaskHandler);
     xTaskNotifyGive(appTaskHandler);

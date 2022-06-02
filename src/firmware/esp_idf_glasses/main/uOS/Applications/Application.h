@@ -4,6 +4,7 @@
 #include "DisplayManager.h"
 #include "Content.h"
 #include "Container.h"
+#include "Notification.h"
 #include <vector>
 
 namespace SmartGlasses{
@@ -52,6 +53,8 @@ namespace SmartGlasses{
         virtual void run() = 0;
 
         virtual void changeBLE(ble_status_t newStatus){}
+
+        virtual void newNotification(notification_t n) = 0;
     protected:
         std::shared_ptr<uOS> m_uOS;
         std::shared_ptr<DisplayManager> m_displayManager;
