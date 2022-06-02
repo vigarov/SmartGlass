@@ -15,6 +15,8 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -25,6 +27,7 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.smartglass.smartglassapp.databinding.ActivityBluetoothBinding
 import kotlinx.android.synthetic.main.activity_bluetooth.*
 import java.util.*
+import kotlin.concurrent.timerTask
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.S)
@@ -51,7 +54,12 @@ class BluetoothActivity : MainActivity() {
         //Bluetooth UUIDs
         const val NOTIFICATION_SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
         const val NOTIFICATION_BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
+        const val GRANNY_FALLING_UUID: String = ""
         const val GATT_MAX_MTU_SIZE = 64
+
+        //send message: codes
+        const val NOTIFICATION_CHANGE: Int = 0
+        const val GRANNY_FELL: Int = 1
     }
 
     //Remember to set the notification lists up properly
@@ -170,13 +178,17 @@ class BluetoothActivity : MainActivity() {
                 val service = btGatt.getService(
                     UUID.fromString(NOTIFICATION_SERVICE_UUID)
                 )
-                val characteristic = service.getCharacteristic(
+                var characteristic = service.getCharacteristic(
                     UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)
                 )
 
                 btGatt.setCharacteristicNotification(characteristic, true)
 
+                var charGranny = service.getCharacteristic(
+                    UUID.fromString(GRANNY_FALLING_UUID)
+                )
 
+                btGatt.setCharacteristicNotification(charGranny, true)
             }
         }
 
@@ -194,7 +206,19 @@ class BluetoothActivity : MainActivity() {
             with(characteristic) {
                 Log.d("BluetoothGattCallback", "Characteristic $uuid changed | value: $value")
                 messageSendBool = true
-                sendMessage()
+                if(characteristic.uuid.toString() == NOTIFICATION_BUFFER_ATTR_UUID){
+                    sendMessage()
+                }
+                else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
+                    textView.setText("GRANNY FELL")
+                    textView.setTextSize(50f)
+                    var anim = AlphaAnimation(0f, 1f)
+                    anim.duration = 500
+                    anim.startOffset = 50
+                    anim.repeatMode = Animation.REVERSE
+                    anim.repeatCount = 20
+                    textView.startAnimation(anim)
+                }
             }
         }
     }
@@ -428,15 +452,16 @@ class BluetoothActivity : MainActivity() {
     fun sendMessage(){
         if(messageSendBool && !queue.isEmpty()){
             val notif: Notification = queue.poll()
-
-            if(onServicesDiscoveredBool){
-                writeCharacteristic(btGatt.getService(
-                    UUID.fromString(NOTIFICATION_SERVICE_UUID)).getCharacteristic(UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID))
-                    , notif.packForDelivery())
+            if (onServicesDiscoveredBool) {
+                writeCharacteristic(
+                    btGatt.getService(
+                        UUID.fromString(NOTIFICATION_SERVICE_UUID)
+                    )
+                        .getCharacteristic(UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID)),
+                    notif.packForDelivery()
+                )
                 messageSendBool = false
             }
         }
     }
-
-
 }

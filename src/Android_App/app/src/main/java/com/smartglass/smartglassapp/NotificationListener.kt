@@ -20,34 +20,45 @@ class NotificationListener: NotificationListenerService() {
         super.onNotificationPosted(sbn)
 
         if (sbn != null && BluetoothActivity.onServicesDiscoveredBool == true) {
-            val app: APP = when(sbn.packageName){
+            var app: APP = APP.OTHER
+            var notif: Notification = Notification(app, "", "")
+            when(sbn.packageName){
                 "com.google.android.apps.maps" -> APP.MAPS
                 "com.google.android.apps.messaging" -> APP.SMS
-                "com.whatsapp" -> APP.WHATSAPP
-                "org.thoughtcrime.securesms" -> APP.SIGNAL
+                "com.whatsapp" -> {
+                    app = APP.WHATSAPP
+                    notif = Notification(
+                        app,
+                        sbn.notification.extras.get("android.title") as String,
+                        sbn.notification.extras.get("android.text") as String
+                    )
+                }
+                "org.thoughtcrime.securesms" -> {
+                    app = APP.SIGNAL
+                    notif = Notification(
+                        app,
+                        sbn.notification.extras.get("android.title") as String,
+                        sbn.notification.extras.get("android.text") as String
+                    )
+                }
                 "com.snapchat.android" -> APP.SNAPCHAT
                 "com.instagram.android" -> APP.INSTAGRAM
                 "com.google.android.gm" -> APP.GMAIL
                 "com.discord" -> APP.DISCORD
                 "com.facebook.katana" -> APP.FACEBOOK
-                "org.telegram.messenger" -> APP.TELEGRAM
+                "org.telegram.messenger" -> {
+                    app = APP.TELEGRAM
+                    notif = Notification(
+                        app,
+                        sbn.notification.extras.get("android.title") as String,
+                        sbn.notification.extras.get("android.text") as String
+                    )
+                }
                 "com.linkedin.android" -> APP.LINKEDIN
                 else -> APP.OTHER
             }
 
-
-            val notif: Notification = Notification(app, sbn.notification.extras.get("android.title") as String, sbn.notification.extras.get("android.text") as String)
             BluetoothActivity.queue.add(notif)
-
-            val service = BluetoothActivity.btGatt.getService(
-                UUID.fromString(BluetoothActivity.NOTIFICATION_SERVICE_UUID)
-            )
-
-            val characteristic = service.getCharacteristic(
-                UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID)
-            )
-
-
             sendMessage()
             Log.d("Info", sbn.toString())
         }
