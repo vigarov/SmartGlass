@@ -38,17 +38,18 @@ void uOS::handleEvent(){
         {
             //Just disconnected :
             //Start advertising again 
-            ESP_LOGI(UOS_M,"Bluetooth connection lost, starting asdvertising again");
+            ESP_LOGI(UOS_M,"Bluetooth connection lost, starting advertising again");
             GLOBALSMANAGER.getBLEHandler()->startAdvertise();
             //TODO: only for a while: link to timer.
             break;
         }
         case BT_START_ADVERTISING:
         {
+            ESP_LOGI(UOS_M,"Got started advertising");
             auto currapp = CURRENTAPP;
             if(currapp->id == IDLE){
                 //Start blinking the BL icon <=> add as task handle to notify to the 1s Timer the handle of the updatePixel task of the BLEIcon (or its Container, see how this gets implemented)
-                
+                static_cast<IdleApp*>(currapp.get())->changeBLE(BLE_ADVERTISING);
             }
             break;
         }

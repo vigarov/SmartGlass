@@ -22,6 +22,7 @@ namespace SmartGlasses{
     #define UOS_TASK_PRIORITY 4
     #define BLE_TASK_PRIORITY 1
 
+    #define BLINKING_TASKS_PRIORITY 5
     /**
      * @brief Manager object for of our tasks.
      * Note: Is guaranteed to be created by the GlobalsManager

@@ -12,8 +12,6 @@
 
 using namespace SmartGlasses;
 
-#define BLE_M "BLEHandler"
-
 BLEHandler::BLEHandler(){
     initServer();
     initServices();
@@ -98,6 +96,11 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
 }
 
 void BLEHandler::startAdvertise(){
-    BLEDevice::startAdvertising();    
+    BLEDevice::startAdvertising();
+    auto q = GLOBALSMANAGER.getUOS()->getQueueHandle();
+    uOSEvent e = {.id=BT_START_ADVERTISING,.sender=static_cast<void*>(server)};
+    if(xQueueSendToBack(q,(void *)&e,2/portTICK_PERIOD_MS) !=pdTRUE){
+        ESP_LOGE(BLE_M,"Started Advertisisng but couldn't push to queue: it is full");
+    }
     ESP_LOGI(BLE_M,"Started advertising");
 }

@@ -24,6 +24,7 @@ namespace SmartGlasses{
     #define GNSS_CHAR_UUID 0x2a67 // these come from UUIDs with allocation type=GATT Characteristic and Object Type here: https://btprodspecificationrefs.blob.core.windows.net/assigned-values/16-bit%20UUID%20Numbers%20Document.pdf
     #define GNSS_FEATURES_CHAR_UUID 0x2a6a
     
+    #define BLE_M "BLEHandler"
 
     /**
      * @brief Handler for the BLE connection and interfacing

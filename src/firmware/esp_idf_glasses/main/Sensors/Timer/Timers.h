@@ -20,6 +20,8 @@ namespace SmartGlasses{
 
     #define RESTART_VALUE 0
 
+    #define TIMER_TASK_UPDATER_PRIORITY 6
+
 
     /**
      * @brief Heper class for interacting with a timer

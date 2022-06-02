@@ -42,5 +42,18 @@ void IdleApp::onResume(){
     //static_cast<Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>*>(m_displayables[m_displayables.size()-1].get())->changeString(ns);
 }
 
+
+void IdleApp::changeBLE(ble_status_t newStatus){
+    ESP_LOGI(IDLE_M,"Got change request from %u,to%u",(unsigned int)m_ble_status,(unsigned int)newStatus);
+    if(newStatus!=m_ble_status){
+        if(newStatus == BLE_ADVERTISING){
+            static_cast<Header*>(m_displayables[HEADER_POS].get())->updateBLEBlink(true);
+        }
+        else{
+            static_cast<Header*>(m_displayables[HEADER_POS].get())->updateBLEBlink(false);
+        }
+    }
+}
+
 void IdleApp::run(){}
 

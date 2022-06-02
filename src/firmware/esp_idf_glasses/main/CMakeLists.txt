@@ -31,7 +31,10 @@ set(OBJECTS_DIR ${DISPLAY_DIR}/Objects)
 set(IMM_O_D ${OBJECTS_DIR}/Immutable)
 set(IMM_O_D_SRCS 
     ${IMM_O_D}/RawText.cpp
-    ${IMM_O_D}/Header.cpp)
+    ${IMM_O_D}/Header.cpp
+    ${LOGO_O_D_SRCS})
+set(LOGO_O_D ${IMM_O_D}/Logos)
+set(LOGO_O_D_SRCS ${LOGO_O_D}/Logos.cpp)
 set(M_O_D ${OBJECTS_DIR}/Mutable)
 set(M_O_D_SRCS 
     ${M_O_D}/BLEIcon.cpp
@@ -40,6 +43,7 @@ set(M_O_D_SRCS
 set(OBJECTS_DIRS 
     ${OBJECT_DIR}
     ${IMM_O_D}
+    ${LOGO_O_D}
     ${M_O_D})
 set(DISPLAY_DIRS
     ${DISPLAY_DIR}

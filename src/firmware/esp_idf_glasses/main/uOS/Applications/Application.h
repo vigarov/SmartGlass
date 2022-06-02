@@ -15,6 +15,13 @@ namespace SmartGlasses{
         NB_APPS
     };
 
+    
+    typedef unsigned char ble_status_t;
+    
+    #define BLE_OFF (ble_status_t)0
+    #define BLE_ADVERTISING (ble_status_t)1
+    #define BLE_ON (ble_status_t)1<<1
+
 
     class uOS;//Forward declaration
 
@@ -43,6 +50,8 @@ namespace SmartGlasses{
          * 
          */
         virtual void run() = 0;
+
+        virtual void changeBLE(ble_status_t newStatus){}
     protected:
         std::shared_ptr<uOS> m_uOS;
         std::shared_ptr<DisplayManager> m_displayManager;

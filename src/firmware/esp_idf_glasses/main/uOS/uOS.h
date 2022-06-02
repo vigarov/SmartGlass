@@ -11,6 +11,7 @@ namespace SmartGlasses{
     #define MAX_BUTTON_EVENTS 1
     #define UOS_M "uOS Module"
 
+
     enum uOSEventID{
         BT_DISCONNECT,
         BT_START_ADVERTISING,
