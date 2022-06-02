@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
 import java.util.*
 
 class NotificationListener: NotificationListenerService() {
-
+    private lateinit var lastNotification: StatusBarNotification;
     override fun onListenerConnected() {
         super.onListenerConnected()
     }
@@ -19,26 +19,31 @@ class NotificationListener: NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
-        if (sbn != null && BluetoothActivity.onServicesDiscoveredBool == true) {
+        if (sbn != null && sbn.notification.extras.containsKey("android.subText") && !sbn.notification.extras.containsKey("android.textLines")) {
             var app: APP = APP.OTHER
             var notif: Notification = Notification(app, "", "")
             when(sbn.packageName){
-                "com.google.android.apps.maps" -> APP.MAPS
+                "com.android.systemui" -> APP.SYSTEM
+                "com.google.android.apps.maps" -> {
+                    /*app = APP.MAPS
+                    val strTok: StringTokenizer = StringTokenizer(sbn.notification.extras.get("android.subText").toString(), " · ")
+                    val str: String = strTok.nextToken()*/
+                }
                 "com.google.android.apps.messaging" -> APP.SMS
                 "com.whatsapp" -> {
                     app = APP.WHATSAPP
                     notif = Notification(
                         app,
-                        sbn.notification.extras.get("android.title") as String,
-                        sbn.notification.extras.get("android.text") as String
+                        sbn.notification.extras.get("android.title").toString(),
+                        sbn.notification.extras.get("android.text").toString()
                     )
                 }
                 "org.thoughtcrime.securesms" -> {
                     app = APP.SIGNAL
                     notif = Notification(
                         app,
-                        sbn.notification.extras.get("android.title") as String,
-                        sbn.notification.extras.get("android.text") as String
+                        sbn.notification.extras.get("android.title").toString(),
+                        sbn.notification.extras.get("android.text").toString()
                     )
                 }
                 "com.snapchat.android" -> APP.SNAPCHAT
@@ -50,8 +55,8 @@ class NotificationListener: NotificationListenerService() {
                     app = APP.TELEGRAM
                     notif = Notification(
                         app,
-                        sbn.notification.extras.get("android.title") as String,
-                        sbn.notification.extras.get("android.text") as String
+                        sbn.notification.extras.get("android.title").toString(),
+                        sbn.notification.extras.get("android.text").toString()
                     )
                 }
                 "com.linkedin.android" -> APP.LINKEDIN
@@ -60,7 +65,8 @@ class NotificationListener: NotificationListenerService() {
 
             BluetoothActivity.queue.add(notif)
             sendMessage()
-            Log.d("Info", sbn.toString())
+            Log.d("Info", sbn.toString() )
+            Log.d("Info", BluetoothActivity.onServicesDiscoveredBool.toString() )
         }
     }
 
@@ -76,8 +82,10 @@ class NotificationListener: NotificationListenerService() {
     @RequiresApi(Build.VERSION_CODES.S)
     fun sendMessage(){
         if(BluetoothActivity.messageSendBool && !BluetoothActivity.queue.isEmpty()){
+            Log.d("Info", "inside message send and queue is not empty, and messageSend Bool is true" )
             val notif: Notification = BluetoothActivity.queue.poll()
             if(BluetoothActivity.onServicesDiscoveredBool){
+                Log.d("Info", "========should have sent=======" )
                 writeCharacteristic(BluetoothActivity.btGatt.getService(
                     UUID.fromString(BluetoothActivity.NOTIFICATION_SERVICE_UUID)).getCharacteristic(UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID))
                     , notif.packForDelivery())

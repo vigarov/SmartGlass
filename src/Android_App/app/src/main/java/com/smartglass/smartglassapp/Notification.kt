@@ -63,14 +63,19 @@ class Notification(
             bA[i] = 0.toByte()
             i++
         }
-        bA[63] = 0.toByte()
+        if(infoChars.size >= maxAddInfoLength){
+            bA[63] = 0.toByte()
+        }
+        else{
+            bA[63] = 1.toByte()
+        }
 
         return bA
     }
 }
 
 enum class APP{
-    MAPS, SMS, WHATSAPP, SIGNAL,
+    SYSTEM, SMS, WHATSAPP, SIGNAL,
     SNAPCHAT, INSTAGRAM, GMAIL, DISCORD,
     FACEBOOK, TELEGRAM, LINKEDIN, OTHER
 }

@@ -184,11 +184,11 @@ class BluetoothActivity : MainActivity() {
 
                 btGatt.setCharacteristicNotification(characteristic, true)
 
-                var charGranny = service.getCharacteristic(
-                    UUID.fromString(GRANNY_FALLING_UUID)
-                )
-
-                btGatt.setCharacteristicNotification(charGranny, true)
+//                var charGranny = service.getCharacteristic(
+//                    UUID.fromString(GRANNY_FALLING_UUID)
+//                )
+//
+//                btGatt.setCharacteristicNotification(charGranny, true)
             }
         }
 
@@ -205,8 +205,9 @@ class BluetoothActivity : MainActivity() {
         ) {
             with(characteristic) {
                 Log.d("BluetoothGattCallback", "Characteristic $uuid changed | value: $value")
-                messageSendBool = true
+
                 if(characteristic.uuid.toString() == NOTIFICATION_BUFFER_ATTR_UUID){
+                    messageSendBool = true
                     sendMessage()
                 }
                 else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
