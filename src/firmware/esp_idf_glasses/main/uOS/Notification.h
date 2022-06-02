@@ -14,7 +14,15 @@ namespace SmartGlasses{
         SYSTEM,
         SMS,
         WHATSAPP,
-        //...
+        SIGNAL,
+        //MESSENGER,
+        SNAPCHAT,
+        INSTAGRAM,
+        GMAIL,
+        DISCORD,
+        FACEBOOK,
+        TELEGRAM,
+        LINKEDIN,
         OTHER
     };
 
@@ -26,6 +34,8 @@ namespace SmartGlasses{
         app_t application;
         content_t<MAX_TITLE_LENGTH> title;
         content_t<MAX_ADD_INFO_LENGTH> additionalInfo;
+        
+        //notification_t(const notification_t& n) :application(n.application),title(n.title),additionalInfo(n.additionalInfo){}
     };
 
 };

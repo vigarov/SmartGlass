@@ -8,6 +8,7 @@ void Container::addChild(std::shared_ptr<Displayable> child){
 }
 
 void Container::update(){
+    ESP_LOGI(m_contentName.c_str(),"Updating");
     updateAllChildren();
 }
 

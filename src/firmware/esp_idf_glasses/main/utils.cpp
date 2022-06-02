@@ -32,7 +32,7 @@ constexpr void SmartGlasses::constexpr_for(F&& f)
 }
 
 void SmartGlasses::resetTime(){
-    ESP_LOGI("Utils","Setting system time");
+    ESP_LOGI("Utils","Setting system time, using " __DATE__ " " __TIME__);
     setenv("TZ","Europe/Zurich",1);
     tzset();
 
@@ -48,4 +48,15 @@ void SmartGlasses::resetTime(){
         }
     }
     ESP_LOGI("Utils","Successfully set system time");
+}
+
+struct tm* SmartGlasses::getCurrentTime(){
+    auto t = time(nullptr);
+    return localtime(&t);
+}
+
+std::string SmartGlasses::timeToString(unsigned int timeUnit){
+    std::string ret = std::to_string(timeUnit);
+    if(timeUnit < 10) ret = "0"+ret;
+    return ret;
 }

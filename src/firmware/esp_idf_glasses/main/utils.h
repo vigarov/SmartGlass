@@ -16,6 +16,15 @@ namespace SmartGlasses{
     #define IFD(expression)
     #endif
 
+    struct simple_time_t{
+        int hour;
+        int min;
+
+        inline bool operator!=(const simple_time_t& other)const{
+            return min != other.min||hour!=other.hour;
+        }
+    };
+
 
     /**
      * @brief Utilitary method to compute constexpr for-loops
@@ -51,6 +60,16 @@ namespace SmartGlasses{
      * 
      */
     void resetTime();
+
+    struct tm* getCurrentTime();
+
+    /**
+     * @brief Utilitary function to transform a timeUnit's value into its corresponding string by appending "0" if needed
+     * 
+     * @param timeUnit the timeUnit's value
+     * @return std::string the translated timeUnit inot a string
+     */
+    std::string timeToString(unsigned int timeUnit);
 
     //@see: https://stackoverflow.com/a/896440/8352508 
     template <typename InIt1, typename InIt2, typename OutIt>

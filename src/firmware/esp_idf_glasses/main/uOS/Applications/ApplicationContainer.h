@@ -45,6 +45,7 @@ namespace SmartGlasses{
          */
         void setCurrentApplication(std::shared_ptr<Application> app);
 
+        TaskHandle_t getAppTaskHandle();
         
     private:
         ApplicationContainer(){

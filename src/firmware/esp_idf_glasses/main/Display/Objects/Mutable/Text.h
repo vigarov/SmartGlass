@@ -18,7 +18,7 @@ namespace SmartGlasses{
          * Already calls update(), no need to call it again
          * @param newS the newString to display
          */ 
-        void changeString(std::string &newS);
+        void changeString(const std::string &newS);
 
         static Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS> textWithDefaultFontFrom(std::string s, bool overwrites = false, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 1){
             return SmartGlasses::Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>(s,overwrites,offsets,animate,priority);

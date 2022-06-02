@@ -1,47 +1,80 @@
 #pragma once
 
+#include "Content.h"
+#include "Display.h"
+#include <string>
+#include <memory>
+
 namespace SmartGlasses{
-    class Discord : public ConstantContent{
-        Discord(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Logo: public ConstantContent{
+    public:
+        Logo(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent("Logo "+name,overwrites,offsets,animate,priority){}
+        const unsigned char size = 20; //== length == height
+    };
+    class Discord : public Logo{
+    public:
+        Discord(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Facebook : public ConstantContent{
-        Facebook(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Facebook : public Logo{
+    public:
+        Facebook(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Gmail : public ConstantContent{
-        Gmail(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Gmail : public Logo{
+    public:
+        Gmail(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Instagram : public ConstantContent{
-        Instagram(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Instagram : public Logo{
+    public:
+        Instagram(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Linkedin : public ConstantContent{
-        Linkedin(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Linkedin : public Logo{
+    public:
+        Linkedin(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Other : public ConstantContent{
-        Other(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Other : public Logo{
+    public:
+        Other(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Signal : public ConstantContent{
-        Signal(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Signal : public Logo{
+    public:
+        Signal(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class SMS : public ConstantContent{
-        SMS(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Sms : public Logo{
+    public:
+        Sms(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Snapchat : public ConstantContent{
-        Snapchat(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Snapchat : public Logo{
+    public:
+        Snapchat(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Telegram : public ConstantContent{
-        Telegram(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Telegram : public Logo{
+    public:
+        Telegram(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
+        std::unique_ptr<pixels_set_t> createPixels() override;
     };
-    class Whatsapp : public ConstantContent{
-        Whatsapp(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): ConstantContent(name,overwrites,offsets,animate,priority) {}
+    class Whatsapp : public Logo{
+    public:
+        Whatsapp(const std::string& name, bool overwrites = true, pixel_pair_t offsets = {0,0},unsigned char animate = false, unsigned char priority = 1): Logo(name,overwrites,offsets,animate,priority) {}
+    protected:
         std::unique_ptr<pixels_set_t> createPixels() override;
     };
 };

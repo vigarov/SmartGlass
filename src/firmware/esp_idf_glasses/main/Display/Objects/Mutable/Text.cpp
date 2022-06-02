@@ -16,7 +16,7 @@ std::unique_ptr<pixels_set_t> Text<CHAR_T,CHAR_WIDTH,NB_CHARS>::createPixels(){
 }
 
 template<typename CHAR_T,unsigned int CHAR_WIDTH,unsigned long NB_CHARS>
-void Text<CHAR_T,CHAR_WIDTH,NB_CHARS>::changeString(std::string &newS){
+void Text<CHAR_T,CHAR_WIDTH,NB_CHARS>::changeString(const std::string &newS){
     if(newS != m_s ){
         m_modifiedSinceLastUpdate = true;
         forceHide();

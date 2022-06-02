@@ -27,7 +27,7 @@ void ApplicationContainer::init(std::shared_ptr<Application> app){
     currentApplication = app;
     xSemaphoreGive(xAppSemaphore);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
-    createTask(runApplication,"ApplicationRunner",20960,1,&appTaskHandler,APP_CPU,&currentApplication);
+    createTask(runApplication,"ApplicationRunner",40960,1,&appTaskHandler,APP_CPU,&currentApplication);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     currentApplication->changeTaskToBeUpdated(appTaskHandler);
     xTaskNotifyGive(appTaskHandler);
@@ -58,7 +58,11 @@ void ApplicationContainer::runApplication(void *pvParameters){
         else{
             ESP_LOGW(APPCONT_M, "Couldn't get semaphore to run the application");
         }
-        vTaskDelay(100/portTICK_PERIOD_MS);
+        vTaskDelay(1000/portTICK_PERIOD_MS);
     }
 
+}
+
+TaskHandle_t ApplicationContainer::getAppTaskHandle(){
+    return appTaskHandler;
 }

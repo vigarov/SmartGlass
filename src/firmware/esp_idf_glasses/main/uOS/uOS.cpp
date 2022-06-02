@@ -49,7 +49,7 @@ void uOS::handleEvent(){
             auto currapp = CURRENTAPP;
             if(currapp->id == IDLE){
                 //Start blinking the BL icon <=> add as task handle to notify to the 1s Timer the handle of the updatePixel task of the BLEIcon (or its Container, see how this gets implemented)
-                static_cast<IdleApp*>(currapp.get())->changeBLE(BLE_ADVERTISING);
+                std::static_pointer_cast<IdleApp>(currapp)->changeBLE(BLE_ADVERTISING);
             }
             break;
         }
@@ -59,7 +59,7 @@ void uOS::handleEvent(){
             std::string notifData = notifCharac->getValue();
             const size_t len = notifData.length();
             ESP_LOGI(UOS_M,"Received new notification, length=%d",len);
-            notification_t notification = {};
+            notification_t notification{};
             const size_t copySize = len > sizeof(notification_t) ? sizeof(notification_t) : len;
             memcpy(&notification,notifData.data(),copySize);
 
