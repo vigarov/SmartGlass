@@ -2,6 +2,7 @@ package com.smartglass.smartglassapp
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
+import android.graphics.Bitmap
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
@@ -30,15 +31,23 @@ class NotificationListener: NotificationListenerService() {
                         val strTokSub: StringTokenizer = StringTokenizer(
                             sbn.notification.extras.get("android.subText").toString(), "·"
                         )
-                        strTokSub.nextToken()
+                        val timeLeft = strTokSub.nextToken()
                         val strTokTitle: StringTokenizer = StringTokenizer(
                             sbn.notification.extras.get("android.title").toString(),
                             " "
                         )
-                        val direction =
-                            sbn.notification.extras.get("android.title").toString().substring(5)
+                        val direction: String
+                        val dashIndex = sbn.notification.extras.get("android.title").toString().indexOf('-')
+                        if(dashIndex >= 0){
+                            direction = sbn.notification.extras.get("android.title").toString().substring(dashIndex+1)
+                        } else {
+                            direction = sbn.notification.extras.get("android.title").toString().substring(5)
+                        }
+
+
                         val distance = strTokSub.nextToken()
                         val eta = strTokSub.nextToken()
+
 
                         var directionByte: Byte = 10
 
@@ -47,7 +56,14 @@ class NotificationListener: NotificationListenerService() {
                         } else if (direction == "right") {
                             directionByte = DIRECTION.RIGHT.ordinal.toByte()
                         } else {
-                            directionByte = DIRECTION.FORWARD.ordinal.toByte()
+                            if(direction == "North" || direction == "East" || direction == "West" || direction == "South"){
+                                directionByte = DIRECTION.FORWARD.ordinal.toByte()
+                            } else{ // Handling case where it says none of pre-determined directions and only says address
+
+                                directionByte = DIRECTION.FORWARD.ordinal.toByte()
+                            }
+
+
                         }
 
                         val tokenizeDistance = StringTokenizer(distance, " ")
