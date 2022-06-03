@@ -15,8 +15,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -44,7 +42,7 @@ class BluetoothActivity : MainActivity() {
         var onServicesDiscoveredBool: Boolean = false
         var messageSendBool: Boolean = true
 
-        val mapQueue: Queue<ByteArray> = LinkedList()
+        var mapValue: ByteArray = ByteArray(8)
         var mapsSendBool: Boolean = true
         var navStarted: Boolean = false
         //Permission Codes
@@ -57,9 +55,10 @@ class BluetoothActivity : MainActivity() {
 
         //Bluetooth UUIDs
         const val NOTIFICATION_SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
-        const val GRANNY_SERVICE_UUID: String = ""
+        //const val GRANNY_SERVICE_UUID: String = ""
         const val NOTIFICATION_BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
-        const val GRANNY_FALLING_UUID: String = "4d8aea79-7207-4f92-a629-60e0fdb2f242"
+        //const val GRANNY_FALLING_UUID: String = ""
+        const val TIME_UUID: String = "4d8aea79-7207-4f92-a629-60e0fdb2f242"
         const val MAPS_UUID: String = "df1fbdbe-c41b-45fb-9c99-cb5ba89cfac1"
         const val GATT_MAX_MTU_SIZE = 64
     }
@@ -154,6 +153,8 @@ class BluetoothActivity : MainActivity() {
                             "BluetoothGattCallback",
                             "Successfully disconnected from $deviceAddress"
                         )
+                        mapsSendBool = true
+                        messageSendBool = true
                         gatt.close()
                     }
                     else -> {
@@ -180,24 +181,49 @@ class BluetoothActivity : MainActivity() {
                 val service = btGatt.getService(
                     UUID.fromString(NOTIFICATION_SERVICE_UUID)
                 )
-                val grannyService = btGatt.getService(
+                /*val grannyService = btGatt.getService(
                     UUID.fromString(GRANNY_SERVICE_UUID)
-                )
+                )*/
 
                 val charNotification = service.getCharacteristic(
                     UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)
                 )
                 btGatt.setCharacteristicNotification(charNotification, true)
 
-                val charGranny = grannyService.getCharacteristic(
+                /*val charGranny = grannyService.getCharacteristic(
                     UUID.fromString(GRANNY_FALLING_UUID)
                 )
-                btGatt.setCharacteristicNotification(charGranny, true)
+                btGatt.setCharacteristicNotification(charGranny, true)*/
 
                 val charMaps = service.getCharacteristic(
                     UUID.fromString(MAPS_UUID)
                 )
                 btGatt.setCharacteristicNotification(charMaps, true)
+
+                val date = LocalDateTime.now()
+                val tm_sec: Int = date.second
+                val tm_min: Int = date.minute
+                val tm_hour: Int = date.hour
+                val tm_mday: Int = date.dayOfMonth
+                val tm_mon: Int = date.monthValue
+                val tm_year: Int = date.year - 1900
+                val tm_wday: Int = date.dayOfWeek.ordinal
+                val tm_yday: Int = date.dayOfYear
+
+                Log.d("ServicesDiscovered", "SENDING TIME _______________________________")
+                var packet = ByteArray(32)
+                packet = intToByteArray(tm_sec).copyInto(packet, 0, 0, 4)
+                packet = intToByteArray(tm_min).copyInto(packet, 4, 0, 4)
+                packet = intToByteArray(tm_hour).copyInto(packet, 8, 0, 4)
+                packet = intToByteArray(tm_mday).copyInto(packet, 12, 0, 4)
+                packet = intToByteArray(tm_mon).copyInto(packet, 16, 0, 4)
+                packet = intToByteArray(tm_year).copyInto(packet, 20, 0, 4)
+                packet = intToByteArray(tm_wday).copyInto(packet, 24, 0, 4)
+                packet = intToByteArray(tm_yday).copyInto(packet, 28, 0, 4)
+                writeCharacteristic(
+                    service.getCharacteristic(UUID.fromString(TIME_UUID)),
+                    packet
+                )
             }
         }
 
@@ -220,7 +246,7 @@ class BluetoothActivity : MainActivity() {
                     messageSendBool = true
                     sendMessage()
                 }
-                else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
+                /*else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
                     Log.d("BluetootGallCallback", "GRANNY FELL ALERT!!!!!!!!")
                     textView.text = "GRANNY FELL"
                     textView.textSize = 50f
@@ -230,33 +256,8 @@ class BluetoothActivity : MainActivity() {
                     anim.repeatMode = Animation.REVERSE
                     anim.repeatCount = 20
                     textView.startAnimation(anim)
-
-                    val date = LocalDateTime.now()
-                    val tm_sec: Int = date.second
-                    val tm_min: Int = date.minute
-                    val tm_hour: Int = date.hour
-                    val tm_mday: Int = date.dayOfMonth
-                    val tm_mon: Int = date.monthValue
-                    val tm_year: Int = date.year
-                    val tm_wday: Int = date.dayOfWeek.ordinal
-                    val tm_yday: Int = date.dayOfYear
-
-                    var packet = ByteArray(32)
-                    packet = intToByteArray(tm_sec).copyInto(packet, 0, 0, 4)
-                    packet = intToByteArray(tm_min).copyInto(packet, 4, 0, 4)
-                    packet = intToByteArray(tm_hour).copyInto(packet, 8, 0, 4)
-                    packet = intToByteArray(tm_mday).copyInto(packet, 12, 0, 4)
-                    packet = intToByteArray(tm_mon).copyInto(packet, 16, 0, 4)
-                    packet = intToByteArray(tm_year).copyInto(packet, 20, 0, 4)
-                    packet = intToByteArray(tm_wday).copyInto(packet, 24, 0, 4)
-                    packet = intToByteArray(tm_yday).copyInto(packet, 28, 0, 4)
-                    writeCharacteristic(
-                        btGatt.getService(UUID.fromString(GRANNY_SERVICE_UUID))
-                            .getCharacteristic(UUID.fromString(GRANNY_FALLING_UUID)),
-                        packet
-                    )
-                }
-                else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
+                }*/
+                else if(characteristic.uuid.toString() == MAPS_UUID) {
                     mapsSendBool = true
                     sendMapData()
                 }
@@ -498,7 +499,9 @@ class BluetoothActivity : MainActivity() {
     fun sendMessage(){
         if(messageSendBool && !queue.isEmpty()){
             val notif: Notification = queue.poll() as Notification
+            Log.d("Info", "inside message send and queue is not empty, and messageSend Bool is true" )
             if (onServicesDiscoveredBool) {
+                Log.d("Info", "========should have sent=======" )
                 writeCharacteristic(
                     btGatt.getService(
                         UUID.fromString(NOTIFICATION_SERVICE_UUID)
@@ -513,19 +516,20 @@ class BluetoothActivity : MainActivity() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     fun sendMapData(){
-        if(mapsSendBool && !mapQueue.isEmpty()){
-            Log.d("Info", "inside maps send and queue is not empty, and messageSend Bool is true" )
-            val payload: ByteArray? = mapQueue.poll()
+        if(mapsSendBool){
+            Log.d("BTActivity", "inside maps send and queue is not empty, and messageSend Bool is true" )
             if(onServicesDiscoveredBool){
-                Log.d("Info", "========maps should have sent=======" )
+                Log.d("BTActivity", "========maps should have sent=======" )
                 writeCharacteristic(
                     btGatt.getService(
                         UUID.fromString(
                             NOTIFICATION_SERVICE_UUID
                         )
                     ).getCharacteristic(
-                        UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)),
-                    payload as ByteArray)
+                        UUID.fromString(MAPS_UUID)),
+                    mapValue
+                )
+                Log.d("BTActivity", mapValue.toString())
                 mapsSendBool = false
             }
         }

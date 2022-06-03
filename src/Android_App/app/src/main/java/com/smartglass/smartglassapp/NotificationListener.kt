@@ -2,12 +2,13 @@ package com.smartglass.smartglassapp
 
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothGattCharacteristic
-import android.graphics.Bitmap
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.annotation.RequiresApi
+import org.jetbrains.annotations.Nullable
+import java.lang.NullPointerException
 import java.util.*
 
 class NotificationListener: NotificationListenerService() {
@@ -83,44 +84,8 @@ class NotificationListener: NotificationListenerService() {
                         val minute: Byte = eta.substring(colonIndex+1, colonIndex+3).toByte()
 
                         if(timeLeft.toInt() == 0){
-                            BluetoothActivity.mapQueue.add(
-                                byteArrayOf(
-                                    0.toByte(),
-                                    0.toByte(),
-                                    0.toByte(),
-                                    0.toByte(),
-                                    0.toByte(),
-                                    0.toByte(),
-                                    0.toByte(),
-                                    0.toByte()
-                                )
-                            )
-                            Log.d("Maps integration", "arrived at destination!")
-                            BluetoothActivity.navStarted = false
-                        }
-                        else{
-                            BluetoothActivity.mapQueue.add(
-                                byteArrayOf(
-                                    1.toByte(),
-                                    directionByte,
-                                    distanceInt.toByte(),
-                                    distanceInt.shr(8).toByte(),
-                                    distanceInt.shr(16).toByte(),
-                                    distanceInt.shr(24).toByte(),
-                                    hour,
-                                    minute
-                                )
-                            )
-                            Log.d("Maps integration", "maps is sending!")
-                        }
-                        sendMapData()
-                        return
-                    }
-                    else{
-                        BluetoothActivity.navStarted = true
-                        BluetoothActivity.mapQueue.add(
-                            byteArrayOf(
-                                1.toByte(),
+                            BluetoothActivity.mapValue = byteArrayOf(
+                                0.toByte(),
                                 0.toByte(),
                                 0.toByte(),
                                 0.toByte(),
@@ -129,9 +94,44 @@ class NotificationListener: NotificationListenerService() {
                                 0.toByte(),
                                 0.toByte()
                             )
+                            Log.d("Maps integration", "arrived at destination!")
+                            BluetoothActivity.navStarted = false
+                            sendMapData()
+                            return
+                        }
+                        else{
+                            val newValMap: ByteArray = byteArrayOf(
+                                1.toByte(),
+                                directionByte,
+                                distanceInt.toByte(),
+                                distanceInt.shr(8).toByte(),
+                                distanceInt.shr(16).toByte(),
+                                distanceInt.shr(24).toByte(),
+                                hour,
+                                minute
+                            )
+                            if(!BluetoothActivity.mapValue.contentEquals(newValMap)){
+                                Log.d("Maps integration", "maps is sending!")
+                                BluetoothActivity.mapValue = newValMap
+                                sendMapData()
+                            }
+                            return
+                        }
+                    }
+                    else{
+                        BluetoothActivity.navStarted = true
+                        BluetoothActivity.mapValue = byteArrayOf(
+                            1.toByte(),
+                            0.toByte(),
+                            0.toByte(),
+                            0.toByte(),
+                            0.toByte(),
+                            0.toByte(),
+                            0.toByte(),
+                            0.toByte()
                         )
-                        Log.d("Maps integration", "maps is starting!")
-                        sendMapData()
+                        //Log.d("Maps integration", "maps is starting!")
+                        //sendMapData()
                         return
                     }
                 }
@@ -249,19 +249,20 @@ class NotificationListener: NotificationListenerService() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     fun sendMapData(){
-        if(BluetoothActivity.mapsSendBool && !BluetoothActivity.mapQueue.isEmpty()){
-            Log.d("Info", "inside maps send and queue is not empty, and messageSend Bool is true" )
-            val payload: ByteArray? = BluetoothActivity.mapQueue.poll()
+        if(BluetoothActivity.mapsSendBool){
+            Log.d("NotificationListener", "inside maps send and queue is not empty, and messageSend Bool is true" )
             if(BluetoothActivity.onServicesDiscoveredBool){
-                Log.d("Info", "========maps should have sent=======" )
+                Log.d("NotificationListener", "========maps should have sent=======" )
                 writeCharacteristic(
                     BluetoothActivity.btGatt.getService(
                         UUID.fromString(
                             BluetoothActivity.NOTIFICATION_SERVICE_UUID
                         )
                     ).getCharacteristic(
-                        UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID)),
-                    payload as ByteArray)
+                        UUID.fromString(BluetoothActivity.MAPS_UUID)),
+                    BluetoothActivity.mapValue
+                )
+                Log.d("NotificationListener", BluetoothActivity.mapValue.toString())
                 BluetoothActivity.mapsSendBool = false
             }
         }
