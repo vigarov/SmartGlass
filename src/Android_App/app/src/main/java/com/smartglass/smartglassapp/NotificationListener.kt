@@ -28,7 +28,7 @@ class NotificationListener: NotificationListenerService() {
                     if(BluetoothActivity.navStarted) {
                         var bA = ByteArray(8)
                         val strTokSub: StringTokenizer = StringTokenizer(
-                            sbn.notification.extras.get("android.subText").toString(), " · "
+                            sbn.notification.extras.get("android.subText").toString(), "·"
                         )
                         strTokSub.nextToken()
                         val strTokTitle: StringTokenizer = StringTokenizer(
@@ -41,6 +41,7 @@ class NotificationListener: NotificationListenerService() {
                         val eta = strTokSub.nextToken()
 
                         var directionByte: Byte = 10
+
                         if (direction == "left") {
                             directionByte = DIRECTION.LEFT.ordinal.toByte()
                         } else if (direction == "right") {
