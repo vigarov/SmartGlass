@@ -20,6 +20,8 @@ namespace SmartGlasses{
         #define NAV_MINUTE_OFFSET_Y NAV_HOUR_OFFSET_Y
         #define NAV_DISTANCE_OFFSET_X ((ARROW_OFFSET_X) +3)
         #define NAV_DISTANCE_OFFSET_Y 52
+
+        #define NCONT_M "NavigationContainer"
     public:
         NavigationContainer(const std::string& s,navigation_t navigation,bool overwrites = true, pixel_pair_t offsets = {0,0}, unsigned char animate = false, unsigned char priority = 2,TaskHandle_t notifyOnDraw = nullptr);
     

@@ -62,6 +62,14 @@ void IdleApp::changeBLE(ble_status_t newStatus){
         }
         else{
             std::static_pointer_cast<Header>(m_displayables[HEADER_POS])->updateBLEBlink(false);
+            if(newStatus == BLE_OFF){
+                size_t i = HEADER_POS+1;
+                DEVICEMANAGER.getOneSecondTimer()->removeTaskNotifiedOnAlarm(m_displayTimerTask);
+                for(size_t i = 1;i<m_displayables.size();i++){
+                    m_displayables[i]->hide();
+                }
+                m_displayables.erase(m_displayables.begin()+1,m_displayables.end());
+            }
         }
         m_ble_status = newStatus;
     }
@@ -104,12 +112,14 @@ void IdleApp::newNotification(notification_t n){
     std::string s = "Idle Notif";
     auto disp = std::make_shared<NotificationContainer>(s,std::move(n),true,(pixel_pair_t){NOTIF_OFFSET_X,NOTIF_OFFSET_Y},false,2);
     m_displayables.push_back(disp);
+    hideNavigationTask();
     disp->update();
     xSemaphoreGive(m_notifDisplaySemaphore);
 }
 
 
 void IdleApp::getNavigation(navigation_t newNavigation){
+    eraseDisplayableTask();
     if(!m_createdNav){
         std::string temp = "Navigation Container";
         m_displayables.push_back(std::make_shared<NavigationContainer>(temp,newNavigation));
@@ -121,8 +131,8 @@ void IdleApp::getNavigation(navigation_t newNavigation){
 void IdleApp::T_DISPLAY_COUNT(void* pvParameters){
     auto app = static_cast<IdleApp*>(pvParameters);
     while(1){
-        if(ulTaskNotifyTake(pdTRUE,2000/portTICK_PERIOD_MS) == pdFALSE){
-            ESP_LOGE(IDLE_M,"Did not receive 1 second notification after 2000 seconds...");
+        if(ulTaskNotifyTake(pdTRUE,1200/portTICK_PERIOD_MS) == pdFALSE){
+            ESP_LOGE(IDLE_M,"Did not receive 1 second notification after 1200 mseconds...");
         }
         xSemaphoreTake(app->m_notifDisplaySemaphore,0);
 
@@ -135,7 +145,7 @@ void IdleApp::T_DISPLAY_COUNT(void* pvParameters){
             xSemaphoreGive(app->m_notifDisplaySemaphore);
             vTaskDelete(NULL); //delete self == m_displayTimerTask
         }
-        xSemaphoreGive(app->m_notifDisplaySemaphore);
+        //xSemaphoreGive(app->m_notifDisplaySemaphore);
     }
 }
 
@@ -143,6 +153,7 @@ void IdleApp::eraseDisplayableTask(){
     for(size_t i=0;i<m_displayables.size();i++){
         auto& displayable = m_displayables[i];
         if(displayable->id == NOTIFICATION_CONTAINER_ID){
+            ESP_LOGI(IDLE_M,"Hiding and erasing");
             displayable->hide();
             m_displayables.erase(m_displayables.begin() + i);
         }
@@ -153,6 +164,7 @@ void IdleApp::eraseDisplayableTask(){
 void IdleApp::hideNavigationTask(){
     for(auto& displayable:m_displayables){
         if(displayable->id == NAVIGATION_CONTAINER_ID){
+            ESP_LOGI(IDLE_M,"Hiding the nav");
             displayable->hide();
         }
     }
@@ -161,6 +173,7 @@ void IdleApp::hideNavigationTask(){
 void IdleApp::showNavigationTask(){
     for(auto& displayable:m_displayables){
         if(displayable->id == NAVIGATION_CONTAINER_ID){
+            ESP_LOGI(IDLE_M,"Updating the nav");
             displayable->update();
         }
     }
@@ -170,6 +183,7 @@ void IdleApp::showNavigationTask(){
 void IdleApp::updateAndShowNav(navigation_t n){
     for(auto& displayable:m_displayables){
         if(displayable->id == NAVIGATION_CONTAINER_ID){
+            ESP_LOGI(IDLE_M,"Updating and showing");
             std::static_pointer_cast<NavigationContainer>(displayable)->changeNavigation(n);
             displayable->update();
         }

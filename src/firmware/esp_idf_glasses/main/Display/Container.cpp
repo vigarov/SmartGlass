@@ -27,9 +27,9 @@ void Container::changeTaskToBeUpdated(TaskHandle_t newTask){
 void Container::updateAllChildren(){
     for(auto& displayable : m_displayables){
         displayable->update();
-        if(ulTaskNotifyTake(pdTRUE,100/portTICK_PERIOD_MS) == pdFALSE){
+        if(ulTaskNotifyTake(pdTRUE,50/portTICK_PERIOD_MS) == pdFALSE){
             IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
-            ESP_LOGE(("Container"+m_contentName).c_str(),"Didn't get notified, still coninuing with next update");
+            ESP_LOGW(("Container"+m_contentName).c_str(),"Didn't get notified, still coninuing with next update");
         }
     }
     ESP_LOGI(("Container"+m_contentName).c_str(),"Finished updating all children");

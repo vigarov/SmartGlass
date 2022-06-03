@@ -49,6 +49,9 @@ namespace SmartGlasses{
 
         std::array<std::shared_ptr<Application>, NB_APPS> applications{};
 
+        
+        navigation_t m_previousNav{};
+
         TaskHandle_t m_buttonTask = NULL;
         static void T_buttonPress(void* pvParameters);
     };

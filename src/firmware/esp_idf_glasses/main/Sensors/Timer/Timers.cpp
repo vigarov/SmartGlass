@@ -119,6 +119,7 @@ bool Timer<GROUP,ID>::addTaskNotifiedOnAlarm(TaskHandle_t handle){
 
 template<timer_group_t GROUP, timer_idx_t ID>
 bool Timer<GROUP,ID>::removeTaskNotifiedOnAlarm(TaskHandle_t handle){
+    if(handle==nullptr)return false;
     if(!m_setup){
         ESP_LOGE(TIMER_M,"Removing tasks before timer setup!");
         return false;

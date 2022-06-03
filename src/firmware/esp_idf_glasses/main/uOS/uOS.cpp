@@ -96,9 +96,11 @@ void uOS::handleEvent(){
             navigation_t nav{};
             const size_t copySize = len > sizeof(navigation_t) ? sizeof(navigation_t) : len;
             memcpy(&nav,navData.data(),copySize);
-            ESP_LOGI(UOS_M,"Got new navigation instruction: start:%u,dir=%u,dist=%u,h=%u,m=%u",(unsigned int)nav.STARTstop,(unsigned int)nav.direction,(unsigned int)nav.distance,(unsigned int)nav.hour,(unsigned int)nav.min);
-            //TODO: do something with notification
-            CURRENTAPP->getNavigation(nav);
+            if(!(nav== m_previousNav)){
+                ESP_LOGI(UOS_M,"Got new navigation instruction: start:%u,dir=%u,dist=%u,h=%u,m=%u",(unsigned int)nav.STARTstop,(unsigned int)nav.direction,(unsigned int)nav.distance,(unsigned int)nav.hour,(unsigned int)nav.min);
+                //TODO: do something with notification
+                CURRENTAPP->getNavigation(nav);
+            }
             navCharac->setValue("-1");
             navCharac->notify();
             break;

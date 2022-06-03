@@ -14,5 +14,9 @@ namespace SmartGlasses{
         uint32_t distance;
         unsigned char hour;
         unsigned char min;
+
+        bool operator==(navigation_t &rhs){
+            return direction==rhs.direction && distance==rhs.distance && hour==rhs.hour && min==rhs.min;
+        }
     };
 };

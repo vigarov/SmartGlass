@@ -30,6 +30,7 @@ void NavigationContainer::changeEta(unsigned char hour,unsigned char min){
     m_ETAMinute_p->changeString(timeToString(min));
 }
 void NavigationContainer::changeNavigation(navigation_t newNav){
+    ESP_LOGI(NCONT_M,"Updating with new navigation");
     m_arrow_p->changeDirection(newNav.direction);
     changeDistance(newNav.distance);
     changeEta(newNav.hour,newNav.min);
