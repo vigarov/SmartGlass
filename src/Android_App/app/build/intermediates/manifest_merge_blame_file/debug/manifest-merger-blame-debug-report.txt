@@ -1,0 +1,276 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.smartglass.smartglassapp"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="26"
+8-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml
+9        android:targetSdkVersion="28" />
+9-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml
+10
+11    <uses-permission android:name="android.permission.INTERNET" />
+11-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:6:5-67
+11-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:6:22-64
+12    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+12-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:7:5-79
+12-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:7:22-76
+13    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+13-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:8:5-81
+13-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:8:22-78
+14    <uses-permission android:name="android.permission.BLUETOOTH" />
+14-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:9:5-68
+14-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:9:22-65
+15    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+15-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:10:5-74
+15-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:10:22-71
+16    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+16-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:11:5-76
+16-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:11:22-73
+17    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
+17-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:12:5-73
+17-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:12:22-70
+18    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- Include required permissions for Google Maps API to run. -->
+18-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:10:5-76
+18-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:10:22-73
+19    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+19-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:23:5-79
+19-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:23:22-76
+20
+21    <uses-feature
+21-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:26:5-28:35
+22        android:glEsVersion="0x00020000"
+22-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:27:9-41
+23        android:required="true" />
+23-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:28:9-32
+24
+25    <queries>
+25-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:30:5-34:15
+26
+27        <!-- Needs to be explicitly declared on Android R+ -->
+28        <package android:name="com.google.android.apps.maps" />
+28-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:33:9-64
+28-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:33:18-61
+29    </queries>
+30
+31    <application
+31-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:14:5-79:19
+32        android:allowBackup="true"
+32-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:15:9-35
+33        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+33-->[androidx.core:core:1.7.0] C:\Users\shrey\.gradle\caches\transforms-3\3b0bd2282ba30c54b1682b06788a5883\transformed\core-1.7.0\AndroidManifest.xml:24:18-86
+34        android:debuggable="true"
+35        android:extractNativeLibs="false"
+36        android:icon="@mipmap/ic_launcher"
+36-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:16:9-43
+37        android:label="@string/app_name"
+37-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:17:9-41
+38        android:roundIcon="@mipmap/ic_launcher_round"
+38-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:18:9-54
+39        android:supportsRtl="true"
+39-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:19:9-35
+40        android:testOnly="true"
+41        android:theme="@style/Theme.SmartGlassApp" >
+41-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:20:9-51
+42
+43        <!--
+44             TODO: Before you run your application, you need a Google Maps API key.
+45
+46             To get one, follow the directions here:
+47
+48                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+49
+50             Once you have your API key (it starts with "AIza"), define a new property in your
+51             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+52             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+53        -->
+54        <meta-data
+54-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:33:9-35:44
+55            android:name="com.google.android.geo.API_KEY"
+55-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:34:13-58
+56            android:value="YOUR_API_KEY" />
+56-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:35:13-41
+57
+58        <activity
+58-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:37:9-40:59
+59            android:name="com.smartglass.smartglassapp.MapsActivity"
+59-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:38:13-41
+60            android:exported="false"
+60-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:39:13-37
+61            android:label="@string/title_activity_maps" />
+61-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:40:13-56
+62
+63        <receiver
+63-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:42:9-49:20
+64            android:name="com.smartglass.smartglassapp.MyReceiver"
+64-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:43:13-39
+65            android:enabled="true"
+65-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:44:13-35
+66            android:exported="true" >
+66-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:45:13-36
+67            <intent-filter>
+67-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:46:13-48:29
+68                <action android:name="com.androidbook.intents.testbc" />
+68-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:47:17-73
+68-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:47:25-70
+69            </intent-filter>
+70        </receiver>
+71
+72        <activity
+72-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:51:9-58:20
+73            android:name="com.smartglass.smartglassapp.BluetoothActivity"
+73-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:52:13-46
+74            android:exported="true" >
+74-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:53:13-36
+75            <intent-filter>
+75-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:54:13-57:29
+76                <action android:name="android.intent.action.MAIN" />
+76-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:55:17-69
+76-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:55:25-66
+77                <action android:name="android.intent.action.LAUNCHER" />
+77-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:56:17-73
+77-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:56:25-70
+78            </intent-filter>
+79        </activity>
+80        <activity
+80-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:59:9-69:20
+81            android:name="com.smartglass.smartglassapp.MainActivity"
+81-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:60:13-41
+82            android:exported="true"
+82-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:61:13-36
+83            android:label="@string/app_name"
+83-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:62:13-45
+84            android:theme="@style/Theme.SmartGlassApp.NoActionBar" >
+84-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:63:13-67
+85            <intent-filter>
+85-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:64:13-68:29
+86                <action android:name="android.intent.action.MAIN" />
+86-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:55:17-69
+86-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:55:25-66
+87
+88                <category android:name="android.intent.category.LAUNCHER" />
+88-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:67:17-77
+88-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:67:27-74
+89            </intent-filter>
+90        </activity>
+91
+92        <service
+92-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:71:9-77:19
+93            android:name="com.smartglass.smartglassapp.NotificationListener"
+93-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:71:18-54
+94            android:exported="false"
+94-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:73:13-37
+95            android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE" >
+95-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:72:13-87
+96            <intent-filter>
+96-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:74:13-76:29
+97                <action android:name="android.service.notification.NotificationListenerService" />
+97-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:75:17-99
+97-->C:\Users\shrey\Le_Poly\IN_BA3+4\Making_Intelligent_Things\SmartGlass\src\Android_App\app\src\main\AndroidManifest.xml:75:25-96
+98            </intent-filter>
+99        </service>
+100
+101        <uses-library
+101-->[androidx.window:window:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\d7c6d3ef5356a04f0c781c9d7d4e4226\transformed\window-1.0.0\AndroidManifest.xml:25:9-27:40
+102            android:name="androidx.window.extensions"
+102-->[androidx.window:window:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\d7c6d3ef5356a04f0c781c9d7d4e4226\transformed\window-1.0.0\AndroidManifest.xml:26:13-54
+103            android:required="false" />
+103-->[androidx.window:window:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\d7c6d3ef5356a04f0c781c9d7d4e4226\transformed\window-1.0.0\AndroidManifest.xml:27:13-37
+104        <uses-library
+104-->[androidx.window:window:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\d7c6d3ef5356a04f0c781c9d7d4e4226\transformed\window-1.0.0\AndroidManifest.xml:28:9-30:40
+105            android:name="androidx.window.sidecar"
+105-->[androidx.window:window:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\d7c6d3ef5356a04f0c781c9d7d4e4226\transformed\window-1.0.0\AndroidManifest.xml:29:13-51
+106            android:required="false" />
+106-->[androidx.window:window:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\d7c6d3ef5356a04f0c781c9d7d4e4226\transformed\window-1.0.0\AndroidManifest.xml:30:13-37
+107
+108        <activity
+108-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:14:9-20:20
+109            android:name="com.google.android.libraries.places.widget.AutocompleteActivity"
+109-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:15:13-91
+110            android:exported="false"
+110-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:16:13-37
+111            android:label="@string/places_autocomplete_label"
+111-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:17:13-62
+112            android:theme="@style/PlacesAutocompleteOverlay"
+112-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:18:13-61
+113            android:windowSoftInputMode="adjustResize" >
+113-->[com.google.android.libraries.places:places:2.6.0] C:\Users\shrey\.gradle\caches\transforms-3\9568eb422e03d5af5dcbd276766c295b\transformed\places-2.6.0\AndroidManifest.xml:19:13-55
+114        </activity> <!-- Needs to be explicitly declared on P+ -->
+115        <uses-library
+115-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:39:9-41:40
+116            android:name="org.apache.http.legacy"
+116-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:40:13-50
+117            android:required="false" />
+117-->[com.google.android.gms:play-services-maps:18.0.2] C:\Users\shrey\.gradle\caches\transforms-3\67cf0cc78498acf09f3c2a6cddc64725\transformed\play-services-maps-18.0.2\AndroidManifest.xml:41:13-37
+118
+119        <activity
+119-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\shrey\.gradle\caches\transforms-3\ef372aad69dc4d188fb95ed223aee7a4\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+120            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+120-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\shrey\.gradle\caches\transforms-3\ef372aad69dc4d188fb95ed223aee7a4\transformed\play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+121            android:exported="false"
+121-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\shrey\.gradle\caches\transforms-3\ef372aad69dc4d188fb95ed223aee7a4\transformed\play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+122            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+122-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\shrey\.gradle\caches\transforms-3\ef372aad69dc4d188fb95ed223aee7a4\transformed\play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+123
+124        <meta-data
+124-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\shrey\.gradle\caches\transforms-3\62e2251b8851ef00cebdc1543039edbe\transformed\play-services-basement-18.0.0\AndroidManifest.xml:21:9-23:69
+125            android:name="com.google.android.gms.version"
+125-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\shrey\.gradle\caches\transforms-3\62e2251b8851ef00cebdc1543039edbe\transformed\play-services-basement-18.0.0\AndroidManifest.xml:22:13-58
+126            android:value="@integer/google_play_services_version" />
+126-->[com.google.android.gms:play-services-basement:18.0.0] C:\Users\shrey\.gradle\caches\transforms-3\62e2251b8851ef00cebdc1543039edbe\transformed\play-services-basement-18.0.0\AndroidManifest.xml:23:13-66
+127
+128        <provider
+128-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+129            android:name="androidx.startup.InitializationProvider"
+129-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:27:13-67
+130            android:authorities="com.smartglass.smartglassapp.androidx-startup"
+130-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:28:13-68
+131            android:exported="false" >
+131-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:29:13-37
+132            <meta-data
+132-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+133                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+133-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:32:17-75
+134                android:value="androidx.startup" />
+134-->[androidx.emoji2:emoji2:1.0.0] C:\Users\shrey\.gradle\caches\transforms-3\c8877a845a1ecc21bc4d7aef49a3be7d\transformed\emoji2-1.0.0\AndroidManifest.xml:33:17-49
+135            <meta-data
+135-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\shrey\.gradle\caches\transforms-3\6db2d206bf3eb761a6ebdcccacb69391\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+136                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+136-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\shrey\.gradle\caches\transforms-3\6db2d206bf3eb761a6ebdcccacb69391\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+137                android:value="androidx.startup" />
+137-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\shrey\.gradle\caches\transforms-3\6db2d206bf3eb761a6ebdcccacb69391\transformed\lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+138        </provider>
+139
+140        <service
+140-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\shrey\.gradle\caches\transforms-3\c1397e1e6dd6ecfd13eefe1b50ff6ac4\transformed\transport-backend-cct-2.3.0\AndroidManifest.xml:29:9-35:19
+141            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+141-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\shrey\.gradle\caches\transforms-3\c1397e1e6dd6ecfd13eefe1b50ff6ac4\transformed\transport-backend-cct-2.3.0\AndroidManifest.xml:30:13-103
+142            android:exported="false" >
+142-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\shrey\.gradle\caches\transforms-3\c1397e1e6dd6ecfd13eefe1b50ff6ac4\transformed\transport-backend-cct-2.3.0\AndroidManifest.xml:31:13-37
+143            <meta-data
+143-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\shrey\.gradle\caches\transforms-3\c1397e1e6dd6ecfd13eefe1b50ff6ac4\transformed\transport-backend-cct-2.3.0\AndroidManifest.xml:32:13-34:39
+144                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+144-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\shrey\.gradle\caches\transforms-3\c1397e1e6dd6ecfd13eefe1b50ff6ac4\transformed\transport-backend-cct-2.3.0\AndroidManifest.xml:33:17-94
+145                android:value="cct" />
+145-->[com.google.android.datatransport:transport-backend-cct:2.3.0] C:\Users\shrey\.gradle\caches\transforms-3\c1397e1e6dd6ecfd13eefe1b50ff6ac4\transformed\transport-backend-cct-2.3.0\AndroidManifest.xml:34:17-36
+146        </service>
+147        <service
+147-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:26:9-30:19
+148            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+148-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:27:13-117
+149            android:exported="false"
+149-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:28:13-37
+150            android:permission="android.permission.BIND_JOB_SERVICE" >
+150-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:29:13-69
+151        </service>
+152
+153        <receiver
+153-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:32:9-34:40
+154            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+154-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:33:13-132
+155            android:exported="false" />
+155-->[com.google.android.datatransport:transport-runtime:2.2.3] C:\Users\shrey\.gradle\caches\transforms-3\9e5cca2ed0614322cc0bcf1f4d18baaf\transformed\transport-runtime-2.2.3\AndroidManifest.xml:34:13-37
+156    </application>
+157
+158</manifest>
