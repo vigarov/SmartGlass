@@ -34,13 +34,15 @@ set(LOGO_O_D_SRCS ${LOGO_O_D}/Logos.cpp)
 set(IMM_O_D_SRCS 
     ${IMM_O_D}/RawText.cpp
     ${IMM_O_D}/Header.cpp
+    ${IMM_O_D}/NavigationContainer.cpp
     ${LOGO_O_D_SRCS})
 set(M_O_D ${OBJECTS_DIR}/Mutable)
 set(M_O_D_SRCS 
     ${M_O_D}/BLEIcon.cpp
     ${M_O_D}/Text.cpp
     ${M_O_D}/Battery.cpp
-    ${M_O_D}/NotificationContainer.cpp)
+    ${M_O_D}/NotificationContainer.cpp
+    ${M_O_D}/Arrow.cpp)
 set(OBJECTS_DIRS 
     ${OBJECT_DIR}
     ${IMM_O_D}

@@ -16,6 +16,7 @@ namespace SmartGlasses{
         IdleApp(std::shared_ptr<uOS> uOS_p);
         void changeBLE(ble_status_t newStatus) override;
         void newNotification(notification_t n) override;
+        void getNavigation(navigation_t newNavigation) override;
 
         void onClose() override;
         void onResume() override;
@@ -31,6 +32,11 @@ namespace SmartGlasses{
         static void T_DISPLAY_COUNT(void* pvParameters);
 
         void eraseDisplayableTask();
+
+        bool m_createdNav = false;
+        void showNavigationTask();
+        void hideNavigationTask();
+        void updateAndShowNav(navigation_t n);
     };
 
 }

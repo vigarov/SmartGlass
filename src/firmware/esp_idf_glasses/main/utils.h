@@ -73,6 +73,15 @@ namespace SmartGlasses{
      */
     std::string timeToString(unsigned int timeUnit);
 
+    /**
+     * @brief Get distanec string from distance
+     * Simply appends 'm'
+     * 
+     * @param dist the distance
+     * @return std::string stringified distance
+     */
+    std::string distanceToString(unsigned int dist);
+
     //@see: https://stackoverflow.com/a/896440/8352508 
     template <typename InIt1, typename InIt2, typename OutIt>
     OutIt unordered_set_intersection(InIt1 b1, InIt1 e1, InIt2 b2, InIt2 e2, OutIt out) {

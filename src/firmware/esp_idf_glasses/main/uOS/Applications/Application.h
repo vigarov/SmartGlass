@@ -5,6 +5,7 @@
 #include "Content.h"
 #include "Container.h"
 #include "Notification.h"
+#include "Navigation.h"
 #include <vector>
 
 namespace SmartGlasses{

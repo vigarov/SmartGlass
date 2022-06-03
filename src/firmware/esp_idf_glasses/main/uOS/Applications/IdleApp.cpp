@@ -1,5 +1,7 @@
 #include "IdleApp.h"
 #include "Header.h"
+#include "NavigationContainer.h"
+#include "Navigation.h"
 #include "utils.h"
 #include "constants.h"
 #include "NotificationContainer.h"
@@ -28,8 +30,11 @@ IdleApp::IdleApp(std::shared_ptr<uOS> uOS_p) : Application(uOS_p,IDLE){
     m_displayables.push_back(std::make_shared<Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>>(Text<unsigned char,CHAR_WIDTH_8x8,NB_ASCII_CHARS>::textWithDefaultFontFrom("500 m",true,{36,50},USE_ANIMATIONS,1)));
     //s = "arrowRight";*/
     //m_displayables.push_back(std::make_shared<RightArrow>(s,true,(pixel_pair_t){36,20}));
-    m_displayables.push_back(std::make_shared<Header>(s,m_st.hour,m_st.min));
-    notification_t n = {.application=FACEBOOK,.title={true,"test"},.additionalInfo={false,"test2"}};
+    std::string tempS = s+"Header";
+    m_displayables.push_back(std::make_shared<Header>(tempS,m_st.hour,m_st.min));
+    //navigation_t nav = {0,LEFT,400,10,30};
+    //tempS = s+"NavCont";
+    //m_displayables.push_back(std::make_shared<NavigationContainer>(tempS,nav));
     //s="Idle notif";
     //m_displayables.push_back(std::make_shared<NotificationContainer>(s,n,true,(pixel_pair_t){16,22}));
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
@@ -103,6 +108,16 @@ void IdleApp::newNotification(notification_t n){
     xSemaphoreGive(m_notifDisplaySemaphore);
 }
 
+
+void IdleApp::getNavigation(navigation_t newNavigation){
+    if(!m_createdNav){
+        std::string temp = "Navigation Container";
+        m_displayables.push_back(std::make_shared<NavigationContainer>(temp,newNavigation));
+        m_createdNav = true;
+    }
+    updateAndShowNav(newNavigation);
+}
+
 void IdleApp::T_DISPLAY_COUNT(void* pvParameters){
     auto app = static_cast<IdleApp*>(pvParameters);
     while(1){
@@ -113,6 +128,7 @@ void IdleApp::T_DISPLAY_COUNT(void* pvParameters){
 
         if(++app->m_secondsDisplayedCount >= MAX_SECONDS_TEMP_DISPLAY){
             app->eraseDisplayableTask();
+            app->showNavigationTask();
             app->m_secondsDisplayedCount = 0;
             DEVICEMANAGER.getOneSecondTimer()->removeTaskNotifiedOnAlarm(app->m_displayTimerTask);
             app->m_displayTimerTask = nullptr;
@@ -129,6 +145,33 @@ void IdleApp::eraseDisplayableTask(){
         if(displayable->id == NOTIFICATION_CONTAINER_ID){
             displayable->hide();
             m_displayables.erase(m_displayables.begin() + i);
+        }
+    }
+}
+
+
+void IdleApp::hideNavigationTask(){
+    for(auto& displayable:m_displayables){
+        if(displayable->id == NAVIGATION_CONTAINER_ID){
+            displayable->hide();
+        }
+    }
+}
+
+void IdleApp::showNavigationTask(){
+    for(auto& displayable:m_displayables){
+        if(displayable->id == NAVIGATION_CONTAINER_ID){
+            displayable->update();
+        }
+    }
+}
+
+
+void IdleApp::updateAndShowNav(navigation_t n){
+    for(auto& displayable:m_displayables){
+        if(displayable->id == NAVIGATION_CONTAINER_ID){
+            std::static_pointer_cast<NavigationContainer>(displayable)->changeNavigation(n);
+            displayable->update();
         }
     }
 }

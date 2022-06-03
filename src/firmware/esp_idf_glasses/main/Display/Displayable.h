@@ -25,7 +25,7 @@ namespace SmartGlasses{
          */
         unsigned char id = 0;
     protected:
-        const pixel_pair_t m_offsets;
+        pixel_pair_t m_offsets;
 
 
         /**

@@ -66,3 +66,6 @@ std::string SmartGlasses::timeToString(unsigned int timeUnit){
     if(timeUnit < 10) ret = "0"+ret;
     return ret;
 }
+std::string SmartGlasses::distanceToString(unsigned int dist){
+    return std::to_string(dist) + "m";
+}

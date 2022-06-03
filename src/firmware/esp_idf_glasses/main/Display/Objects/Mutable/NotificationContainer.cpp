@@ -8,7 +8,6 @@ using namespace SmartGlasses;
 NotificationContainer::NotificationContainer(const std::string& s,notification_t notification,bool overwrites, pixel_pair_t offsets, unsigned char animate, unsigned char priority,TaskHandle_t notifyOnDraw)
 : Container(notifyOnDraw,s,overwrites,offsets,animate,priority), m_notification(notification)
 {
-    ESP_LOGI(s.c_str(),"created %d,%d",offsets.x,offsets.y);
     m_displayables.push_back(getNotificationLogo(notification.application,offsets+(pixel_pair_t){0,NOTIF_LOGO_OFFSET_Y}));
     m_displayables.push_back(std::make_shared<RawText>(parseTerminated(notification.title.text,notification.title.isTerminated),true,offsets+(pixel_pair_t){NOTIF_TITLE_OFFSET_X,NOTIF_TITLE_OFFSET_Y}));
     m_displayables.push_back(std::make_shared<RawText>(parseTerminated(notification.additionalInfo.text,notification.additionalInfo.isTerminated),true,offsets+(pixel_pair_t){NOTIF_ADDINFO_OFFSET_X,NOTIF_ADDINFO_OFFSET_Y}));
