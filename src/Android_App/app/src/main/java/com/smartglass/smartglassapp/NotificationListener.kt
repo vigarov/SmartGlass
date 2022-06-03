@@ -25,7 +25,13 @@ class NotificationListener: NotificationListenerService() {
             when(sbn.packageName){
                 "com.android.systemui" -> APP.SYSTEM
                 "com.google.android.apps.maps" -> {
-                    return;
+                    var bA = ByteArray(8)
+                    val strTokSub: StringTokenizer = StringTokenizer(sbn.notification.extras.get("android.subText").toString(), " · ")
+                    strTokSub.nextToken()
+                    val strTokTitle: StringTokenizer = StringTokenizer(sbn.notification.extras.get("android.title").toString(), " ")
+                    val dir = sbn.notification.extras.get("android.title").toString().substring(5)
+                    val dist = strTokSub.nextToken()
+                    val eta = strTokSub.nextToken()
                 }
                 "com.google.android.apps.messaging" -> {
                     app = APP.SMS
@@ -138,4 +144,8 @@ class NotificationListener: NotificationListenerService() {
             }
         }
     }
+}
+
+enum class DIRECTION{
+    FORWARD, LEFT, RIGHT
 }
