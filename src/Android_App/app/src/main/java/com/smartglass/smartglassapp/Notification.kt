@@ -8,8 +8,8 @@ class Notification(
     private val title: String,
     private val additionalInfo: String
 ) {
-    private val maxTitleLength: Int = 12
-    private val maxAddInfoLength: Int = 48
+    private val maxTitleLength: Int = 11
+    private val maxAddInfoLength: Int = 23
     private val packageLength: Int = 64
 
     fun packForDelivery(): ByteArray{
@@ -41,33 +41,36 @@ class Notification(
             i++
         }
         bA[maxTitleLength + 2] = 0.toByte()
+        bA[maxTitleLength + 3] = 0.toByte()
 
         // Bytes 15 to 63 (included) are the additional info
         // Byte 15 informs us whether the string fits in the given bytes
         // Same conventions apply as for the title, but instead e.g.:
         // "Hello", would mean bA[16] = 'H', bA[17] = 'e', etc
         // Byte 63 represents the ending character
-        if(titleChars.size >= maxTitleLength){
-            bA[maxTitleLength + 3] = 0.toByte()
+        i = maxTitleLength + 5
+        val infoChars = additionalInfo.toCharArray()
+        if(infoChars.size >= maxAddInfoLength){
+            bA[maxTitleLength + 4] = 0.toByte()
         }
         else{
-            bA[maxTitleLength + 3] = 1.toByte()
+            bA[maxTitleLength + 4] = 1.toByte()
         }
-        i = maxTitleLength + 4
-        val infoChars = additionalInfo.toCharArray()
-        while(i < infoChars.size + maxTitleLength + 4 && i < maxAddInfoLength + maxTitleLength + 3){
-            bA[i] = infoChars[i - (maxTitleLength + 4)].code.toByte()
+        while(i < infoChars.size + maxTitleLength + 5 && i < (maxAddInfoLength/2) + maxTitleLength + 5){
+            bA[i] = infoChars[i - (maxTitleLength + 5)].code.toByte()
             i++
         }
-        while(i < maxAddInfoLength + maxTitleLength + 3){
+        if(infoChars.size + maxTitleLength + 5 >= (maxAddInfoLength/2) + maxTitleLength + 5){
+            bA[(maxAddInfoLength/2) + maxTitleLength + 5] = '\n'.code.toByte()
+        }
+        i = (maxAddInfoLength/2) + maxTitleLength + 6
+        while(i < infoChars.size + maxTitleLength + 5 && i < maxAddInfoLength + maxTitleLength + 4){
+            bA[i] = infoChars[i - (maxTitleLength + 6)].code.toByte()
+            i++
+        }
+        while(i < packageLength){
             bA[i] = 0.toByte()
             i++
-        }
-        if(infoChars.size >= maxAddInfoLength){
-            bA[63] = 0.toByte()
-        }
-        else{
-            bA[63] = 1.toByte()
         }
 
         return bA

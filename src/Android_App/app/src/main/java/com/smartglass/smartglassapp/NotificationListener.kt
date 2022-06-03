@@ -19,44 +19,89 @@ class NotificationListener: NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
-        if (sbn != null && sbn.notification.extras.containsKey("android.subText") && !sbn.notification.extras.containsKey("android.textLines")) {
+        if (sbn != null && sbn.notification.extras.containsKey("android.subText")) {
             var app: APP = APP.OTHER
             var notif: Notification = Notification(app, "", "")
             when(sbn.packageName){
                 "com.android.systemui" -> APP.SYSTEM
                 "com.google.android.apps.maps" -> {
-                    /*app = APP.MAPS
-                    val strTok: StringTokenizer = StringTokenizer(sbn.notification.extras.get("android.subText").toString(), " · ")
-                    val str: String = strTok.nextToken()*/
+                    return;
                 }
-                "com.google.android.apps.messaging" -> APP.SMS
-                "com.whatsapp" -> {
-                    app = APP.WHATSAPP
+                "com.google.android.apps.messaging" -> {
+                    app = APP.SMS
                     notif = Notification(
                         app,
                         sbn.notification.extras.get("android.title").toString(),
                         sbn.notification.extras.get("android.text").toString()
                     )
+                }
+                "com.whatsapp" -> {
+                    if(!sbn.notification.extras.containsKey("android.textLines")) {
+                        app = APP.WHATSAPP
+                        notif = Notification(
+                            app,
+                            sbn.notification.extras.get("android.title").toString(),
+                            sbn.notification.extras.get("android.text").toString()
+                        )
+                    }
+                    else{
+                        return;
+                    }
                 }
                 "org.thoughtcrime.securesms" -> {
-                    app = APP.SIGNAL
+                    if(sbn.notification.extras.containsKey("android.text") &&
+                        !sbn.notification.extras.get("android.text").toString().contains("Most recent from")){
+                        app = APP.SIGNAL
+                        notif = Notification(
+                            app,
+                            sbn.notification.extras.get("android.title").toString(),
+                            sbn.notification.extras.get("android.text").toString()
+                        )
+                    }
+                    else{
+                        return;
+                    }
+                }
+                "com.snapchat.android" -> APP.SNAPCHAT
+                "com.instagram.android" -> {
+                    return
+                    /*if(!sbn.notification.extras.containsKey("android.text") ||
+                            !sbn.notification.extras.get("android.text").toString().contains(":")){
+                        return
+                    }
+                    app = APP.INSTAGRAM
+                    var st = StringTokenizer(sbn.notification.extras.get("android.text").toString(), ":")
+                    st.nextToken()
+                    var title = sbn.notification.extras.get("android.title").toString().substring(0, 6)
+                    if(title.length > 5){
+                        title = title.substring(0, 5)
+                    }
+                    notif = Notification(
+                        app,
+                        title,
+                        ""
+                    )*/
+                }
+                "com.google.android.gm" -> APP.GMAIL
+                "com.discord" -> APP.DISCORD
+                "com.facebook.katana" -> {
+                    app = APP.FACEBOOK
                     notif = Notification(
                         app,
                         sbn.notification.extras.get("android.title").toString(),
                         sbn.notification.extras.get("android.text").toString()
                     )
                 }
-                "com.snapchat.android" -> APP.SNAPCHAT
-                "com.instagram.android" -> APP.INSTAGRAM
-                "com.google.android.gm" -> APP.GMAIL
-                "com.discord" -> APP.DISCORD
-                "com.facebook.katana" -> APP.FACEBOOK
                 "org.telegram.messenger" -> {
+                    val text: String = sbn.notification.extras.get("android.text").toString()
+                    if(text.contains(" new messages from ") && text.contains("chats")){
+                        return
+                    }
                     app = APP.TELEGRAM
                     notif = Notification(
                         app,
                         sbn.notification.extras.get("android.title").toString(),
-                        sbn.notification.extras.get("android.text").toString()
+                        text
                     )
                 }
                 "com.linkedin.android" -> APP.LINKEDIN

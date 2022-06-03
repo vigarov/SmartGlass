@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.smartglass.smartglassapp.databinding.ActivityBluetoothBinding
 import kotlinx.android.synthetic.main.activity_bluetooth.*
+import java.time.LocalDateTime
 import java.util.*
 import kotlin.concurrent.timerTask
 
@@ -54,7 +55,7 @@ class BluetoothActivity : MainActivity() {
         //Bluetooth UUIDs
         const val NOTIFICATION_SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
         const val NOTIFICATION_BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
-        const val GRANNY_FALLING_UUID: String = ""
+        const val GRANNY_FALLING_UUID: String = "4d8aea79-7207-4f92-a629-60e0fdb2f242"
         const val GATT_MAX_MTU_SIZE = 64
 
         //send message: codes
@@ -181,14 +182,12 @@ class BluetoothActivity : MainActivity() {
                 var characteristic = service.getCharacteristic(
                     UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)
                 )
-
                 btGatt.setCharacteristicNotification(characteristic, true)
 
-//                var charGranny = service.getCharacteristic(
-//                    UUID.fromString(GRANNY_FALLING_UUID)
-//                )
-//
-//                btGatt.setCharacteristicNotification(charGranny, true)
+                var charGranny = service.getCharacteristic(
+                    UUID.fromString(GRANNY_FALLING_UUID)
+                )
+                btGatt.setCharacteristicNotification(charGranny, true)
             }
         }
 
@@ -219,9 +218,40 @@ class BluetoothActivity : MainActivity() {
                     anim.repeatMode = Animation.REVERSE
                     anim.repeatCount = 20
                     textView.startAnimation(anim)
+
+                    val date = LocalDateTime.now()
+                    val tm_sec: Int = date.second
+                    val tm_min: Int = date.minute
+                    val tm_hour: Int = date.hour
+                    val tm_mday: Int = date.dayOfMonth
+                    val tm_mon: Int = date.monthValue
+                    val tm_year: Int = date.year
+                    val tm_wday: Int = date.dayOfWeek.ordinal
+                    val tm_yday: Int = date.dayOfYear
+                    val tm_isdst: Int = 1
+
+                    var packet: ByteArray = ByteArray(64)
+                    packet = tm_sec.to4ByteArray().copyInto(packet, 0, 0, 4)
+                    packet = tm_min.to4ByteArray().copyInto(packet, 4, 0, 4)
+                    packet = tm_hour.to4ByteArray().copyInto(packet, 8, 0, 4)
+                    packet = tm_mday.to4ByteArray().copyInto(packet, 12, 0, 4)
+                    packet = tm_mon.to4ByteArray().copyInto(packet, 16, 0, 4)
+                    packet = tm_year.to4ByteArray().copyInto(packet, 20, 0, 4)
+                    packet = tm_wday.to4ByteArray().copyInto(packet, 24, 0, 4)
+                    packet = tm_yday.to4ByteArray().copyInto(packet, 28, 0, 4)
+                    packet = tm_isdst.to4ByteArray().copyInto(packet, 32, 0, 4)
+                    writeCharacteristic(
+                        btGatt.getService(UUID.fromString(NOTIFICATION_SERVICE_UUID))
+                            .getCharacteristic(UUID.fromString(GRANNY_FALLING_UUID)),
+                        packet
+                    )
                 }
             }
         }
+
+        fun Int.to4ByteArray(): ByteArray = byteArrayOf(
+            toByte(), shr(8).toByte(), shr(16).toByte(), shr(24).toByte()
+        )
     }
 
 
