@@ -28,7 +28,6 @@ import com.smartglass.smartglassapp.databinding.ActivityBluetoothBinding
 import kotlinx.android.synthetic.main.activity_bluetooth.*
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.concurrent.timerTask
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.S)
@@ -40,10 +39,14 @@ class BluetoothActivity : MainActivity() {
 
 
     companion object {
-        val queue: Queue<Notification> = LinkedList<Notification>()
+        val queue: Queue<Notification> = LinkedList()
         lateinit var btGatt: BluetoothGatt
         var onServicesDiscoveredBool: Boolean = false
         var messageSendBool: Boolean = true
+
+        val mapQueue: Queue<ByteArray> = LinkedList()
+        var mapsSendBool: Boolean = true
+        var navStarted: Boolean = false
         //Permission Codes
         const val BLUETOOTH_PERMISSION: Int = 100
         const val BLUETOOTH_ADMIN_PERMISSION: Int = 101
@@ -54,13 +57,11 @@ class BluetoothActivity : MainActivity() {
 
         //Bluetooth UUIDs
         const val NOTIFICATION_SERVICE_UUID: String = "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
+        const val GRANNY_SERVICE_UUID: String = ""
         const val NOTIFICATION_BUFFER_ATTR_UUID: String = "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
         const val GRANNY_FALLING_UUID: String = "4d8aea79-7207-4f92-a629-60e0fdb2f242"
+        const val MAPS_UUID: String = "df1fbdbe-c41b-45fb-9c99-cb5ba89cfac1"
         const val GATT_MAX_MTU_SIZE = 64
-
-        //send message: codes
-        const val NOTIFICATION_CHANGE: Int = 0
-        const val GRANNY_FELL: Int = 1
     }
 
     //Remember to set the notification lists up properly
@@ -179,15 +180,24 @@ class BluetoothActivity : MainActivity() {
                 val service = btGatt.getService(
                     UUID.fromString(NOTIFICATION_SERVICE_UUID)
                 )
-                var characteristic = service.getCharacteristic(
+                val grannyService = btGatt.getService(
+                    UUID.fromString(GRANNY_SERVICE_UUID)
+                )
+
+                val charNotification = service.getCharacteristic(
                     UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)
                 )
-                btGatt.setCharacteristicNotification(characteristic, true)
+                btGatt.setCharacteristicNotification(charNotification, true)
 
-                var charGranny = service.getCharacteristic(
+                val charGranny = grannyService.getCharacteristic(
                     UUID.fromString(GRANNY_FALLING_UUID)
                 )
                 btGatt.setCharacteristicNotification(charGranny, true)
+
+                val charMaps = service.getCharacteristic(
+                    UUID.fromString(MAPS_UUID)
+                )
+                btGatt.setCharacteristicNotification(charMaps, true)
             }
         }
 
@@ -198,6 +208,7 @@ class BluetoothActivity : MainActivity() {
             )
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onCharacteristicChanged(
             gatt: BluetoothGatt,
             characteristic: BluetoothGattCharacteristic
@@ -210,9 +221,10 @@ class BluetoothActivity : MainActivity() {
                     sendMessage()
                 }
                 else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
-                    textView.setText("GRANNY FELL")
-                    textView.setTextSize(50f)
-                    var anim = AlphaAnimation(0f, 1f)
+                    Log.d("BluetootGallCallback", "GRANNY FELL ALERT!!!!!!!!")
+                    textView.text = "GRANNY FELL"
+                    textView.textSize = 50f
+                    val anim = AlphaAnimation(0f, 1f)
                     anim.duration = 500
                     anim.startOffset = 50
                     anim.repeatMode = Animation.REVERSE
@@ -228,33 +240,36 @@ class BluetoothActivity : MainActivity() {
                     val tm_year: Int = date.year
                     val tm_wday: Int = date.dayOfWeek.ordinal
                     val tm_yday: Int = date.dayOfYear
-                    val tm_isdst: Int = 1
 
-                    var packet: ByteArray = ByteArray(64)
-                    packet = tm_sec.to4ByteArray().copyInto(packet, 0, 0, 4)
-                    packet = tm_min.to4ByteArray().copyInto(packet, 4, 0, 4)
-                    packet = tm_hour.to4ByteArray().copyInto(packet, 8, 0, 4)
-                    packet = tm_mday.to4ByteArray().copyInto(packet, 12, 0, 4)
-                    packet = tm_mon.to4ByteArray().copyInto(packet, 16, 0, 4)
-                    packet = tm_year.to4ByteArray().copyInto(packet, 20, 0, 4)
-                    packet = tm_wday.to4ByteArray().copyInto(packet, 24, 0, 4)
-                    packet = tm_yday.to4ByteArray().copyInto(packet, 28, 0, 4)
-                    packet = tm_isdst.to4ByteArray().copyInto(packet, 32, 0, 4)
+                    var packet = ByteArray(32)
+                    packet = intToByteArray(tm_sec).copyInto(packet, 0, 0, 4)
+                    packet = intToByteArray(tm_min).copyInto(packet, 4, 0, 4)
+                    packet = intToByteArray(tm_hour).copyInto(packet, 8, 0, 4)
+                    packet = intToByteArray(tm_mday).copyInto(packet, 12, 0, 4)
+                    packet = intToByteArray(tm_mon).copyInto(packet, 16, 0, 4)
+                    packet = intToByteArray(tm_year).copyInto(packet, 20, 0, 4)
+                    packet = intToByteArray(tm_wday).copyInto(packet, 24, 0, 4)
+                    packet = intToByteArray(tm_yday).copyInto(packet, 28, 0, 4)
                     writeCharacteristic(
-                        btGatt.getService(UUID.fromString(NOTIFICATION_SERVICE_UUID))
+                        btGatt.getService(UUID.fromString(GRANNY_SERVICE_UUID))
                             .getCharacteristic(UUID.fromString(GRANNY_FALLING_UUID)),
                         packet
                     )
                 }
+                else if(characteristic.uuid.toString() == GRANNY_FALLING_UUID) {
+                    mapsSendBool = true
+                    sendMapData()
+                }
             }
         }
-
-        fun Int.to4ByteArray(): ByteArray = byteArrayOf(
-            toByte(), shr(8).toByte(), shr(16).toByte(), shr(24).toByte()
-        )
     }
 
-
+    fun intToByteArray(int: Int): ByteArray = byteArrayOf(
+        int.toByte(),
+        int.shr(8).toByte(),
+        int.shr(16).toByte(),
+        int.shr(24).toByte()
+    )
 
     private var isScanning: Boolean = false
 
@@ -482,16 +497,36 @@ class BluetoothActivity : MainActivity() {
 
     fun sendMessage(){
         if(messageSendBool && !queue.isEmpty()){
-            val notif: Notification = queue.poll()
+            val notif: Notification = queue.poll() as Notification
             if (onServicesDiscoveredBool) {
                 writeCharacteristic(
                     btGatt.getService(
                         UUID.fromString(NOTIFICATION_SERVICE_UUID)
                     )
-                        .getCharacteristic(UUID.fromString(BluetoothActivity.NOTIFICATION_BUFFER_ATTR_UUID)),
+                        .getCharacteristic(UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)),
                     notif.packForDelivery()
                 )
                 messageSendBool = false
+            }
+        }
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun sendMapData(){
+        if(mapsSendBool && !mapQueue.isEmpty()){
+            Log.d("Info", "inside maps send and queue is not empty, and messageSend Bool is true" )
+            val payload: ByteArray? = mapQueue.poll()
+            if(onServicesDiscoveredBool){
+                Log.d("Info", "========maps should have sent=======" )
+                writeCharacteristic(
+                    btGatt.getService(
+                        UUID.fromString(
+                            NOTIFICATION_SERVICE_UUID
+                        )
+                    ).getCharacteristic(
+                        UUID.fromString(NOTIFICATION_BUFFER_ATTR_UUID)),
+                    payload as ByteArray)
+                mapsSendBool = false
             }
         }
     }
