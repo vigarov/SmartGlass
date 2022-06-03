@@ -58,6 +58,7 @@ void IdleApp::changeBLE(ble_status_t newStatus){
         else{
             std::static_pointer_cast<Header>(m_displayables[HEADER_POS])->updateBLEBlink(false);
         }
+        m_ble_status = newStatus;
     }
 }
 
@@ -86,31 +87,37 @@ void IdleApp::newNotification(notification_t n){
     while(xSemaphoreTake(m_notifDisplaySemaphore,30/portTICK_PERIOD_MS) != pdTRUE){
         ESP_LOGW(IDLE_M,"Couldn't take notification update semaphore after 30ms");
     }
+    ESP_LOGI(IDLE_M,"Fetched semaphore, can now update notification. Current m_displayTimerTask=%p",m_displayTimerTask);
     m_secondsDisplayedCount = 0;
     if(m_displayTimerTask==nullptr){
-        createTask(T_DISPLAY_COUNT,"DisplayUpdate Task",4096,APPLICATION_TASK_PRIORITY+1,&m_displayTimerTask,APP_CPU,static_cast<void*>(this));
+        createTask(T_DISPLAY_COUNT,"DisplayUpdate Task",4096,UOS_TASK_PRIORITY+1,&m_displayTimerTask,APP_CPU,static_cast<void*>(this));
         DEVICEMANAGER.getOneSecondTimer()->addTaskNotifiedOnAlarm(m_displayTimerTask);
     }
     else{
         eraseDisplayableTask();
     }
     std::string s = "Idle Notif";
-    m_displayables.push_back(std::make_shared<NotificationContainer>(s,std::move(n),true,(pixel_pair_t){NOTIF_OFFSET_X,NOTIF_OFFSET_Y},false,2,TASKMANAGER.getTaskHandle(T_UOS)));
+    auto disp = std::make_shared<NotificationContainer>(s,std::move(n),true,(pixel_pair_t){NOTIF_OFFSET_X,NOTIF_OFFSET_Y},false,2);
+    m_displayables.push_back(disp);
+    disp->update();
     xSemaphoreGive(m_notifDisplaySemaphore);
 }
 
 void IdleApp::T_DISPLAY_COUNT(void* pvParameters){
     auto app = static_cast<IdleApp*>(pvParameters);
     while(1){
-        if(ulTaskNotifyTake(pdTRUE,1500/portTICK_PERIOD_MS) == pdFALSE){
-            ESP_LOGE(IDLE_M,"Did not receive 1 second notification after 1.5 seconds...");
+        if(ulTaskNotifyTake(pdTRUE,2000/portTICK_PERIOD_MS) == pdFALSE){
+            ESP_LOGE(IDLE_M,"Did not receive 1 second notification after 2000 seconds...");
         }
         xSemaphoreTake(app->m_notifDisplaySemaphore,0);
 
         if(++app->m_secondsDisplayedCount >= MAX_SECONDS_TEMP_DISPLAY){
             app->eraseDisplayableTask();
+            app->m_secondsDisplayedCount = 0;
+            DEVICEMANAGER.getOneSecondTimer()->removeTaskNotifiedOnAlarm(app->m_displayTimerTask);
+            app->m_displayTimerTask = nullptr;
             xSemaphoreGive(app->m_notifDisplaySemaphore);
-            vTaskDelete(NULL); //delete self
+            vTaskDelete(NULL); //delete self == m_displayTimerTask
         }
         xSemaphoreGive(app->m_notifDisplaySemaphore);
     }

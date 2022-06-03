@@ -105,7 +105,7 @@ bool Timer<GROUP,ID>::addTaskNotifiedOnAlarm(TaskHandle_t handle){
         xSemaphoreGive(xSetSemaphore);
         if(wasEmpty){
             ESP_LOGI(TIMER_M,"and starting timer");
-            createTask(T_NotifyAlarmSubscribers,"Subscriber Updater",4098,TIMER_TASK_UPDATER_PRIORITY,&m_updaterTask,APP_CPU,this);
+            createTask(T_NotifyAlarmSubscribers,"Subscriber Updater",8192,TIMER_TASK_UPDATER_PRIORITY,&m_updaterTask,APP_CPU,this);
             timer_set_counter_value(GROUP, ID, RESTART_VALUE);
             timer_start(GROUP,ID);
         }

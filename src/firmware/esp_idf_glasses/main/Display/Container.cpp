@@ -1,4 +1,5 @@
 #include "Container.h"
+#include "utils.h"
 
 using namespace SmartGlasses;
 
@@ -27,6 +28,7 @@ void Container::updateAllChildren(){
     for(auto& displayable : m_displayables){
         displayable->update();
         if(ulTaskNotifyTake(pdTRUE,100/portTICK_PERIOD_MS) == pdFALSE){
+            IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
             ESP_LOGE(("Container"+m_contentName).c_str(),"Didn't get notified, still coninuing with next update");
         }
     }

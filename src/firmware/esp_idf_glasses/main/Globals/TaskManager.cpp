@@ -22,7 +22,7 @@ void TaskManager::initAllTasks(){
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)
     int error = createTask(T_HandleBLE,"BLEHandler",5240,BLE_TASK_PRIORITY, &allTasks[T_BLE], PRO_CPU); 
     vTaskDelay(5 / portTICK_PERIOD_MS);
-    error = createTask(T_HandleDisplay,"DisplayHandler",50960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
+    error = createTask(T_HandleDisplay,"DisplayHandler",54960,DISPLAY_TASK_PRIORITY,&allTasks[T_DISPLAY],APP_CPU);
     // error = createTask(T_HandleGNSS,"GNSSHandler",10240,1,allTasks[T_GNSS], APP_CPU);
     error = createTask(T_HandleUOS,"uOS",5240,UOS_TASK_PRIORITY,&allTasks[T_UOS],APP_CPU,&allTasks[T_BLE]);
     IFD(heap_caps_print_heap_info(MALLOC_CAP_8BIT);)

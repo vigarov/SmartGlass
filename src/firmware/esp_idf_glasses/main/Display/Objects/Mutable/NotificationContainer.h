@@ -10,10 +10,10 @@
 namespace SmartGlasses{
 
     class NotificationContainer : public Container{
-        #define NOTIF_LOGO_OFFSET_Y 5
-        #define NOTIF_TITLE_OFFSET_X 25
+        #define NOTIF_LOGO_OFFSET_Y 10
+        #define NOTIF_TITLE_OFFSET_X 22
         #define NOTIF_TITLE_OFFSET_Y 7
-        #define NOTIF_ADDINFO_OFFSET_X NOTIF_TITLE_OFFSET_X
+        #define NOTIF_ADDINFO_OFFSET_X ((NOTIF_TITLE_OFFSET_X)+5)
         #define NOTIF_ADDINFO_OFFSET_Y ((NOTIF_TITLE_OFFSET_Y)+10)
         #define NOTIFICATION_CONTAINER_ID 1
     public:

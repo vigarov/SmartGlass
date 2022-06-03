@@ -41,13 +41,19 @@ void SmartGlasses::resetTime(){
         ESP_LOGE("Utils Module", "Unable to convert date/time");
     }
     else {
-        time_t tt = mktime(&t);
-        struct timeval tv{tt,0};
-        if(tt==-1 || settimeofday(&tv,NULL) == -1){
-            ESP_LOGE("Utils Module", "Failed to set date/time");
-        }
+        updateTime(&t);
     }
     ESP_LOGI("Utils","Successfully set system time");
+}
+
+void SmartGlasses::updateTime(struct tm* t){
+    setenv("TZ","Europe/Zurich",1);
+    tzset();
+    time_t tt = mktime(t);
+    struct timeval tv{tt,0};
+    if(tt==-1 || settimeofday(&tv,NULL) == -1){
+        ESP_LOGE("Utils Module", "Failed to set date/time");
+    }
 }
 
 struct tm* SmartGlasses::getCurrentTime(){

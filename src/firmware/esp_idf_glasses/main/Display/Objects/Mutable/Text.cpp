@@ -21,6 +21,7 @@ void Text<CHAR_T,CHAR_WIDTH,NB_CHARS>::changeString(const std::string &newS){
         m_modifiedSinceLastUpdate = true;
         forceHide();
         m_s = newS;
+        m_contentName = m_s;
         update();
     }
 }

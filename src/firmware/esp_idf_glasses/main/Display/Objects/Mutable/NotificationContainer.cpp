@@ -16,7 +16,7 @@ NotificationContainer::NotificationContainer(const std::string& s,notification_t
 }
 
 std::shared_ptr<Logo> NotificationContainer::getNotificationLogo(app_t n, pixel_pair_t offsets){
-    switch(n){ //TODO: add system
+    switch(n){ 
         case SMS:
             return std::move(std::make_shared<Sms>(m_contentName+" SMS",true,offsets));
             

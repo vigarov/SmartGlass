@@ -6,6 +6,7 @@
 #include "DeviceManager.h"
 #include "GlobalsManager.h"
 #include "constants.h"
+#include "Navigation.h"
 
 
 using namespace SmartGlasses;
@@ -39,8 +40,15 @@ void uOS::handleEvent(){
             //Just disconnected :
             //Start advertising again 
             ESP_LOGI(UOS_M,"Bluetooth connection lost, starting advertising again");
+            CURRENTAPP->changeBLE(BLE_OFF);
             GLOBALSMANAGER.getBLEHandler()->startAdvertise();
             //TODO: only for a while: link to timer.
+            break;
+        }
+        case BT_CONNECT:
+        {
+            ESP_LOGI(UOS_M,"Bluetooth connection established");
+            CURRENTAPP->changeBLE(BLE_ON);
             break;
         }
         case BT_START_ADVERTISING:
@@ -61,9 +69,38 @@ void uOS::handleEvent(){
             memcpy(&notification,notifData.data(),copySize);
 
             ESP_LOGI(UOS_M,"The notification's values are type ordinal =%d, titleTerminated=%d,title=%s,additionalInfoTerminated = %d,addidionalInfo=%s",notification.application,(int)(notification.title.isTerminated),notification.title.text,(int)(notification.additionalInfo.isTerminated),notification.additionalInfo.text);
+            CURRENTAPP->newNotification(std::move(notification));
             notifCharac->setValue("-1");
             notifCharac->notify();
-            CURRENTAPP->newNotification(std::move(notification));
+            break;
+        }
+        case TIME_UPDATE:
+        {
+            auto timeCharac = static_cast<BLECharacteristic*>(eventBuffer.sender);
+            std::string timeData = timeCharac->getValue();
+            const size_t len = timeData.length();
+            ESP_LOGI(UOS_M,"Received time update, length=%d",len);
+            struct tm t{};
+            const size_t copySize = len > sizeof(struct tm) ? sizeof(struct tm) : len;
+            memcpy(&t,timeData.data(),copySize);
+            ESP_LOGI(UOS_M,"Fetched time: %d:%d",t.tm_hour,t.tm_min);
+            updateTime(&t);
+            break;
+        }
+        case NAVIGATION_UPDATE:
+        {
+            auto navCharac = static_cast<BLECharacteristic*>(eventBuffer.sender);
+            std::string navData = navCharac->getValue();
+            const size_t len = navData.length();
+            ESP_LOGI(UOS_M,"Received navigation update, length=%d",len);
+            navigation_t nav{};
+            const size_t copySize = len > sizeof(navigation_t) ? sizeof(navigation_t) : len;
+            memcpy(&nav,navData.data(),copySize);
+            ESP_LOGI(UOS_M,"Got new navigation instruction: start:%u,dir=%u,dist=%u,h=%u,m=%u",(unsigned int)nav.STARTstop,(unsigned int)nav.direction,(unsigned int)nav.distance,(unsigned int)nav.hour,(unsigned int)nav.min);
+            //TODO: do something with notification
+            
+            navCharac->setValue("-1");
+            navCharac->notify();
             break;
         }
         default:

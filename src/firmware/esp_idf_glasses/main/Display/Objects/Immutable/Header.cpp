@@ -59,6 +59,7 @@ void Header::updateBLEBlink(bool STARTstop){
         if(m_bleBlinking){
             DEVICEMANAGER.getOneSecondTimer()->removeTaskNotifiedOnAlarm(m_blinkTask);
             m_bleBlinking = false;
+            m_displayables[m_displayables.size()-1]->update();
         }
     }
 }

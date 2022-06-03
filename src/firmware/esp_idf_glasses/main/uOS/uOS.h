@@ -19,6 +19,8 @@ namespace SmartGlasses{
         BT_CONNECT,
         NOTIFICATION_NEW,
         BUTTON_PRESSED,
+        TIME_UPDATE,
+        NAVIGATION_UPDATE,
         NB_EVENTS
     };
 

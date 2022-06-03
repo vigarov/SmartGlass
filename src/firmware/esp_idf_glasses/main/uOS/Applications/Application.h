@@ -17,11 +17,11 @@ namespace SmartGlasses{
     };
 
     
-    typedef unsigned char ble_status_t;
-    
-    #define BLE_OFF (ble_status_t)0
-    #define BLE_ADVERTISING (ble_status_t)1
-    #define BLE_ON (ble_status_t)1<<1
+    enum ble_status_t{
+        BLE_OFF,
+        BLE_ADVERTISING,
+        BLE_ON
+    };
 
 
     class uOS;//Forward declaration
@@ -53,6 +53,7 @@ namespace SmartGlasses{
         virtual void run() = 0;
 
         virtual void changeBLE(ble_status_t newStatus){}
+        virtual void getNavigation(navigation_t newNavigation){}
 
         virtual void newNotification(notification_t n) = 0;
     protected:

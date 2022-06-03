@@ -61,6 +61,8 @@ namespace SmartGlasses{
      */
     void resetTime();
 
+    void updateTime(struct tm* t);
+
     struct tm* getCurrentTime();
 
     /**
@@ -85,5 +87,4 @@ namespace SmartGlasses{
 
         return out;
     }
-
 };

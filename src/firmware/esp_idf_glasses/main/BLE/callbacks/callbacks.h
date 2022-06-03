@@ -41,4 +41,26 @@ namespace SmartGlasses{
             ESP_LOGI(NOTIFICATIONCB_M,"Notification callback: either notified or got notified");
         }
     };
+
+    class TimeCB : public BLECharacteristicCallbacks {
+        void onWrite(BLECharacteristic *pCharacteristic) override {
+            ESP_LOGI(NOTIFICATIONCB_M,"Got time update, sending to uOS");
+            QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
+            uOSEvent e = {.id=TIME_UPDATE,.sender=static_cast<void*>(pCharacteristic)};
+            if(xQueueSendToBack(q,(void *)&e,10/portTICK_PERIOD_MS) !=pdTRUE){
+                ESP_LOGE("BLE Time CB","New time update but couldn't push to queue: it is full");
+            }
+        }
+    };
+
+    class NavigationCB : public BLECharacteristicCallbacks{
+        void onWrite(BLECharacteristic *pCharacteristic) override {
+            ESP_LOGI(NOTIFICATIONCB_M,"Got navigation update, sending to uOS");
+            QueueHandle_t q = GLOBALSMANAGER.getUOS()->getQueueHandle();
+            uOSEvent e = {.id=NAVIGATION_UPDATE,.sender=static_cast<void*>(pCharacteristic)};
+            if(xQueueSendToBack(q,(void *)&e,10/portTICK_PERIOD_MS) !=pdTRUE){
+                ESP_LOGE("BLE Nav CB","New navigation but couldn't push to queue: it is full");
+            }
+        }
+    };
 };

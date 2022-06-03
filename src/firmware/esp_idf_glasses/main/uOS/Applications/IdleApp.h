@@ -10,8 +10,8 @@ namespace SmartGlasses{
         #define HEADER_POS 0
         #define MAX_SECONDS_TEMP_DISPLAY 5
 
-        #define NOTIF_OFFSET_X 16
-        #define NOTIF_OFFSET_Y 22
+        #define NOTIF_OFFSET_X 12
+        #define NOTIF_OFFSET_Y 20
     public:
         IdleApp(std::shared_ptr<uOS> uOS_p);
         void changeBLE(ble_status_t newStatus) override;

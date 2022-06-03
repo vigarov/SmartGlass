@@ -16,6 +16,8 @@ namespace SmartGlasses{
 
     #define NOTIF_SERVICE_UUID "1e7b14e7-f5d9-4113-b249-d16b6ae7db7f"
     #define NOTIF_BUFFER_ATTR_UUID "8d5b53b8-fe04-4509-a689-82ab4c3d2507"
+    #define TIME_ATTR_UUID "4d8aea79-7207-4f92-a629-60e0fdb2f242"
+    #define NAVIGATION_ATTR_UUID "df1fbdbe-c41b-45fb-9c99-cb5ba89cfac1"
 
     #define BATTERY_SERVICE_UUID 0x180F
     #define BATTERY_CHAR_UUID 0x2A19
@@ -74,6 +76,18 @@ namespace SmartGlasses{
     |    |  | UUID: 8d5b53b8-fe04-4509-a689-82ab4c3d2507                        | | |
     |    |  | Properites: WRITE,NOTIFY                                          | | |
     |    |  | Value Type: notification_t (size = 64 bytes)                      | | |
+    |    |  +-------------------------------------------------------------------+ | |
+    |    |  +-------------------------------------------------------------------+ | |
+    |    |  | Attribute 2: Time Buffer                                          | | |
+    |    |  | UUID: 4d8aea79-7207-4f92-a629-60e0fdb2f242                        | | |
+    |    |  | Properites: WRITE                                                 | | |
+    |    |  | Value Type: struct_tm (size = 36 bytes)                           | | |
+    |    |  +-------------------------------------------------------------------+ | |
+    |    |  +-------------------------------------------------------------------+ | |
+    |    |  | Attribute 2: Time Buffer                                          | | |
+    |    |  | UUID: df1fbdbe-c41b-45fb-9c99-cb5ba89cfac1                        | | |
+    |    |  | Properites: WRITE                                                 | | |
+    |    |  | Value Type: navigation_t (size = 8 bytes)                         | | |
     |    |  +-------------------------------------------------------------------+ | |
     |    |                                                                        | |
     |    +------------------------------------------------------------------------+ |

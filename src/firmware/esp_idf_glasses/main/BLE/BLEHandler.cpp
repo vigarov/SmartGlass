@@ -64,6 +64,12 @@ void BLEHandler::addCharacteristics(services_t servID, BLEService* service){
                 auto* characteristic = service->createCharacteristic(NOTIF_BUFFER_ATTR_UUID,BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
                 INLINE_CHECK_FOR_ERROR(characteristic,NOTIF_BUFFER_ATTR_UUID)
                 characteristic->setCallbacks(new NotificationBufferCB());
+                characteristic = service->createCharacteristic(TIME_ATTR_UUID,BLECharacteristic::PROPERTY_WRITE);
+                INLINE_CHECK_FOR_ERROR(characteristic,TIME_ATTR_UUID)
+                characteristic->setCallbacks(new TimeCB());
+                characteristic = service->createCharacteristic(NAVIGATION_ATTR_UUID,BLECharacteristic::PROPERTY_WRITE | BLECharacteristic::PROPERTY_NOTIFY);
+                INLINE_CHECK_FOR_ERROR(characteristic,NAVIGATION_ATTR_UUID)
+                characteristic->setCallbacks(new NavigationCB());
                 break;
             }
         case GNSS_SERVICE:
