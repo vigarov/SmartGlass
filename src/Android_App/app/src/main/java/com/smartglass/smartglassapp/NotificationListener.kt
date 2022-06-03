@@ -31,7 +31,7 @@ class NotificationListener: NotificationListenerService() {
                         val strTokSub: StringTokenizer = StringTokenizer(
                             sbn.notification.extras.get("android.subText").toString(), "·"
                         )
-                        val timeLeft = strTokSub.nextToken()
+                        val timeLeft = strTokSub.nextToken().substring(0,1)
                         val strTokTitle: StringTokenizer = StringTokenizer(
                             sbn.notification.extras.get("android.title").toString(),
                             " "
@@ -39,24 +39,24 @@ class NotificationListener: NotificationListenerService() {
                         val direction: String
                         val dashIndex = sbn.notification.extras.get("android.title").toString().indexOf('-')
                         if(dashIndex >= 0){
-                            direction = sbn.notification.extras.get("android.title").toString().substring(dashIndex+1)
+                            direction = sbn.notification.extras.get("android.title").toString().substring(dashIndex+7)
                         } else {
                             direction = sbn.notification.extras.get("android.title").toString().substring(5)
                         }
 
 
-                        val distance = strTokSub.nextToken()
-                        val eta = strTokSub.nextToken()
+                        val distance = strTokSub.nextToken().substring(1).trim()
+                        val eta = strTokSub.nextToken().substring(1)
 
 
                         var directionByte: Byte = 10
 
-                        if (direction == "left") {
+                        if (direction.equals("left")) {
                             directionByte = DIRECTION.LEFT.ordinal.toByte()
-                        } else if (direction == "right") {
+                        } else if (direction.equals("right")) {
                             directionByte = DIRECTION.RIGHT.ordinal.toByte()
                         } else {
-                            if(direction == "North" || direction == "East" || direction == "West" || direction == "South"){
+                            if(direction.equals("north") || direction.equals("east") || direction.equals("west") || direction.equals("south")){
                                 directionByte = DIRECTION.FORWARD.ordinal.toByte()
                             } else{ // Handling case where it says none of pre-determined directions and only says address
 
@@ -68,8 +68,9 @@ class NotificationListener: NotificationListenerService() {
 
                         val tokenizeDistance = StringTokenizer(distance, " ")
                         var distanceInt: UInt
-                        val dist: String = tokenizeDistance.nextToken()
-                        val unit: String = tokenizeDistance.nextToken()
+                        val space = distance.indexOf(" ")
+                        val dist: String = distance.substring(0, space+1).trim()
+                        val unit: String = distance.substring(space+1)
 
                         if (unit == "km") {
                             distanceInt = (dist.toDouble() * 1000).toUInt()
@@ -77,11 +78,11 @@ class NotificationListener: NotificationListenerService() {
                             distanceInt = dist.toUInt()
                         }
 
-                        val etaTokenizer = StringTokenizer(eta, ":")
-                        val hour: Byte = etaTokenizer.nextToken().toByte()
-                        val minute: Byte = etaTokenizer.nextToken().toByte()
+                        val colonIndex = eta.indexOf(':')
+                        val hour: Byte = eta.substring(0, colonIndex).toByte()
+                        val minute: Byte = eta.substring(colonIndex+1, colonIndex+3).toByte()
 
-                        if(hour == 0.toByte() && minute == 0.toByte()){
+                        if(timeLeft.toInt() == 0){
                             BluetoothActivity.mapQueue.add(
                                 byteArrayOf(
                                     0.toByte(),
