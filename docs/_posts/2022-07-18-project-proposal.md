@@ -2,14 +2,10 @@
 permalink: /project-proposal/
 title: "Project Proposal"
 toc: true
+toc_sticky: true
 ---
 
-# Project proposal : Smart Glasses
-
-_Group Members_: Paolo Celati, David Chernis, Victor Garvalov, Shrey Mittal, Tim Vaughan-Whitehead
-
-
-## I. Description
+# I. Description
 
 The main idea of this project is to make smart glasses. To keep things simple, only one of the eyes will have a screen/act as a graphic interface for the user. What would’ve been the glasses’ frames will be expanded to fit in electronics and batteries. A general sketch of the desired outcome would be the following: 
 
@@ -113,7 +109,7 @@ Hardware components (more on that later) :
 * Battery
 
 
-## II. Related Projects
+# II. Related Projects
 
 There are several DIY-related projects, such as:
 
@@ -138,7 +134,7 @@ and much more on your favourite search engine!
 However, as one can see, most do not implement the idea of using a (semi-)transparent OLED screen, but rather use a projected image/text. More on that later.
 
 
-## III. Risk and Challenges
+# III. Risk and Challenges
 
 Most of the challenges we will face with this project will be hardware-based. Indeed, when looking at the project outline, several things come to mind.
 
@@ -185,7 +181,7 @@ As custom PCBs will almost certainly be necessary to get a compact device, this 
 Finally, as you can see, we’ve decided to build an Android app to interface with the glasses. This might be subject to additional difficulties since Android App development is known to not always be a piece of cake. In the case where it becomes too complicated, we can try building on already done work (such as sensor integrations), and making it interface with pre-existing applications such as Automate.
 
 
-## IV. Components needed
+# IV. Components needed
 
 All in stock as of 28/03/2022
 
@@ -261,7 +257,7 @@ Only with custom PCB (all parts to communicate with from software are the non-br
 * Battery charge IC: [MCP73831](https://www.digikey.ch/en/products/detail/microchip-technology/MCP73831T-2ACI-OT/964301) for 1S LiPo
 
 
-## V. Software Requirements
+# V. Software Requirements
 
 In order to implement our smart glasses prototype, we will also need to create a lot of software that will utilise the hardware components already present on the glasses to give the user the features that we have discussed above. In order to communicate with the user’s smartphone and to provide the user with a decent UI to interact with the glasses, we will be developing a small android app. Some of the things this android app will do include:
 
@@ -279,7 +275,7 @@ On the onboard processor, we won’t have dedicated applications, but we will st
 * Data from the IMU will be treated onboard the glasses, hence seeing if the user is in an “emergency situation” will be done onboard the glasses themselves. 
 
 
-## VI. Tasks Breakdown
+# VI. Tasks Breakdown
 
 Mini tasks (hardware+firmware).  Parts prefixed with F are firmware, with A are Android, with H are hardware, with HP are hardware but only applicable if making custom PCBs, and O other.  These can be either omitted or delayed without too many problems.  Unlike what seems to have been initially misunderstood, 1x does not mean Paolo.  It just means “1 person needs to do this”.
 
@@ -367,7 +363,7 @@ If we have time to optionally implement custom PCBs, the tasks will be done in t
     1.  Try transitioning from breadboard version, have several weeks of “buffer” to be able to rollback if anything goes wrong
 
 
-#### Milestones
+## Milestones
 
 
 <table>
