@@ -1,0 +1,25 @@
+main:
+  - title: "Quick Start"
+    url: /quick-start/
+  - title: "Project Proposal"
+    url: /project-proposal/
+  - title: "Hardware"
+    url: /dive-down/hardware/ #to get the "/dive-down/" part created, one must add "category: dive-down" in the Front Matter of the relevant post
+  - title: "Firmware"
+    url: /dive-down/firmware/
+  - title: "Software (Android)"
+    url: /dive-down/software/
+
+nav:
+  - title: "Quick Start"
+    url: /quick-start/
+  - title: "Project Proposal"
+    url: /project-proposal/
+  - title: "Dive-downs"
+    children:
+      - title: "Hardware"
+        url: /dive-down/hardware/ #to get the "/dive-down/" part created, one must add "category: dive-down" in the Front Matter of the relevant post
+      - title: "Firmware"
+        url: /dive-down/firmware/
+      - title: "Software (Android)"
+        url: /dive-down/software/
