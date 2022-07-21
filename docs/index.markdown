@@ -1,13 +1,59 @@
 --- 
 author_profile: false
-title: "Smart Glasses"
 layout: single
 classes: wide2
 permarlink: /index/
 ---
 
-
-<img src="image/SmartGlasses.jpg" alt="The final version of the Smart Glasses, physically built">
+<div id="glasses_images_container">
+    <div class="column">
+        <!-- The HTML for the animations is from Copyright (c) 2022 by Shaw (https://codepen.io/shshaw/pen/LBZyyM) -->
+        <div class="glasses" style="background-image: url('{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png'); --row-total: 5;">
+            <img alt="The final version of the Smart Glasses, physically built, angle 1" src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png">
+            <div class="glasses__popup">
+                <img src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png" />
+                <div class="glasses__row" style="--row-index: 0; --random: 0.23">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 1; --random: 0.72">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 2; --random: 0.11">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 3; --random: 0.50">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 4; --random: 0.39;">
+                    <div class="glasses__row-inner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="column">
+        <div class="glasses" style="background-image: url('{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_1.png'); --row-total: 5;">
+            <img alt="The final version of the Smart Glasses, physically built, angle 2" src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_1.png">
+            <div class="glasses__popup">
+                <img src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_1.png" />
+                <div class="glasses__row" style="--row-index: 0; --random: 0.23">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 1; --random: 0.72">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 2; --random: 0.11">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 3; --random: 0.50">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 4; --random: 0.39;">
+                    <div class="glasses__row-inner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 Smart Glasses are, as their name suggests, a pair of glasses built to keep you more easily in touch with your surroundings.
 
