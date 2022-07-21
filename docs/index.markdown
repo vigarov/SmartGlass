@@ -11,11 +11,8 @@ permarlink: /index/
         <div class="glasses" style="background-image: url('{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png'); --row-total: 5;">
             <img alt="The final version of the Smart Glasses, physically built, angle 1" src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png">
             <div class="glasses__popup">
-                <img src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png" />
-                <div class="glasses__row" style="--row-index: 0; --random: 0.23">
-                    <div class="glasses__row-inner"></div>
-                </div>
-                <div class="glasses__row" style="--row-index: 1; --random: 0.72">
+                <img src="{{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_2.png" /><div class="glasses__row" style="--row-index: 0; --random: 0.23"><div class="glasses__row-inner"></div>
+                </div><div class="glasses__row" style="--row-index: 1; --random: 0.72">
                     <div class="glasses__row-inner"></div>
                 </div>
                 <div class="glasses__row" style="--row-index: 2; --random: 0.11">

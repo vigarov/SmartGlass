@@ -62,6 +62,7 @@
     }
 }
 
+
 /* Glasses animations Copyright (c) 2022 by Shaw (https://codepen.io/shshaw/pen/LBZyyM)*/
 
 img { max-width: 100%; }
@@ -69,7 +70,8 @@ img { max-width: 100%; }
 .glasses {
   max-width: 450px;
   margin: auto;
-  visibility: hidden; // position: relative;
+  //visibility: hidden; 
+  //position: relative;
   cursor: pointer;
 
   background-size: contain;
@@ -130,7 +132,7 @@ img { max-width: 100%; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  border: solid 1px red;
+  //border: solid 1px red;
   pointer-events: none;
   background: inherit;
   visibility: visible;
@@ -249,4 +251,12 @@ img { max-width: 100%; }
   content: "";
   clear: both;
   display: table;
+}
+
+.masthead{
+  border: 0;
+}
+
+.greedy-nav{
+  background-color : inherit;
 }
