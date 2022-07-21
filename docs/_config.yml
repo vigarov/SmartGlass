@@ -38,7 +38,7 @@ atom_feed:
 search                   :  true #, false (default)
 search_full_content      :  true #, false (default)
 lunr:
-  search_within_pages    :  true #, false (default)
+  search_within_pages    :   false #true, false (default) //set to true -> searches in assets as well -> finds output in some js files
 # SEO Related
 google_site_verification :
 bing_site_verification   :

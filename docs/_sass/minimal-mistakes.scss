@@ -112,13 +112,12 @@ img { max-width: 100%; }
 
 .glasses:hover {
   z-index: 999;
-
+  
   >img {
     opacity: 1;
     transform: scale(1.2);
   }
 }
-
 
 /* ---------------------------------- */
 
@@ -144,7 +143,7 @@ img { max-width: 100%; }
     height: auto;
     max-height: 100%;
     max-width: 100%;
-    outline: solid 1px blue;
+    //outline: solid 1px blue;
   }
 
 }
@@ -251,12 +250,4 @@ img { max-width: 100%; }
   content: "";
   clear: both;
   display: table;
-}
-
-.masthead{
-  border: 0;
-}
-
-.greedy-nav{
-  background-color : inherit;
 }

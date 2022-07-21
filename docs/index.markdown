@@ -67,3 +67,17 @@ As such, a quick start guide can be found under [Quick Start]({% post_url 2022-0
 While reading those, you might notice several features have been cut off - this is mainly due to lack of time and the need for a stable build by the end of the course. If you intend to build this project, and would like to add even more features, take a look at our [Project Proposal]({% post_url 2022-07-18-project-proposal %}) which we used to present the project before it was accepted by the course's teaching team. It contains several ideas that we didn't have time to implement, such as custom PCB, or additional localization features.
 
 On that note, I wish you a nice read-through!
+
+<script>
+    let glass_images = document.getElementsByClassName("glasses");
+    let masthead = document.getElementsByClassName("masthead")[0];
+    let m_text = document.getElementById("site-nav");
+    var previous_bo = masthead.style.border;
+    var previous_ba = m_text.style.background;
+    for(let i=0; i< glass_images.length;i++){
+        glass_images[i].addEventListener('mouseover',function(){masthead.style.border = "0";
+                                                                m_text.style.background = "inherit"});
+        glass_images[i].addEventListener('mouseout',function(){masthead.style.border = previous_b;
+                                                                m_text.style.background = previous_ba;});
+    }
+</script>
