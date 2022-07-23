@@ -1,0 +1,24 @@
+- name: Paolo Celati
+  role: Responsible for hardware
+  pic: false
+  socials:
+- name: Tim Vaughan-Whitehead
+  role: Responsible for 3D design
+  pic: true
+  socials:
+- name: Victor Garvalov
+  role: Firmware development
+  pic: true
+  socials:
+    - type: github
+      data: vigarov
+    - type: mail
+      data: victor.garvalov@epfl.ch
+- name: David Chernis
+  role: Android development
+  pic: true
+  socials:
+- name: Shrey Mittal
+  role: Android development
+  pic: true
+  socials:
