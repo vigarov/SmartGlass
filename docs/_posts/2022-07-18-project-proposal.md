@@ -192,11 +192,11 @@ All in stock as of 28/03/2022
     Among the ESP32 line, these (and the WROOM) seem to be the ones with best expansion options and they’re active parts.
 
 
-    Dev board (10.9 CHF): [https://www.digikey.ch/en/products/detail/espressif-systems/ESP32-DEVKITC-VE/12091812](https://www.digikey.ch/en/products/detail/espressif-systems/ESP32-DEVKITC-VE/12091812)
+    Dev board (10.9 CHF): [Digikey](https://www.digikey.ch/en/products/detail/espressif-systems/ESP32-DEVKITC-VE/12091812)
 
 * Transparent OLED display (only Sparkfun’s breakout board seems to be practical, and monochrome).  The model seems quite new, so it might be complicated to buy.
 
-    Sparkfun display (40 CHF): [https://www.digikey.ch/en/products/detail/sparkfun-electronics/LCD-15173/9962476](https://www.digikey.ch/en/products/detail/sparkfun-electronics/LCD-15173/9962476)
+    Sparkfun display (40 CHF): [Digikey](https://www.digikey.ch/en/products/detail/sparkfun-electronics/LCD-15173/9962476)
 
 
     And seems equivalent to the one found [here](https://www.crystalfontz.com/product/cfal12856a00151b-128x56-transparent-oled-screen), [here](https://lcdstore.de/128x56-transparent-OLED-Display-CFAL12856A0-0151-B), or [here](https://www.digikey.com/en/products/detail/crystalfontz/CFAL12856A0-0151-B-E1-2/13982920) (US digikey only though).
@@ -208,7 +208,7 @@ All in stock as of 28/03/2022
     OLED display: 
 
 
-    Parallax module (33.4): [https://www.digikey.ch/en/products/detail/parallax-inc/28087/6561022](https://www.digikey.ch/en/products/detail/parallax-inc/28087/6561022)
+    Parallax module (33.4): [Digikey](https://www.digikey.ch/en/products/detail/parallax-inc/28087/6561022)
 
 
     The display can be interfaced with SPI and Adafruit also has a version [here](https://www.adafruit.com/product/684), with associated library.
@@ -220,7 +220,7 @@ All in stock as of 28/03/2022
 
 * Wanting both an accelerometer and gyro, an IMU would be a good choice.  A [BMI160](https://www.digikey.ch/en/products/detail/bosch-sensortec/BMI160/6136300) integrates both for instance.
 
-    DFrobot breakout (9.8 CHF): [https://www.digikey.ch/en/products/detail/dfrobot/SEN0250/9356335](https://www.digikey.ch/en/products/detail/dfrobot/SEN0250/9356335)
+    DFrobot breakout (9.8 CHF): [Digikey](https://www.digikey.ch/en/products/detail/dfrobot/SEN0250/9356335)
 
 * Battery: probably single 0.5-1 Ah LiPo, needs to be bought in CH.  Maybe even 2 of [these](https://www.conrad.ch/de/p/emmerich-14500-spezial-akku-14500-flat-top-li-ion-3-7-v-800-mah-1362894.html) if bulk is ok, buying 2 for breakout and 2 for PCB version 48 CHF
 * GNSS Module
@@ -228,11 +228,11 @@ All in stock as of 28/03/2022
     PA1616
 
 
-    Adafruit breakout board (29.7 CHF): [https://www.digikey.ch/en/products/detail/adafruit-industries-llc/746/5353613](https://www.digikey.ch/en/products/detail/adafruit-industries-llc/746/5353613)
+    Adafruit breakout board (29.7 CHF): [Digikey](https://www.digikey.ch/en/products/detail/adafruit-industries-llc/746/5353613)
 
 * Buck-boost converter to get stable 3.3V from the cell: 
 
-    Breakout module: [https://www.digikey.ch/en/products/detail/dfrobot/DFR0568/9559258](https://www.digikey.ch/en/products/detail/dfrobot/DFR0568/9559258)
+    Breakout module: [Digikey](https://www.digikey.ch/en/products/detail/dfrobot/DFR0568/9559258)
 
 * Paolo has a bunch of TP4056 boards we can use for charging a 1S LiPo during development time, and we can order some more meanwhile
 
@@ -246,14 +246,14 @@ Only with custom PCB (all parts to communicate with from software are the non-br
     Cost should be reasonable as long as we stay &lt;=4 layer.  Looking at Aisler, 3x ~53 cm<sup>2</sup> 4 layer boards including stencils (microcontroller boards for Xplore) are about €60 from Aisler. Best case using 2 layer : 40$
 
 * Other basic ICs, connectors and discretes will be sorted out during schematics design because there are undoubtedly small parts we can’t foresee before.
-* Only applicable if we make custom PCBs: Module (3.86 CHF): [https://www.digikey.ch/en/products/detail/espressif-systems/ESP32-WROVER-E-N16R8/11613135](https://www.digikey.ch/en/products/detail/espressif-systems/ESP32-WROVER-E-N16R8/11613135)
-* Only applicable if we make custom PCBs: Bare opaque display (21.2 CHF): [https://www.digikey.ch/en/products/detail/newhaven-display-intl/NHD-0-95-9664G/9842781](https://www.digikey.ch/en/products/detail/newhaven-display-intl/NHD-0-95-9664G/9842781)
+* Only applicable if we make custom PCBs: Module (3.86 CHF): [Digikey](https://www.digikey.ch/en/products/detail/espressif-systems/ESP32-WROVER-E-N16R8/11613135)
+* Only applicable if we make custom PCBs: Bare opaque display (21.2 CHF): [Digikey](https://www.digikey.ch/en/products/detail/newhaven-display-intl/NHD-0-95-9664G/9842781)
 
     The main difficulty with this is unlike the previous idea the bare panel has a pin pitch of 0.7 mm, for which FPC connectors seem to not exist.  We need to see if ACI has a hot bar machine, or otherwise we need to solder that by hand.
 
-* BMI160 Chip (6.3 CHF): [https://www.digikey.ch/en/products/detail/bosch-sensortec/BMI160/6136300](https://www.digikey.ch/en/products/detail/bosch-sensortec/BMI160/6136300)
-* Buck-boost converter IC for stable 3.3V [https://www.digikey.ch/en/products/detail/renesas-electronics-america-inc/ISL91107IRTNZ-T7A/6097373](https://www.digikey.ch/en/products/detail/renesas-electronics-america-inc/ISL91107IRTNZ-T7A/6097373)
-* GNSS Module (19.8 CHF): [https://www.digikey.ch/en/products/detail/adafruit-industries-llc/5186/15204092?s=N4IgTCBcDaIAoEECMA2VIC6BfIA](https://www.digikey.ch/en/products/detail/adafruit-industries-llc/5186/15204092?s=N4IgTCBcDaIAoEECMA2VIC6BfIA)
+* BMI160 Chip (6.3 CHF): [Digikey](https://www.digikey.ch/en/products/detail/bosch-sensortec/BMI160/6136300)
+* Buck-boost converter IC for stable 3.3V [Digikey](https://www.digikey.ch/en/products/detail/renesas-electronics-america-inc/ISL91107IRTNZ-T7A/6097373)
+* GNSS Module (19.8 CHF): [Digikey](https://www.digikey.ch/en/products/detail/adafruit-industries-llc/5186/15204092?s=N4IgTCBcDaIAoEECMA2VIC6BfIA)
 * Battery charge IC: [MCP73831](https://www.digikey.ch/en/products/detail/microchip-technology/MCP73831T-2ACI-OT/964301) for 1S LiPo
 
 
@@ -263,9 +263,9 @@ In order to implement our smart glasses prototype, we will also need to create a
 
 
 
-* We will configure a notification listener on the android app (using this library: [https://github.com/lamydev/Android-Notification](https://github.com/lamydev/Android-Notification)) in order to detect notifications. If the listener is triggered, the data will be transferred to the smart glasses for them to display the information to the user
-* We can use this library: [https://developers.google.com/maps/documentation/directions/get-directions](https://developers.google.com/maps/documentation/directions/get-directions) in order to get directions (such as left, right, etc) to show on the glasses screen via google maps. Again, we can make listeners so that if a direction change is required and is triggered by this library, we display it on the glasses screen and it allows for easy navigation for the user
-* For the find-my-glasses feature: we can use the android directives for bluetooth (link: [https://developer.android.com/guide/topics/connectivity/bluetooth](https://developer.android.com/guide/topics/connectivity/bluetooth)) along with the help of an existing library (link: [https://altbeacon.github.io/android-beacon-library/distance-calculations.html](https://altbeacon.github.io/android-beacon-library/distance-calculations.html)), helping us know the distance between our android device and the glasses, which can be extremely helpful if one of them gets lost
+* We will configure a notification listener on the android app (using [this library](https://github.com/lamydev/Android-Notification)) in order to detect notifications. If the listener is triggered, the data will be transferred to the smart glasses for them to display the information to the user
+* We can use [this library](https://developers.google.com/maps/documentation/directions/get-directions) in order to get directions (such as left, right, etc) to show on the glasses screen via google maps. Again, we can make listeners so that if a direction change is required and is triggered by this library, we display it on the glasses screen and it allows for easy navigation for the user
+* For the find-my-glasses feature: we can use the [android directives for bluetooth](https://developer.android.com/guide/topics/connectivity/bluetooth)) along with the help of an [existing library](https://altbeacon.github.io/android-beacon-library/distance-calculations.html)), helping us know the distance between our android device and the glasses, which can be extremely helpful if one of them gets lost
 
 On the onboard processor, we won’t have dedicated applications, but we will still perform the following computations:
 
@@ -434,25 +434,25 @@ References to useful documentation:
 
 
 
-* General details on ESP32 architecture (for firmware development): [https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf](https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf)
+* General details on [ESP32 architecture](https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf) (for firmware development)
 * Bluetooth:
-    * [https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/](https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/)
-    * [https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/](https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/)
-    * [https://randomnerdtutorials.com/esp32-ble-server-client/](https://randomnerdtutorials.com/esp32-ble-server-client/)
-    * Getting BLE signal strength from ESP32: [https://github.com/nkolban/esp32-snippets/issues/236#issuecomment-378937725](https://github.com/nkolban/esp32-snippets/issues/236#issuecomment-378937725)
+    * [Basic BLE tutorial](https://randomnerdtutorials.com/esp32-bluetooth-low-energy-ble-arduino-ide/)
+    * vs [Classic BLE](https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/)
+    * [BLE server-client setup](https://randomnerdtutorials.com/esp32-ble-server-client/)
+    * [Getting BLE signal strength from ESP32](https://github.com/nkolban/esp32-snippets/issues/236#issuecomment-378937725)
 * Power management:
-    * [https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/)
+    * [Deep sleep](https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/)
 * IMU:
-    * Datasheet: [https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf)
-    * DFrobot library: [https://github.com/DFRobot/DFRobot_BMI160](https://github.com/DFRobot/DFRobot_BMI160)
+    * [Datasheet](https://www.bosch-sensortec.com/media/boschsensortec/downloads/datasheets/bst-bmi160-ds000.pdf)
+    * [DFrobot library](https://github.com/DFRobot/DFRobot_BMI160)
 * Sending alerts from the ESP32 directly, to complement Android application’s
-    * [https://randomnerdtutorials.com/esp32-send-email-smtp-server-arduino-ide/](https://randomnerdtutorials.com/esp32-send-email-smtp-server-arduino-ide/)
+    * [SMTP server tutorial](https://randomnerdtutorials.com/esp32-send-email-smtp-server-arduino-ide/)
 * OLED display:
-    * [https://randomnerdtutorials.com/esp32-ssd1306-oled-display-arduino-ide/](https://randomnerdtutorials.com/esp32-ssd1306-oled-display-arduino-ide/)
-    * [https://randomnerdtutorials.com/esp32-esp8266-dht-temperature-and-humidity-oled-display/](https://randomnerdtutorials.com/esp32-esp8266-dht-temperature-and-humidity-oled-display/)
+    * [Using the SSD1306 with an ESP32](https://randomnerdtutorials.com/esp32-ssd1306-oled-display-arduino-ide/)
+    * [Small project with OLED display, showing temoperetature and humidity](https://randomnerdtutorials.com/esp32-esp8266-dht-temperature-and-humidity-oled-display/)
 * PCB for ESP32-WROVER-E module:
-    * Reference design of dev boards: [https://www.espressif.com/sites/default/files/documentation/esp32-devkitc-v4_reference_design.zip](https://www.espressif.com/sites/default/files/documentation/esp32-devkitc-v4_reference_design.zip)
-    * Module’s datasheet: [https://www.espressif.com/sites/default/files/documentation/esp32-wrover-e_esp32-wrover-ie_datasheet_en.pdf](https://www.espressif.com/sites/default/files/documentation/esp32-wrover-e_esp32-wrover-ie_datasheet_en.pdf)
-    * Family datasheet: [https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)
-* Common ESP32 Pinout: [https://randomnerdtutorials.com/esp32-pinout-reference-gpios/](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)
-* Unlikely to be necessary, but if we need it i2c multiplexing is straightforward: [https://randomnerdtutorials.com/tca9548a-i2c-multiplexer-esp32-esp8266-arduino/](https://randomnerdtutorials.com/tca9548a-i2c-multiplexer-esp32-esp8266-arduino/)
+    * [Reference design of dev boards](https://www.espressif.com/sites/default/files/documentation/esp32-devkitc-v4_reference_design.zip)
+    * [Module’s datasheet](https://www.espressif.com/sites/default/files/documentation/esp32-wrover-e_esp32-wrover-ie_datasheet_en.pdf)
+    * [Family datasheet](https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf)
+* [Common ESP32 Pinout](https://randomnerdtutorials.com/esp32-pinout-reference-gpios/)
+* Unlikely to be necessary, but if we need it i2c multiplexing is [straightforward](https://randomnerdtutorials.com/tca9548a-i2c-multiplexer-esp32-esp8266-arduino/)

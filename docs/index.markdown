@@ -11,28 +11,28 @@ title: " "
 
 <div id="glasses_images_container">
     {%- for i in (1..2) -%}
-        {%- capture pic_link -%} {{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_{{i}}.png {%- endcapture -%}
-        <div class="column elements_no_2">
-            <!-- The HTML for the animations is adapted from Copyright (c) 2022 by Shaw (https://codepen.io/shshaw/pen/LBZyyM) -->
-            <div class="glasses" style="background-image: url('{{pic_link}}'); --row-total: 5;">
-                <img alt="The final version of the Smart Glasses, physically built, angle {{i}}" src="{{pic_link}}">
-                <div class="glasses__popup">
-                    <img src="{{pic_link}}" /><div class="glasses__row" style="--row-index: 0; --random: 0.23"><div class="glasses__row-inner"></div>
-                    </div><div class="glasses__row" style="--row-index: 1; --random: 0.72">
-                        <div class="glasses__row-inner"></div>
-                    </div>
-                    <div class="glasses__row" style="--row-index: 2; --random: 0.11">
-                        <div class="glasses__row-inner"></div>
-                    </div>
-                    <div class="glasses__row" style="--row-index: 3; --random: 0.50">
-                        <div class="glasses__row-inner"></div>
-                    </div>
-                    <div class="glasses__row" style="--row-index: 4; --random: 0.39;">
-                        <div class="glasses__row-inner"></div>
-                    </div>
+    {%- capture pic_link -%} {{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_{{i}}.png {%- endcapture -%}
+    <div class="column elements_no_2">
+        <!-- The HTML for the animations is adapted from Copyright (c) 2022 by Shaw (https://codepen.io/shshaw/pen/LBZyyM) -->
+        <div class="glasses" style="background-image: url('{{pic_link}}'); --row-total: 5;">
+            <img alt="The final version of the Smart Glasses, physically built, angle {{i}}" src="{{pic_link}}">
+            <div class="glasses__popup">
+                <img src="{{pic_link}}" /><div class="glasses__row" style="--row-index: 0; --random: 0.23"><div class="glasses__row-inner"></div>
+                </div><div class="glasses__row" style="--row-index: 1; --random: 0.72">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 2; --random: 0.11">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 3; --random: 0.50">
+                    <div class="glasses__row-inner"></div>
+                </div>
+                <div class="glasses__row" style="--row-index: 4; --random: 0.39;">
+                    <div class="glasses__row-inner"></div>
                 </div>
             </div>
         </div>
+    </div>
     {%- endfor -%}
 </div>
 
