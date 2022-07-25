@@ -9,6 +9,8 @@ main:
     url: /dive-down/firmware/
   - title: "Software (Android)"
     url: /dive-down/software/
+  - title: "3D"
+    url: /dive-down/3d/
 
 nav:
   - title: "Quick Start"
@@ -23,3 +25,5 @@ nav:
         url: /dive-down/firmware/
       - title: "Software (Android)"
         url: /dive-down/software/
+      - title: "3D"
+        url: /dive-down/3d/
