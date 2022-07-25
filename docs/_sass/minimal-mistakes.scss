@@ -260,6 +260,10 @@ img { max-width: 100%; }
   }
 }
 
+#glasses_images_container{
+  max-height: 300px;
+}
+
 #glasses_images_container::after {
   content: "";
   clear: both;
