@@ -3,8 +3,6 @@ author_profile: false
 layout: single
 classes: wide2
 permarlink: /index/
-toc: true
-toc_sticky: true
 title: " "
 ---
 # Smart Glasses
