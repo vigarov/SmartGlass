@@ -10,7 +10,7 @@ title: " "
 <div id="glasses_images_container">
     <!-- The HTML for the animations is adapted from Copyright (c) 2022 by Shaw (https://codepen.io/shshaw/pen/LBZyyM) -->
     {%- for i in (1..2) -%}
-    {%- capture pic_link -%} {{ site.url }}{{ site.baseurl }}/assets/images/final_glasses_{{i}}.png {%- endcapture -%}
+    {%- capture pic_link -%} {{ site.url }}{{ site.baseurl }}/assets/images/smaller_final_glasses_{{i}}.png {%- endcapture -%}
     <div class="column elements_no_2">
         <div class="glasses" style="background-image: url('{{pic_link}}'); --row-total: 5;">
             <img alt="The final version of the Smart Glasses, physically built, angle {{i}}" src="{{pic_link}}">
