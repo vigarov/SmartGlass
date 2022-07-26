@@ -50,7 +50,7 @@ Weekly feedback and supervision was done by Federico Stella, and Q&A sessions we
             {%- capture pic_link -%} 
                 assets/images/home_profiles/
                 {%- if person.pic -%}
-                    {{person.name | downcase | split: " " | first}}
+                    smaller{{person.name | downcase | split: " " | first}}
                 {%- else -%}
                     default
                 {%- endif -%}
