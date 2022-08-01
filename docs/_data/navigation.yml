@@ -15,8 +15,6 @@ main:
 nav:
   - title: "Quick Start"
     url: /quick-start/
-  - title: "Project Proposal"
-    url: /project-proposal/
   - title: "Dive-downs"
     children:
       - title: "Hardware"
@@ -27,3 +25,5 @@ nav:
         url: /dive-down/software/
       - title: "3D"
         url: /dive-down/3d/
+  - title: "Project Proposal"
+    url: /project-proposal/
