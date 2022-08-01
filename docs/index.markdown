@@ -99,10 +99,10 @@ Weekly feedback and supervision was done by Federico Stella, and Q&A sessions we
 
 ## Site Structure
 
-The project naturally partitioned itself into three different parts, namely hardware (electronics and 3D design), firmware and software. 
-As such, a quick start guide can be found under [Quick Start]({% post_url 2022-07-18-quick-start %}), giving a straigthforward explanation on how to recreate the glasses. A deeper explanation of the challenges and solutions applied to each one of them can be found in the relevant [Dive Downs]({{ site.url }}{{ site.baseurl }}/categories/#dive-down).
+The project naturally partitioned itself into four different parts, namely hardware/electronics, 3D design, firmware and software. 
+As such, a quick start guide can be found under [Quick Start]({% post_url 2022-07-18-quick-start %}), giving a straigthforward explanation on how to recreate the glasses. A deeper explanation of the challenges and solutions applied to each one of them can be found in their relevant [Dive Downs]({{ site.url }}{{ site.baseurl }}/categories/#dive-down).
 
-While reading those, you might notice several features have been cut off - this is mainly due to lack of time and the need for a stable build by the end of the course. If you intend to build this project, and would like to add even more features, take a look at our [Project Proposal]({% post_url 2022-07-18-project-proposal %}) which we used to present the project before it was accepted by the course's teaching team. It contains several ideas that we didn't have time to implement, such as custom PCB, or additional localization features.
+While reading those, you might notice several interesting features have been cut off - this is mainly due to lack of time and the need for a stable build by the end of the course. If you intend to build this project, and would like to add even more features, take a look at our [Project Proposal]({% post_url 2022-07-18-project-proposal %}) which we used to present the project before it was accepted by the course's teaching team. It contains several ideas that we didn't have time to implement, such as custom PCB, or additional localization features.
 
 On that note, I wish you a nice read-through!
 
