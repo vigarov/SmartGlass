@@ -1,8 +1,6 @@
 main:
   - title: "Quick Start"
     url: /quick-start/
-  - title: "Project Proposal"
-    url: /project-proposal/
   - title: "Hardware"
     url: /dive-down/hardware/ #to get the "/dive-down/" part created, one must add "category: dive-down" in the Front Matter of the relevant post
   - title: "Firmware"
@@ -11,6 +9,8 @@ main:
     url: /dive-down/software/
   - title: "3D"
     url: /dive-down/3d/
+  - title: "Project Proposal"
+    url: /project-proposal/
 
 nav:
   - title: "Quick Start"
