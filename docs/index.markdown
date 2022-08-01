@@ -44,7 +44,6 @@ Weekly feedback and supervision was done by Federico Stella, and Q&A sessions we
 
 <div id="team_cards">
 {% for person in site.data.team %}
-    <p style="display: none;">{{ person | json}}</p>
     <div class="column elements_no_{{ site.data.team.size }} team_member">
         <div class="pic_or_avatar">
             {%- capture pic_link -%} 
