@@ -84,7 +84,7 @@ namespace SmartGlasses{
     |    |  | Value Type: struct_tm (size = 36 bytes)                           | | |
     |    |  +-------------------------------------------------------------------+ | |
     |    |  +-------------------------------------------------------------------+ | |
-    |    |  | Attribute 2: Time Buffer                                          | | |
+    |    |  | Attribute 2: Navigaition Buffer                                     | | |
     |    |  | UUID: df1fbdbe-c41b-45fb-9c99-cb5ba89cfac1                        | | |
     |    |  | Properites: WRITE                                                 | | |
     |    |  | Value Type: navigation_t (size = 8 bytes)                         | | |
@@ -99,7 +99,6 @@ namespace SmartGlasses{
     |    |  +-------------------------------------------------------------------+ | |
     |    |  | Attribute 1:GNSS Features Supported                               | | |
     |    |  | UUID: 0x2A6A                                                      | | |
-    |    |  |                                                                   | | |
     |    |  +-------------------------------------------------------------------+ | |
     |    |                                                                        | |
     |    |  +-------------------------------------------------------------------+ | |
@@ -114,7 +113,7 @@ namespace SmartGlasses{
     |    |                                                                        | |
     |    |                                                                        | |
     |    |                                                                        | |
-    |    |                               TBD                                      | |
+    |    |                     TBD - integration not finished                     | |
     |    |                                                                        | |
     |    |                                                                        | |
     |    +------------------------------------------------------------------------+ |
