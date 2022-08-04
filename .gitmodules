@@ -1,0 +1,4 @@
+[submodule "arduino"]
+	path = src/firmware/esp_idf_glasses/components/arduino
+	url = https://github.com/vigarov/arduino-esp32.git
+	branch = SmartGlasses_libraries
