@@ -20,7 +20,7 @@ title                    : "Smart Glasses"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Victor Garvalov"
-description              : "Website describing the Smart Glasses project"
+description              : "Smart Glasses are an EPFL project made by Victor Garvalov, Tim Vaughan-Whitehead, David Chernis, Shrey Mittal and Paolo Celati consisting of connected glasses with a transparent OLED display."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : "vigarov/SmartGlass"
@@ -73,7 +73,7 @@ analytics:
 author:
   name             : "Victor Garvalov"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an **amazing** person."
+  bio              : ""
   location         : "Somewhere"
   email            : "victor.garvalov@epfl.ch"
   links:
