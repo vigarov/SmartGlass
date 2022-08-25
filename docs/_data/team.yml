@@ -2,10 +2,14 @@
   role: Hardware design
   pic: false
   socials:
+    - type: mail
+      data: paolo.celati@epfl.ch
 - name: Tim Vaughan-Whitehead
   role: 3D & graphic design
   pic: true
   socials:
+    - type: mail
+      data: tim.vaughan-whitehead@epfl.ch
 - name: Victor Garvalov
   role: Firmware development
   pic: true
@@ -18,7 +22,11 @@
   role: Android development
   pic: true
   socials:
+    - type: mail
+      data: david.chernis@epfl.ch
 - name: Shrey Mittal
   role: Android development
   pic: true
   socials:
+    - type: mail
+      data: shrey.mittal@epfl.ch
