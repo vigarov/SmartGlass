@@ -4,7 +4,7 @@ title: "Project Proposal"
 toc: true
 toc_sticky: true
 ---
-
+{% raw %}{% seo %}{% endraw %}
 # I. Description
 
 The main idea of this project is to make smart glasses. To keep things simple, only one of the eyes will have a screen/act as a graphic interface for the user. What would’ve been the glasses’ frames will be expanded to fit in electronics and batteries. A general sketch of the desired outcome would be the following: 
