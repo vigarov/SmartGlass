@@ -5,7 +5,6 @@ classes: wide2
 permarlink: /index/
 title: " "
 ---
-{% raw %}{% seo %}{% endraw %}
 # Smart Glasses
 
 <div id="glasses_images_container">
