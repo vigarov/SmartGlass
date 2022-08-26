@@ -183,6 +183,7 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jekyll-include-cache
+  - jekyll-seo-tag
 
 
 # Archives
